@@ -1,0 +1,49 @@
+name: Triagem semanal de lançamentos EV/PHEV
+
+on:
+  schedule:
+    # 09:00 UTC toda segunda-feira = 06:00 no horário de Brasília
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {} # permite rodar manualmente também, pelo botão no GitHub
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Rodar varredura dos canais
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/scan-channels.mjs
+
+      - name: Checar se apareceu candidato de lançamento
+        id: check
+        run: |
+          if [ -f scripts/pending-reviews/.last-run-had-candidates ] && [ "$(cat scripts/pending-reviews/.last-run-had-candidates)" = "true" ]; then
+            echo "has_candidates=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_candidates=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Abrir Pull Request com o relatório (se houver candidatos)
+        if: steps.check.outputs.has_candidates == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Triagem semanal de lançamentos EV/PHEV"
+          title: "🔎 Triagem semanal de lançamentos EV/PHEV"
+          body: |
+            Relatório automático gerado pela varredura dos canais do YouTube.
+            Revise os vídeos listados e, se algum for de fato um lançamento novo,
+            atualize os dados do carro em `src/App.jsx` (ou na base do site, se já
+            estiver usando Supabase) antes de fazer o merge.
+          branch: "triagem-semanal/${{ github.run_id }}"
+          add-paths: scripts/pending-reviews/**
