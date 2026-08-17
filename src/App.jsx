@@ -3941,20 +3941,23 @@ function CompareModal({ cars, onClose, T }) {
             Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}) — pra uma comparação mais justa, prefira carros da mesma categoria.
           </div>
         )}
-        <div style={{ overflowX: "auto" }}>
+        <div style={{ fontSize: 10.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
+          <ArrowRight size={11} /> Arraste pros lados pra ver mais carros — o nome do carro e o nome do atributo ficam fixos na tela.
+        </div>
+        <div style={{ overflowX: "auto", maxHeight: "60vh", overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: 8 }}>
           <table style={{ borderCollapse: "collapse", width: "100%", minWidth: cars.length * 150 }}>
             <thead>
               <tr>
-                <th style={thStyle(T)}></th>
+                <th style={stickyCornerStyle(T)}></th>
                 {cars.map((c) => (
-                  <th key={c.id} style={{ ...thStyle(T), fontFamily: "'Space Grotesk', sans-serif" }}>{c.name}</th>
+                  <th key={c.id} style={{ ...stickyTopStyle(T), fontFamily: "'Space Grotesk', sans-serif" }}>{c.name}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {rows.map(([label, get]) => (
                 <tr key={label}>
-                  <td style={{ ...tdStyle(T), color: T.inkDim, fontWeight: 600 }}>{label}</td>
+                  <td style={stickyLeftStyle(T)}>{label}</td>
                   {cars.map((c) => (
                     <td key={c.id} style={{ ...tdStyle(T), fontFamily: "'IBM Plex Mono', monospace" }}>{get(c) ?? "—"}</td>
                   ))}
@@ -3973,6 +3976,22 @@ function thStyle(T) {
 }
 function tdStyle(T) {
   return { padding: "8px 10px", borderBottom: `1px solid ${T.line}`, fontSize: 12.5, whiteSpace: "nowrap" };
+}
+// Cabeçalho (nome dos carros) fixo ao rolar a tabela pra baixo.
+function stickyTopStyle(T) {
+  return { ...thStyle(T), position: "sticky", top: 0, background: T.panel, zIndex: 2 };
+}
+// Primeira coluna (nome do atributo) fixa ao rolar a tabela pros lados.
+function stickyLeftStyle(T) {
+  return {
+    ...tdStyle(T), color: T.inkDim, fontWeight: 600,
+    position: "sticky", left: 0, background: T.panel, zIndex: 1,
+    boxShadow: `2px 0 4px -2px rgba(0,0,0,0.25)`,
+  };
+}
+// Canto superior esquerdo: fixo nos dois eixos ao mesmo tempo, por cima de tudo.
+function stickyCornerStyle(T) {
+  return { ...thStyle(T), position: "sticky", top: 0, left: 0, background: T.panel, zIndex: 3 };
 }
 
 // Chutes de consumo pra quem não sabe o km/L exato do próprio carro —
