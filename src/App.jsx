@@ -2719,6 +2719,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-x",
+    imageUrl: "https://www.datocms-assets.com/146515/1752768085-mobile-x.png",
     name: "Zeekr X Flagship",
     brand: "Zeekr",
     category: "SUV compacto",
@@ -2752,6 +2753,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-001",
+    imageUrl: "https://www.datocms-assets.com/146515/1752768085-mobile-001.png",
     name: "Zeekr 001 Premium",
     brand: "Zeekr",
     category: "Sedã grande premium",
@@ -2785,6 +2787,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-7x",
+    imageUrl: "https://www.datocms-assets.com/146515/1753086881-cx1e_eu_f3q_20_longrange_rwd_black-2.png",
     name: "Zeekr 7X",
     brand: "Zeekr",
     category: "SUV médio premium",
