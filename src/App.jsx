@@ -199,6 +199,7 @@ const BULK_CARS = BULK_RAW.map(([brand, model, category, price, powerCv, rangeKm
 const SEED_CARS_DETAILED = [
   {
     id: "ex2max",
+    imageUrl: "https://static.autodromo.com.br/uploads/8aab83a5-c041-4fa6-9440-b6c458ee1f1b_laGEE002725_ImagensSite_desktop_1920x756px_Design_01.webp",
     name: "Geely EX2 Max",
     brand: "Geely",
     category: "Hatch compacto",
@@ -233,6 +234,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg4urban",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/new-mg4-urban/banner.jpg",
     name: "MG4 Urban Luxury 54 kWh",
     brand: "MG",
     category: "Hatch médio",
@@ -267,6 +269,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "aionut",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202606/1780368380304-pc.webp",
     name: "GAC Aion UT Elite",
     brand: "GAC",
     category: "Hatch compacto",
@@ -301,6 +304,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-ut-premium",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202606/1780368380304-pc.webp",
     name: "GAC Aion UT Premium",
     brand: "GAC",
     category: "Hatch compacto",
@@ -334,6 +338,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "ora5",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/ora-5/lancamento/externas-cinza/ora-5-lateral-rigida-2-gwm-galeria.webp",
     name: "GWM Ora 5",
     brand: "GWM",
     category: "SUV compacto",
@@ -368,6 +373,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "dolphinse",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/dolphin-se/menu-dolphin-se-4.png",
     name: "BYD Dolphin SE",
     brand: "BYD",
     category: "Hatch compacto",
@@ -402,6 +408,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex2-pro",
+    imageUrl: "https://static.autodromo.com.br/uploads/8aab83a5-c041-4fa6-9440-b6c458ee1f1b_laGEE002725_ImagensSite_desktop_1920x756px_Design_01.webp",
     name: "Geely EX2 Pro",
     brand: "Geely",
     category: "Hatch compacto",
@@ -435,6 +442,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jac-e-js1",
+    imageUrl: "https://www.jacmotors.com.br/wp-content/uploads/2025/12/01-jac-e-js1.webp",
     name: "JAC E-JS1",
     brand: "JAC",
     category: "Hatch compacto",
@@ -468,6 +476,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "renault-kwid-e-tech",
+    imageUrl: "https://storage.googleapis.com/ire-74774-ope/files%2F%2Fimage_9e693e33-8699-4d2f-b9af-0d89354507ec.jpg",
     name: "Renault Kwid E-Tech",
     brand: "Renault",
     category: "Hatch compacto",
@@ -501,6 +510,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "renault-megane-e-tech",
+    imageUrl: "https://cdn.group.renault.com/ren/br/renault-new-cars/product-plans/2025/megane-/megane_design2.jpg.ximg.xsmall.jpg/696b5a6e02.jpg",
     name: "Renault Megane E-Tech",
     brand: "Renault",
     category: "Hatch médio",
@@ -534,6 +544,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-aya",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-AYA-4.png.webp",
     name: "Neta Aya",
     brand: "Neta",
     category: "Hatch compacto",
@@ -567,6 +578,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-ora-03",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/ora-03-bev58/placas-ajustadas/ora-bev-58-blue.webp",
     name: "GWM Ora 03",
     brand: "GWM",
     category: "Hatch compacto",
@@ -600,6 +612,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex30",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltd6c4bc738c705b81/67bba19c633cc722a1804cfa/Overview-exterior-gallery-2-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX30",
     brand: "Volvo",
     category: "SUV compacto premium",
@@ -633,6 +646,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex30-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt925a50f0601b1430/67bba201335a44fc7f411489/Overview-exterior-gallery-7-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX30 Ultra Twin Motor",
     brand: "Volvo",
     category: "SUV compacto premium",
@@ -666,6 +680,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "fiat-500e",
+    imageUrl: "https://500e.fiat.com.br/images/HeroDesktop/backgrounds/fiat-500e-novo-500-eletrico.webp",
     name: "Fiat 500e",
     brand: "Fiat",
     category: "Hatch compacto premium",
@@ -699,6 +714,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "peugeot-e-2008",
+    imageUrl: "https://www.peugeot.pt/content/dam/peugeot/portugal/b2c/our-range/e-2008-suv/canvas-aug25/E-2008_1920x1080-1.jpg",
     name: "Peugeot e-2008",
     brand: "Peugeot",
     category: "SUV compacto premium",
@@ -732,6 +748,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-cooper-se",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/cooper/all-electric/bodytype-hub/mini-J01-BEV-gallery-front-wide.webp",
     name: "Mini Cooper SE",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -765,6 +782,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-aceman-e",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
     name: "Mini Aceman E",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -798,6 +816,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-aceman-se",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
     name: "Mini Aceman SE",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -831,6 +850,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-countryman-se-all4",
+    imageUrl: "https://www.mini.com/content/dam/MINI/common/Range/new-generation/countryman/bev/bodytype-hub/mini-U25-BEV-campaign-wide.webp",
     name: "MINI Countryman SE ALL4",
     brand: "Mini",
     category: "SUV compacto premium",
@@ -864,6 +884,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-equinox-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/electric/guide/guias-equinox-ev/mh-equinox-desk.jpg?imwidth=1200",
     name: "Chevrolet Equinox EV",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -897,6 +918,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-blazer-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/2025-blazer-ev/01-images/mov/01-images/imagem-balzer-ev.jpg?imwidth=1200",
     name: "Chevrolet Blazer EV RS",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -930,6 +952,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-captiva-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/captiva-ev/mov/banner-01/chevrolet-captiva-ev-suv-urbano.jpg?imwidth=1200",
     name: "Chevrolet Captiva EV Premier",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -963,6 +986,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-spark-euv",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/spark-euv/refresh/gallery/fechada/chevrolet-spark-euv.jpeg?imwidth=1200",
     name: "Chevrolet Spark EUV",
     brand: "Chevrolet",
     category: "SUV compacto",
@@ -996,6 +1020,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex40",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5fe2e0ad60256848/685251c2c6e1436bffd9bde6/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EX40",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1029,6 +1054,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex40-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt36d2dc5cfa41f957/6852527a8319c416c2d91a22/overview-exterior-gallery-02-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX40 Ultra P8",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1062,6 +1088,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ec40-plus",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5e9113fe09dfe427/685bf946947f79a03951f0cf/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EC40 Plus",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1095,6 +1122,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ec40-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltdd9a3cddf17c1565/685bfa259f3389c127e2015d/overview-exterior-gallery-02-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EC40 Ultra",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1128,6 +1156,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix1",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/u11-bev_stage:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW iX1 eDrive20",
     brand: "BMW",
     category: "SUV compacto premium",
@@ -1161,6 +1190,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix2",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/u10_bev_design-positioning:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW iX2 xDrive30 M Sport",
     brand: "BMW",
     category: "SUV compacto premium",
@@ -1194,6 +1224,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix3",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/na5_exterior_front_view_1920_1024_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW iX3 50 xDrive",
     brand: "BMW",
     category: "SUV médio premium",
@@ -1227,6 +1258,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/i20_bev_stage_dsk_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW iX xDrive50 Sport",
     brand: "BMW",
     category: "SUV grande premium",
@@ -1260,6 +1292,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i4",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g26_bev_stage_dsk_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW i4 eDrive40 M Sport",
     brand: "BMW",
     category: "Sedã médio premium",
@@ -1293,6 +1326,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i5",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g60-mp-bev-stage-ext-dsk-sl?qlt=80&wid=2000&fmt=webp",
     name: "BMW i5 M60 xDrive",
     brand: "BMW",
     category: "Sedã grande premium",
@@ -1326,6 +1360,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i7",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g70-bev_stage:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW i7 xDrive60 M Sport",
     brand: "BMW",
     category: "Sedã grande premium",
@@ -1359,6 +1394,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-530e",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g60_phev_ext-design-highlights_2_dynamic-light-carpet_dsk_shfv_de?qlt=80&wid=2000&fmt=webp",
     name: "BMW 530e M Sport",
     brand: "BMW",
     category: "Sedã grande híbrido",
@@ -1392,6 +1428,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-x5-xdrive50e",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/1-x5-header:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW X5 xDrive50e M Sport",
     brand: "BMW",
     category: "SUV híbrido premium",
@@ -1425,6 +1462,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "hyundai-ioniq-5",
+    imageUrl: "https://www.hyundai.com.br/content/dam/hmb/product/ioniq-5/_new-assets/mkv/ioniq5_mkv_desk_1920x800.webp",
     name: "Hyundai Ioniq 5",
     brand: "Hyundai",
     category: "SUV médio premium",
@@ -1458,6 +1496,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-t2-phev",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-t2-hero.webp",
     name: "Jetour T2 PHEV",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1491,6 +1530,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-s06",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-s06-hero.webp",
     name: "Jetour S06",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1524,6 +1564,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-t1",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-t1-hero.webp",
     name: "Jetour T1",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1557,6 +1598,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jaecoo-7-phev",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/vehicles-content/1665511444-j7_box-top_desk-v4.jpg",
     name: "JAECOO 7 PHEV",
     brand: "JAECOO",
     category: "SUV híbrido",
@@ -1590,6 +1632,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-haval-h6-phev",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/haval-h6-phev19-my25/lancamento-/phev-19-3-4-dianteira-ambientada.webp",
     name: "GWM Haval H6 PHEV19",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1623,6 +1666,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-tank-300",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/tank-300/gerais/banner-hero-tank-300.webp",
     name: "GWM Tank 300 Hi4-T",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1656,6 +1700,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-wey-07",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/wey/wey-lateral.png",
     name: "GWM WEY 07",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1689,6 +1734,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/dolphin-header-update.png",
     name: "BYD Dolphin",
     brand: "BYD",
     category: "Hatch compacto",
@@ -1722,6 +1768,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin-plus",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/dolphin-plus/section02.jpg",
     name: "BYD Dolphin Plus",
     brand: "BYD",
     category: "Hatch compacto",
@@ -1755,6 +1802,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-yuan-plus",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/yuan-plus-ev-br/yuanplus-2026/yuan-2026/menu_yuan-plus-2026-2.png",
     name: "BYD Yuan Plus",
     brand: "BYD",
     category: "SUV compacto",
@@ -1788,6 +1836,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-atto-2-gl",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/atto-2-dmi/atto2-header.webp",
     name: "BYD Atto 2 DM-i Flex GL",
     brand: "BYD",
     category: "SUV compacto",
@@ -1821,6 +1870,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-atto-2-gs",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/atto-2-dmi/atto2-header.webp",
     name: "BYD Atto 2 DM-i Flex GS",
     brand: "BYD",
     category: "SUV compacto",
@@ -1854,6 +1904,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-seal",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/seal/seal_glacier_blue.png",
     name: "BYD Seal",
     brand: "BYD",
     category: "Sedã médio",
@@ -1887,6 +1938,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-han-ev",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/han/han-black.png",
     name: "BYD Han EV",
     brand: "BYD",
     category: "Sedã grande premium",
@@ -1920,6 +1972,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-song-plus-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/br/song-plus---update-2025/page-finais/banner-key-vision-pc.webp",
     name: "BYD Song Plus PHEV",
     brand: "BYD",
     category: "SUV híbrido",
@@ -1953,6 +2006,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-king-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/king/king-Header1.png",
     name: "BYD King PHEV",
     brand: "BYD",
     category: "Sedã compacto híbrido",
@@ -1986,6 +2040,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-shark-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/Header-BYD-SHARK.png",
     name: "BYD Shark PHEV",
     brand: "BYD",
     category: "Picape híbrida",
@@ -2024,6 +2079,7 @@ const SEED_CARS_DETAILED = [
   // foram recuperados com o mesmo conteúdo que já estava na main.
   {
     id: "byd-atto-8",
+    imageUrl: "https://www.byd.com/material/byd-site/br/atto-8/New_Atto_8_header_2.png",
     name: "BYD Atto 8",
     brand: "BYD",
     category: "SUV híbrido premium",
@@ -2057,6 +2113,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-sealion-7",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/sealion/imagens/header/Sealion7-header.webp",
     name: "BYD Sealion 7",
     brand: "BYD",
     category: "SUV médio premium",
@@ -2090,6 +2147,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-song-pro-dm-i-flex",
+    imageUrl: "https://www.byd.com/material/__CN/byd-site/br/product/songpro-flex/byd-song-pro-flex-HEADER-3.png",
     name: "BYD Song Pro DM-i Flex",
     brand: "BYD",
     category: "SUV híbrido",
@@ -2123,6 +2181,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-tan",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/new-tan-grey-header.png",
     name: "BYD Tan",
     brand: "BYD",
     category: "SUV grande premium",
@@ -2156,6 +2215,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-yuan-pro",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/header-yuanpro.png",
     name: "BYD Yuan Pro",
     brand: "BYD",
     category: "SUV híbrido",
@@ -2189,6 +2249,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-mg4",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/mg4/img-kv-mg4-cortada-3.webp",
     name: "MG4 Comfort",
     brand: "MG",
     category: "Hatch médio",
@@ -2222,6 +2283,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-s5",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/mgs5/mgs5-comfort.webp",
     name: "MG S5",
     brand: "MG",
     category: "SUV médio",
@@ -2255,6 +2317,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-cyberster",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/cyberster/cyberster-color-sombra/cyberster-color-red.webp",
     name: "MG Cyberster",
     brand: "MG",
     category: "Roadster conversível premium",
@@ -2288,6 +2351,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-es",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202505/63deb344-57d5-449f-bcf7-1333ea1150f9.webp",
     name: "GAC Aion ES",
     brand: "GAC",
     category: "Sedã compacto",
@@ -2320,6 +2384,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-y",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202503/c9cae70c-c9ca-4488-b909-541e01608a37.jpg",
     name: "GAC Aion Y Premium",
     brand: "GAC",
     category: "SUV compacto",
@@ -2352,6 +2417,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-v",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202509/1757388789199-%E5%B7%B4%E8%A5%BFv%E5%A4%96%E8%A7%82%E9%A2%9C%E8%89%B2-1.jpg",
     name: "GAC Aion V Elite",
     brand: "GAC",
     category: "SUV médio",
@@ -2384,6 +2450,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-hyptec-ht",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202604/1776324386180-1-pc.webp",
     name: "GAC Hyptec HT Elite",
     brand: "GAC",
     category: "SUV médio premium",
@@ -2417,6 +2484,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-b10",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/487/tac/2/2027/page/hero-webp/hero-0UB.webp",
     name: "Leapmotor B10",
     brand: "Leapmotor",
     category: "SUV compacto",
@@ -2450,6 +2518,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-c10",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/488/cab/2/2027/page/hero-webp/hero-0YF.webp",
     name: "Leapmotor C10",
     brand: "Leapmotor",
     category: "SUV médio",
@@ -2483,6 +2552,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-c10-reev",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/488/cag/2/2027/page/hero-webp/hero-0GD.webp",
     name: "Leapmotor C10 REEV",
     brand: "Leapmotor",
     category: "SUV médio",
@@ -2516,6 +2586,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex5",
+    imageUrl: "https://static.autodromo.com.br/uploads/51bca4b0-a28b-455b-9ed2-7647ccc8deec_4.webp",
     name: "Geely EX5 Pro",
     brand: "Geely",
     category: "SUV médio",
@@ -2549,6 +2620,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex5-em-i",
+    imageUrl: "https://static.autodromo.com.br/uploads/51bca4b0-a28b-455b-9ed2-7647ccc8deec_4.webp",
     name: "Geely EX5 EM-i Pro",
     brand: "Geely",
     category: "SUV híbrido",
@@ -2582,6 +2654,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "omoda-e5",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/vehicles-content/1357281428-168782880-img-desk.jpg",
     name: "Omoda E5",
     brand: "Omoda",
     category: "SUV compacto",
@@ -2614,6 +2687,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "omoda-7-shs-p",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/omoda7/O7_DESIGN_E_CONFORTO/O7_DeC_1920x1080_EXTERNA.jpg",
     name: "Omoda 7 SHS-P",
     brand: "Omoda",
     category: "SUV híbrido",
@@ -2647,6 +2721,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-x",
+    imageUrl: "https://www.datocms-assets.com/146515/1752768085-mobile-x.png",
     name: "Zeekr X Flagship",
     brand: "Zeekr",
     category: "SUV compacto",
@@ -2680,6 +2755,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-001",
+    imageUrl: "https://www.datocms-assets.com/146515/1752768085-mobile-001.png",
     name: "Zeekr 001 Premium",
     brand: "Zeekr",
     category: "Sedã grande premium",
@@ -2713,6 +2789,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "zeekr-7x",
+    imageUrl: "https://www.datocms-assets.com/146515/1753086881-cx1e_eu_f3q_20_longrange_rwd_black-2.png",
     name: "Zeekr 7X",
     brand: "Zeekr",
     category: "SUV médio premium",
@@ -2746,6 +2823,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-x-400",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
     name: "Neta X 400",
     brand: "Neta",
     category: "SUV compacto",
@@ -2779,6 +2857,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-x-500",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
     name: "Neta X 500",
     brand: "Neta",
     category: "SUV compacto",
@@ -2812,6 +2891,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-gt",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2024/08/06_NetaGT_Azul_Estrada_Frente.png.webp",
     name: "Neta GT",
     brand: "Neta",
     category: "Cupê esportivo elétrico",
@@ -2845,6 +2925,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex90",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt88ae6c8936a0e087/68089476b435297d2888d1ae/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EX90",
     brand: "Volvo",
     category: "SUV grande premium",
@@ -2878,6 +2959,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-xc60-recharge-t8",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/bltab26d231d43e6180/blted43c61a243553ba/67d020e6fabac283d0083243/xc60-phev-my25.png?branch=prod_alias&quality=85&format=auto&h=1080&w=1920",
     name: "Volvo XC60 Recharge T8",
     brand: "Volvo",
     category: "SUV híbrido premium",
@@ -2911,6 +2993,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-xc90-recharge-t8",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/bltab26d231d43e6180/blt13250d579061ab3e/67d154a186708c44edcaedf4/xc90-phev-my24.png?branch=prod_alias&quality=85&format=auto&h=1080&w=1920",
     name: "Volvo XC90 Recharge T8",
     brand: "Volvo",
     category: "SUV grande híbrido premium",
@@ -3405,6 +3488,7 @@ export default function App() {
 
             return (
               <div key={car.id} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, overflow: "hidden" }}>
+                <CarImage src={car.imageUrl} alt={car.name} T={T} />
                 <div style={{ padding: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                     <div>
@@ -3767,6 +3851,24 @@ function iconBtnStyle(T, color) {
     color: color || T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
     flexShrink: 0
   };
+}
+
+// Foto do carro no topo do card — link direto pro site oficial da marca (não
+// hospedamos a imagem). Se não tiver imageUrl, ou se o link quebrar (site da
+// marca saiu do ar, trocou a URL, bloqueou hotlink etc.), some sem deixar
+// buraco no lugar — o card volta a ficar igual aos que nunca tiveram foto.
+function CarImage({ src, alt, T }) {
+  const [broken, setBroken] = useState(false);
+  if (!src || broken) return null;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      style={{ width: "100%", height: 140, objectFit: "cover", display: "block", background: T.panelAlt }}
+    />
+  );
 }
 
 function MiniStat({ label, value, T }) {
