@@ -1146,6 +1146,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix1",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/u11-bev_stage:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW iX1 eDrive20",
     brand: "BMW",
     category: "SUV compacto premium",
@@ -1179,6 +1180,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix2",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/u10_bev_design-positioning:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW iX2 xDrive30 M Sport",
     brand: "BMW",
     category: "SUV compacto premium",
@@ -1212,6 +1214,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix3",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/na5_exterior_front_view_1920_1024_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW iX3 50 xDrive",
     brand: "BMW",
     category: "SUV médio premium",
@@ -1245,6 +1248,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-ix",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/i20_bev_stage_dsk_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW iX xDrive50 Sport",
     brand: "BMW",
     category: "SUV grande premium",
@@ -1278,6 +1282,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i4",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g26_bev_stage_dsk_fb?qlt=80&wid=2000&fmt=webp",
     name: "BMW i4 eDrive40 M Sport",
     brand: "BMW",
     category: "Sedã médio premium",
@@ -1344,6 +1349,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i7",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g70-bev_stage:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW i7 xDrive60 M Sport",
     brand: "BMW",
     category: "Sedã grande premium",
@@ -1377,6 +1383,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-530e",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g60_phev_ext-design-highlights_2_dynamic-light-carpet_dsk_shfv_de?qlt=80&wid=2000&fmt=webp",
     name: "BMW 530e M Sport",
     brand: "BMW",
     category: "Sedã grande híbrido",
@@ -1410,6 +1417,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-x5-xdrive50e",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/1-x5-header:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
     name: "BMW X5 xDrive50e M Sport",
     brand: "BMW",
     category: "SUV híbrido premium",
