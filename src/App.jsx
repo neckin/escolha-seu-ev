@@ -6,7 +6,8 @@ import {
 import {
   Zap, Battery, Users, Mountain, TrendingUp, DollarSign, Plus, X,
   ChevronDown, ChevronUp, Car, Gauge, Check,
-  Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles
+  Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
+  Accessibility, Briefcase
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -126,8 +127,6 @@ function defaultPersonasFor(category, price, cv, fuelType) {
 // -- Bulk-imported models (price/range/power from aggregate market source, ago/2026) --
 // Format: [brand, model, category, price, powerCv, rangeKm, consumptionKwh100, fuelType]
 const BULK_RAW = [
-  ["Geely", "EX2 (Pro)", "Hatch compacto", 123800, 116, 235, 9.5, "BEV"],
-  ["JAC", "E-JS1", "Hatch compacto", 159900, 62, 302, 9.8, "BEV"],
   ["BYD", "Dolphin Mini", "Hatch compacto", 119990, 95, 340, 11.5, "BEV"],
   ["Renault", "Kwid E-Tech", "Hatch compacto", 99990, 65, 265, 10.5, "BEV"],
   ["Caoa Chery", "iCar", "Hatch compacto", 119990, 61, 210, 11, "BEV"],
@@ -386,6 +385,72 @@ const SEED_CARS_DETAILED = [
       "Plataforma e-Platform 3.0 da BYD, com a bateria Blade — LFP com formato estrutural que dispensa módulos intermediários, referência de segurança térmica no setor. Autonomia oficial PBEV (272 km) é mais conservadora que o padrão NEDC usado por parte da imprensa.",
     personas: { urbano: 4, familia: 2, aventura: 1, performance: 3, custo: 4 },
   },
+  {
+    id: "geely-ex2-pro",
+    name: "Geely EX2 Pro",
+    brand: "Geely",
+    category: "Hatch compacto",
+    price: 123800,
+    powerCv: 116,
+    torqueNm: 150,
+    batteryKwh: 39.4,
+    batteryChem: "LFP",
+    motorType: "PMSM traseiro (RWD)",
+    rangeKm: 289,
+    accel: 10.2,
+    groundClearance: 160,
+    trunkL: 375,
+    weightKg: 1300,
+    wallbox: null,
+    acKw: 6.6,
+    dcKw: 70,
+    airbags: 6,
+    warranty: "6 anos veículo / 8 anos bateria (150.000 km)",
+    fuelType: "BEV",
+    verified: true,
+    priceVerifiedDate: "17/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: 13.6,
+    techNotes:
+      "Compartilha com o EX2 Max a mesma plataforma, o motor traseiro (RWD) e a bateria LFP de 39,4 kWh — a versão Pro é a entrada de linha, com potência, torque e autonomia idênticos, mas com pacote de ADAS e itens de conforto reduzidos. Tração traseira é incomum nessa faixa de preço.",
+    personas: { urbano: 5, familia: 2, aventura: 3, performance: 2, custo: 5 },
+  },
+  {
+    id: "jac-e-js1",
+    name: "JAC E-JS1",
+    brand: "JAC",
+    category: "Hatch compacto",
+    price: 132900,
+    powerCv: 62,
+    torqueNm: 150,
+    batteryKwh: 31.4,
+    batteryChem: "LFP",
+    motorType: null,
+    rangeKm: 181,
+    accel: 10.7,
+    groundClearance: null,
+    trunkL: 121,
+    weightKg: 1180,
+    wallbox: null,
+    acKw: null,
+    dcKw: null,
+    airbags: 2,
+    warranty: null,
+    fuelType: "BEV",
+    verified: true,
+    priceVerifiedDate: "17/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: 17.3,
+    techNotes:
+      "Um dos elétricos mais baratos do Brasil, com bateria LFP de 31,4 kWh e a menor autonomia INMETRO do grupo (181 km) — reflexo do foco em uso urbano de curta distância. Apenas 2 airbags (motorista e passageiro), abaixo do padrão de 6 já comum em concorrentes chineses mais recentes.",
+    personas: { urbano: 5, familia: 2, aventura: 2, performance: 1, custo: 4 },
+  },
 ];
 
 const SEED_CARS = [...SEED_CARS_DETAILED, ...BULK_CARS];
@@ -400,6 +465,19 @@ const maintCostPer10k = (car) =>
 
 const videoLinkFor = (car) =>
   car.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(car.name + " review teste elétrico 2026")}`;
+
+// Referência (NÃO é confirmação de elegibilidade): teto de preço pra isenção de
+// ICMS de PCD varia por estado, mas historicamente fica entre ~R$120 mil e
+// ~R$200 mil. Usamos essa faixa só pra dar um sinal aproximado no card — o
+// usuário precisa confirmar as regras do próprio estado antes de decidir.
+const PCD_ICMS_LIKELY_MAX = 120000;
+const PCD_ICMS_MAYBE_MAX = 200000;
+function pcdPriceHint(price) {
+  if (price == null) return null;
+  if (price <= PCD_ICMS_LIKELY_MAX) return "provavel";
+  if (price <= PCD_ICMS_MAYBE_MAX) return "possivel";
+  return null; // acima da faixa usual — não exibimos selo pra não sugerir isenção improvável
+}
 
 const wallboxStatus = (wallbox) => {
   if (!wallbox) return null;
@@ -578,13 +656,29 @@ export default function App() {
     if (myCar.powerCv != null && car.powerCv != null) {
       out.powerCv = car.powerCv - myCar.powerCv;
     }
+    let totalSavings = 0;
+    let hasSavings = false;
     if (myCar.kmPerLiter && myCar.fuelPrice && myCar.kmPerMonth && car.consumptionKwh100) {
       const fuelMonthly = (myCar.kmPerMonth / myCar.kmPerLiter) * myCar.fuelPrice;
       const energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
       out.fuelMonthly = fuelMonthly;
       out.energyMonthly = energyMonthly;
-      out.monthlySavings = fuelMonthly - energyMonthly;
+      out.fuelSavings = fuelMonthly - energyMonthly;
+      totalSavings += out.fuelSavings;
+      hasSavings = true;
     }
+    // maintenance: só dá pra comparar quando o EV tem custo de manutenção conhecido
+    const evMaintPer10k = maintCostPer10k(car);
+    if (myCar.maintenanceAnnual && myCar.kmPerMonth && evMaintPer10k != null) {
+      out.myMaintMonthly = myCar.maintenanceAnnual / 12;
+      out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
+      out.maintSavings = out.myMaintMonthly - out.evMaintMonthly;
+      totalSavings += out.maintSavings;
+      hasSavings = true;
+    } else if (myCar.maintenanceAnnual && myCar.kmPerMonth) {
+      out.maintUnavailable = true; // pediu a conta, mas este EV não tem dado de manutenção pra comparar
+    }
+    if (hasSavings) out.monthlySavings = totalSavings;
     return out;
   };
 
@@ -837,6 +931,23 @@ export default function App() {
                         </div>
                       );
                     })()}
+                    {(() => {
+                      const hint = pcdPriceHint(car.price);
+                      if (!hint) return null;
+                      const label = hint === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD";
+                      return (
+                        <div
+                          title="Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária."
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
+                            borderRadius: 999, background: "rgba(61,214,199,0.08)", border: `1px dashed ${T.accent}`,
+                            fontSize: 11, fontWeight: 600, color: T.accent
+                          }}
+                        >
+                          <Accessibility size={12} /> {label}
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 14 }}>
@@ -996,13 +1107,26 @@ export default function App() {
                                   background: d.monthlySavings >= 0 ? "rgba(95,211,123,0.1)" : "rgba(232,121,74,0.1)",
                                   border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
                                 }}>
-                                  <div style={{ fontSize: 11, color: T.inkDim }}>
-                                    Combustível ({myCar.name || "seu carro"}): {money(d.fuelMonthly)}/mês · Energia (este EV): {money(d.energyMonthly)}/mês
-                                  </div>
+                                  {d.fuelMonthly != null && (
+                                    <div style={{ fontSize: 11, color: T.inkDim }}>
+                                      Combustível ({myCar.name || "seu carro"}): {money(d.fuelMonthly)}/mês · Energia (este EV): {money(d.energyMonthly)}/mês
+                                    </div>
+                                  )}
+                                  {d.myMaintMonthly != null && (
+                                    <div style={{ fontSize: 11, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
+                                      Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
+                                    </div>
+                                  )}
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
                                     {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
                                     {money(Math.abs(d.monthlySavings))}/mês
+                                    {d.myMaintMonthly == null && <span style={{ fontWeight: 400, fontSize: 10.5, color: T.inkDim }}> (só combustível/energia)</span>}
                                   </div>
+                                  {d.maintUnavailable && (
+                                    <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
+                                      Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -1042,6 +1166,27 @@ export default function App() {
 
         <div style={{ marginTop: 10, fontSize: 11, color: T.inkDim, lineHeight: 1.5 }}>
           Critério de inclusão: só carros eletrificados (100% elétricos ou híbridos plug-in) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
+        </div>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12, color: T.inkDim, lineHeight: 1.6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, color: T.ink, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", fontSize: 13 }}>
+            <Accessibility size={14} color={T.accent} /> Incentivos PCD e compra via CNPJ
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <strong style={{ color: T.ink }}>Isso não é orientação tributária</strong> — são regras gerais do governo, não um benefício oferecido pela marca do carro. Confirme sempre com a concessionária, a Receita Federal e a Sefaz do seu estado antes de decidir.
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+            <Accessibility size={13} style={{ marginTop: 2, flexShrink: 0 }} />
+            <div>
+              <strong style={{ color: T.ink }}>PCD (pessoa com deficiência):</strong> por lei federal costuma haver isenção de IPI, e muitos estados também isentam ou reduzem o ICMS — mas cada estado define seu próprio teto de preço e regras (geralmente entre R$ 120 mil e R$ 200 mil, variando e mudando com frequência). Exige laudo médico e processo prévio na Receita Federal (IPI) e na Sefaz do seu estado (ICMS). O selo "teto de isenção PCD" nos cards acima é só uma referência aproximada com base nessa faixa — não confirma elegibilidade.
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+            <Briefcase size={13} style={{ marginTop: 2, flexShrink: 0 }} />
+            <div>
+              <strong style={{ color: T.ink }}>CNPJ / frota:</strong> não existe desconto automático só por comprar em nome de empresa. Os benefícios reais são pontuais: locadoras e táxis têm regime especial de redução de IPI; empresas no Lucro Real podem aproveitar crédito de PIS/COFINS/ICMS sobre o veículo como ativo; e vários estados dão desconto ou isenção de IPVA pra elétricos e híbridos plug-in — isso vale tanto pra pessoa física quanto jurídica, não é exclusivo de CNPJ.
+            </div>
+          </div>
         </div>
       </main>
 
@@ -1215,6 +1360,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
     myCar || {
       name: "", groundClearance: "", trunkL: "", powerCv: "",
       kmPerLiter: "", fuelPrice: 6.0, energyPrice: 0.9, kmPerMonth: 1000,
+      maintenanceAnnual: "",
     }
   );
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
@@ -1223,10 +1369,11 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
     ["groundClearance", "Vão livre (mm)"], ["trunkL", "Porta-malas (L)"], ["powerCv", "Potência (cv)"],
   ];
   const costFields = [
+    ["kmPerMonth", "Km rodados por mês"],
     ["kmPerLiter", "Consumo do seu carro (km/L)"],
     ["fuelPrice", "Preço do combustível (R$/L)"],
     ["energyPrice", "Preço da energia (R$/kWh)"],
-    ["kmPerMonth", "Km rodados por mês"],
+    ["maintenanceAnnual", "Manutenção do seu carro (R$/ano)"],
   ];
 
   return (
@@ -1265,8 +1412,11 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           ))}
         </div>
 
-        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5, color: T.inkDim, marginBottom: 8 }}>
+        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5, color: T.inkDim, marginBottom: 4 }}>
           Custo mensal (opcional, pra ver economia)
+        </div>
+        <div style={{ fontSize: 11, color: T.inkDim, marginBottom: 8, lineHeight: 1.4 }}>
+          A quilometragem mensal é usada pra estimar quanto você gastaria com combustível/energia e com manutenção em cada carro comparado.
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           {costFields.map(([key, label]) => (
@@ -1294,6 +1444,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               fuelPrice: form.fuelPrice ? Number(form.fuelPrice) : null,
               energyPrice: form.energyPrice ? Number(form.energyPrice) : 0.9,
               kmPerMonth: form.kmPerMonth ? Number(form.kmPerMonth) : null,
+              maintenanceAnnual: form.maintenanceAnnual ? Number(form.maintenanceAnnual) : null,
             })
           }
           style={{
