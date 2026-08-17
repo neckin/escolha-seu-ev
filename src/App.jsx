@@ -3405,6 +3405,7 @@ export default function App() {
 
             return (
               <div key={car.id} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, overflow: "hidden" }}>
+                <CarImage src={car.imageUrl} alt={car.name} T={T} />
                 <div style={{ padding: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                     <div>
@@ -3767,6 +3768,24 @@ function iconBtnStyle(T, color) {
     color: color || T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
     flexShrink: 0
   };
+}
+
+// Foto do carro no topo do card — link direto pro site oficial da marca (não
+// hospedamos a imagem). Se não tiver imageUrl, ou se o link quebrar (site da
+// marca saiu do ar, trocou a URL, bloqueou hotlink etc.), some sem deixar
+// buraco no lugar — o card volta a ficar igual aos que nunca tiveram foto.
+function CarImage({ src, alt, T }) {
+  const [broken, setBroken] = useState(false);
+  if (!src || broken) return null;
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setBroken(true)}
+      style={{ width: "100%", height: 140, objectFit: "cover", display: "block", background: T.panelAlt }}
+    />
+  );
 }
 
 function MiniStat({ label, value, T }) {
