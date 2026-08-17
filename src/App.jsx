@@ -47,6 +47,15 @@ const FONT_IMPORT = `
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 `;
 
+// Ajustes que só dá pra fazer com media query de verdade (inline style não
+// tem). Em telas médias (ex.: tablet em retrato), esconder a descrição do
+// cabeçalho evita que ele quebre em duas linhas sem necessidade.
+const RESPONSIVE_CSS = `
+@media (max-width: 860px) {
+  .ev-header-subtitle { display: none; }
+}
+`;
+
 // Corporate group / partnership per brand — helps compare who's really behind
 // each nameplate (shared platforms, ownership, joint ventures).
 const BRAND_GROUPS = {
@@ -539,7 +548,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState("light");
   const T = theme === "dark" ? DARK_T : LIGHT_T;
 
   const [myCar, setMyCar] = useState(null);
@@ -708,12 +717,12 @@ export default function App() {
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", color: T.ink, fontFamily: "'Inter', sans-serif" }}>
-      <style>{FONT_IMPORT}</style>
+      <style>{FONT_IMPORT}{RESPONSIVE_CSS}</style>
 
       {/* ---------- HEADER ---------- */}
       <header style={{ borderBottom: `1px solid ${T.line}`, padding: "20px 16px" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", rowGap: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
             <div style={{
               width: 36, height: 36, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`,
               display: "flex", alignItems: "center", justifyContent: "center"
@@ -724,19 +733,20 @@ export default function App() {
               <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>
                 Escolha seu EV
               </div>
-              <div style={{ fontSize: 11, color: T.inkDim }}>
+              <div className="ev-header-subtitle" style={{ fontSize: 11, color: T.inkDim }}>
                 Compare elétricos e híbridos plug-in oficiais no Brasil — pra você decidir com confiança
               </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             <button
               onClick={() => { setTutorialStep(0); setShowTutorial(true); }}
               title="Como usar"
               style={{
-                width: 34, height: 34, borderRadius: 8, background: T.panel, border: `1px solid ${T.line}`,
-                color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer"
+                width: 38, height: 38, borderRadius: 8, background: T.panel, border: `1px solid ${T.line}`,
+                color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                flexShrink: 0
               }}
             >
               <HelpCircle size={15} />
@@ -746,8 +756,9 @@ export default function App() {
               onClick={toggleTheme}
               title={theme === "dark" ? "Modo claro" : "Modo escuro"}
               style={{
-                width: 34, height: 34, borderRadius: 8, background: T.panel, border: `1px solid ${T.line}`,
-                color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer"
+                width: 38, height: 38, borderRadius: 8, background: T.panel, border: `1px solid ${T.line}`,
+                color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+                flexShrink: 0
               }}
             >
               {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
@@ -757,11 +768,11 @@ export default function App() {
               ref={tourRefs.myCarBtn}
               onClick={() => setShowMyCarForm(true)}
               style={{
-                display: "flex", alignItems: "center", gap: 6,
+                display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", flexShrink: 0,
                 background: myCar ? T.panelAlt : T.accent2,
                 color: myCar ? T.inkDim : T.bg,
                 border: `1px solid ${myCar ? T.line : T.accent2}`,
-                borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer"
+                borderRadius: 8, padding: "9px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer"
               }}
             >
               <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Cadastrar meu carro"}
@@ -1270,8 +1281,9 @@ export default function App() {
 // ---------------------------------------------------------------------------
 function iconBtnStyle(T, color) {
   return {
-    width: 28, height: 28, borderRadius: 7, background: T.panelAlt, border: `1px solid ${T.line}`,
-    color: color || T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer"
+    width: 36, height: 36, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}`,
+    color: color || T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+    flexShrink: 0
   };
 }
 
