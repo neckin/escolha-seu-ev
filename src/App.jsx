@@ -1388,6 +1388,51 @@ const FUEL_KMPL_PRESETS = [
   { label: "SUV/picape a diesel", value: 10 },
 ];
 
+// Specs aproximadas dos carros a combustão mais vendidos no Brasil — não cobre
+// tudo (não existe fonte pública gratuita com ficha técnica completa pra
+// qualquer marca/modelo/versão), mas cobre a maioria da frota real. Valores
+// são médias da faixa de versões de cada modelo, não de uma versão específica
+// — por isso ficam marcados como aproximados e sempre editáveis depois.
+const COMMON_CARS = [
+  { label: "Fiat Mobi", groundClearance: 141, trunkL: 235, powerCv: 75, kmPerLiter: 13 },
+  { label: "Fiat Argo", groundClearance: 152, trunkL: 300, powerCv: 85, kmPerLiter: 12.5 },
+  { label: "Fiat Cronos", groundClearance: 152, trunkL: 525, powerCv: 85, kmPerLiter: 12.5 },
+  { label: "Fiat Strada", groundClearance: 168, trunkL: null, powerCv: 100, kmPerLiter: 12 },
+  { label: "Fiat Pulse", groundClearance: 169, trunkL: 370, powerCv: 130, kmPerLiter: 12 },
+  { label: "Fiat Toro", groundClearance: 205, trunkL: null, powerCv: 173, kmPerLiter: 10.5 },
+  { label: "Chevrolet Onix", groundClearance: 153, trunkL: 267, powerCv: 82, kmPerLiter: 13.5 },
+  { label: "Chevrolet Onix Plus", groundClearance: 153, trunkL: 469, powerCv: 116, kmPerLiter: 13 },
+  { label: "Chevrolet Tracker", groundClearance: 173, trunkL: 410, powerCv: 116, kmPerLiter: 12 },
+  { label: "Volkswagen Polo", groundClearance: 149, trunkL: 300, powerCv: 110, kmPerLiter: 12.5 },
+  { label: "Volkswagen Virtus", groundClearance: 149, trunkL: 521, powerCv: 116, kmPerLiter: 12.5 },
+  { label: "Volkswagen T-Cross", groundClearance: 163, trunkL: 373, powerCv: 116, kmPerLiter: 12 },
+  { label: "Volkswagen Nivus", groundClearance: 171, trunkL: 415, powerCv: 116, kmPerLiter: 12.5 },
+  { label: "Volkswagen Gol", groundClearance: 141, trunkL: 285, powerCv: 84, kmPerLiter: 13 },
+  { label: "Hyundai HB20", groundClearance: 157, trunkL: 300, powerCv: 80, kmPerLiter: 13 },
+  { label: "Hyundai HB20S", groundClearance: 157, trunkL: 415, powerCv: 120, kmPerLiter: 12.5 },
+  { label: "Hyundai Creta", groundClearance: 190, trunkL: 402, powerCv: 130, kmPerLiter: 11.5 },
+  { label: "Toyota Corolla", groundClearance: 140, trunkL: 470, powerCv: 177, kmPerLiter: 11 },
+  { label: "Toyota Corolla Cross", groundClearance: 162, trunkL: 440, powerCv: 177, kmPerLiter: 11 },
+  { label: "Toyota Yaris", groundClearance: 147, trunkL: 286, powerCv: 108, kmPerLiter: 13 },
+  { label: "Toyota Hilux", groundClearance: 216, trunkL: null, powerCv: 204, kmPerLiter: 9.5 },
+  { label: "Honda Civic", groundClearance: 132, trunkL: 519, powerCv: 173, kmPerLiter: 11 },
+  { label: "Honda HR-V", groundClearance: 195, trunkL: 437, powerCv: 177, kmPerLiter: 11.5 },
+  { label: "Honda City", groundClearance: 143, trunkL: 519, powerCv: 126, kmPerLiter: 12.5 },
+  { label: "Renault Kwid", groundClearance: 181, trunkL: 290, powerCv: 70, kmPerLiter: 13.5 },
+  { label: "Jeep Compass", groundClearance: 205, trunkL: 438, powerCv: 173, kmPerLiter: 10.5 },
+  { label: "Jeep Renegade", groundClearance: 205, trunkL: 351, powerCv: 116, kmPerLiter: 11.5 },
+  { label: "Nissan Kicks", groundClearance: 185, trunkL: 400, powerCv: 114, kmPerLiter: 12.5 },
+  { label: "Nissan Versa", groundClearance: 145, trunkL: 400, powerCv: 106, kmPerLiter: 13 },
+];
+
+// Acha o preset cujo nome está contido no que a pessoa digitou (ex.: "Nissan
+// Versa 1.6 Exclusive 2021" bate com "Nissan Versa"). Sem match = null.
+function matchCommonCar(typedName) {
+  if (!typedName) return null;
+  const q = typedName.toLowerCase();
+  return COMMON_CARS.find((c) => q.includes(c.label.toLowerCase())) || null;
+}
+
 function MyCarFormModal({ myCar, onSave, onClose, T }) {
   const [form, setForm] = useState(
     myCar || {
@@ -1401,7 +1446,23 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
   const [showSpecs, setShowSpecs] = useState(
     !!(myCar && (myCar.groundClearance || myCar.trunkL || myCar.powerCv))
   );
+  const [autoFillNote, setAutoFillNote] = useState(null);
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const tryAutoFill = () => {
+    const match = matchCommonCar(form.name);
+    if (!match) return;
+    // só preenche o que ainda está vazio — nunca sobrescreve o que a pessoa já digitou
+    setForm((f) => ({
+      ...f,
+      groundClearance: f.groundClearance || match.groundClearance || "",
+      trunkL: f.trunkL || match.trunkL || "",
+      powerCv: f.powerCv || match.powerCv || "",
+      kmPerLiter: f.kmPerLiter || match.kmPerLiter || "",
+    }));
+    setShowSpecs(true);
+    setAutoFillNote(match.label);
+  };
 
   const fieldStyle = {
     background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px",
@@ -1421,16 +1482,33 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois. Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
         </div>
 
-        <label style={{ ...labelStyle, marginBottom: 16 }}>
+        <label style={{ ...labelStyle, marginBottom: 6 }}>
           Nome do seu carro
           <input
             type="text"
+            list="commonCarsList"
             value={form.name ?? ""}
-            onChange={(e) => set("name", e.target.value)}
+            onChange={(e) => { set("name", e.target.value); if (autoFillNote) setAutoFillNote(null); }}
+            onBlur={tryAutoFill}
             placeholder="Ex.: Nissan Versa 1.6 Exclusive 2021"
             style={fieldStyle}
           />
+          <datalist id="commonCarsList">
+            {COMMON_CARS.map((c) => <option key={c.label} value={c.label} />)}
+          </datalist>
         </label>
+        <div style={{ ...hintStyle, marginBottom: autoFillNote ? 8 : 16 }}>
+          Se reconhecermos a marca/modelo (ex.: os {COMMON_CARS.length} carros mais vendidos no Brasil), preenchemos vão livre, porta-malas, potência e consumo aproximados — dá pra ajustar qualquer valor depois.
+        </div>
+        {autoFillNote && (
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6, marginBottom: 16, padding: "8px 10px",
+            borderRadius: 7, background: "rgba(61,214,199,0.1)", border: `1px solid ${T.accent}`,
+            fontSize: 11.5, color: T.accent, fontWeight: 600
+          }}>
+            <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
+          </div>
+        )}
 
         <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.accent, marginBottom: 10, fontWeight: 700 }}>
           Pra calcular sua economia mensal
