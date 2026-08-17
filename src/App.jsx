@@ -2811,7 +2811,7 @@ const wallboxStatus = (wallbox) => {
 // ---------------------------------------------------------------------------
 // STORAGE HELPERS
 // ---------------------------------------------------------------------------
-const CARS_KEY = "ev-comparador:cars:v8";
+const CARS_KEY = "ev-comparador:cars:v9";
 const THEME_KEY = "ev-comparador:theme:v1";
 const MYCAR_KEY = "ev-comparador:mycar:v1";
 const TUTORIAL_KEY = "ev-comparador:tutorial-seen:v2";
