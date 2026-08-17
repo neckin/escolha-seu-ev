@@ -6,7 +6,8 @@ import {
 import {
   Zap, Battery, Users, Mountain, TrendingUp, DollarSign, Plus, X,
   ChevronDown, ChevronUp, Car, Gauge, Check,
-  Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles
+  Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
+  Accessibility, Briefcase
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -126,8 +127,6 @@ function defaultPersonasFor(category, price, cv, fuelType) {
 // -- Bulk-imported models (price/range/power from aggregate market source, ago/2026) --
 // Format: [brand, model, category, price, powerCv, rangeKm, consumptionKwh100, fuelType]
 const BULK_RAW = [
-  ["Geely", "EX2 (Pro)", "Hatch compacto", 123800, 116, 235, 9.5, "BEV"],
-  ["JAC", "E-JS1", "Hatch compacto", 159900, 62, 302, 9.8, "BEV"],
   ["BYD", "Dolphin Mini", "Hatch compacto", 119990, 95, 340, 11.5, "BEV"],
   ["Renault", "Kwid E-Tech", "Hatch compacto", 99990, 65, 265, 10.5, "BEV"],
   ["Caoa Chery", "iCar", "Hatch compacto", 119990, 61, 210, 11, "BEV"],
@@ -386,6 +385,72 @@ const SEED_CARS_DETAILED = [
       "Plataforma e-Platform 3.0 da BYD, com a bateria Blade — LFP com formato estrutural que dispensa módulos intermediários, referência de segurança térmica no setor. Autonomia oficial PBEV (272 km) é mais conservadora que o padrão NEDC usado por parte da imprensa.",
     personas: { urbano: 4, familia: 2, aventura: 1, performance: 3, custo: 4 },
   },
+  {
+    id: "geely-ex2-pro",
+    name: "Geely EX2 Pro",
+    brand: "Geely",
+    category: "Hatch compacto",
+    price: 123800,
+    powerCv: 116,
+    torqueNm: 150,
+    batteryKwh: 39.4,
+    batteryChem: "LFP",
+    motorType: "PMSM traseiro (RWD)",
+    rangeKm: 289,
+    accel: 10.2,
+    groundClearance: 160,
+    trunkL: 375,
+    weightKg: 1300,
+    wallbox: null,
+    acKw: 6.6,
+    dcKw: 70,
+    airbags: 6,
+    warranty: "6 anos veículo / 8 anos bateria (150.000 km)",
+    fuelType: "BEV",
+    verified: true,
+    priceVerifiedDate: "17/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: 13.6,
+    techNotes:
+      "Compartilha com o EX2 Max a mesma plataforma, o motor traseiro (RWD) e a bateria LFP de 39,4 kWh — a versão Pro é a entrada de linha, com potência, torque e autonomia idênticos, mas com pacote de ADAS e itens de conforto reduzidos. Tração traseira é incomum nessa faixa de preço.",
+    personas: { urbano: 5, familia: 2, aventura: 3, performance: 2, custo: 5 },
+  },
+  {
+    id: "jac-e-js1",
+    name: "JAC E-JS1",
+    brand: "JAC",
+    category: "Hatch compacto",
+    price: 132900,
+    powerCv: 62,
+    torqueNm: 150,
+    batteryKwh: 31.4,
+    batteryChem: "LFP",
+    motorType: null,
+    rangeKm: 181,
+    accel: 10.7,
+    groundClearance: null,
+    trunkL: 121,
+    weightKg: 1180,
+    wallbox: null,
+    acKw: null,
+    dcKw: null,
+    airbags: 2,
+    warranty: null,
+    fuelType: "BEV",
+    verified: true,
+    priceVerifiedDate: "17/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: 17.3,
+    techNotes:
+      "Um dos elétricos mais baratos do Brasil, com bateria LFP de 31,4 kWh e a menor autonomia INMETRO do grupo (181 km) — reflexo do foco em uso urbano de curta distância. Apenas 2 airbags (motorista e passageiro), abaixo do padrão de 6 já comum em concorrentes chineses mais recentes.",
+    personas: { urbano: 5, familia: 2, aventura: 2, performance: 1, custo: 4 },
+  },
 ];
 
 const SEED_CARS = [...SEED_CARS_DETAILED, ...BULK_CARS];
@@ -400,6 +465,19 @@ const maintCostPer10k = (car) =>
 
 const videoLinkFor = (car) =>
   car.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(car.name + " review teste elétrico 2026")}`;
+
+// Referência (NÃO é confirmação de elegibilidade): teto de preço pra isenção de
+// ICMS de PCD varia por estado, mas historicamente fica entre ~R$120 mil e
+// ~R$200 mil. Usamos essa faixa só pra dar um sinal aproximado no card — o
+// usuário precisa confirmar as regras do próprio estado antes de decidir.
+const PCD_ICMS_LIKELY_MAX = 120000;
+const PCD_ICMS_MAYBE_MAX = 200000;
+function pcdPriceHint(price) {
+  if (price == null) return null;
+  if (price <= PCD_ICMS_LIKELY_MAX) return "provavel";
+  if (price <= PCD_ICMS_MAYBE_MAX) return "possivel";
+  return null; // acima da faixa usual — não exibimos selo pra não sugerir isenção improvável
+}
 
 const wallboxStatus = (wallbox) => {
   if (!wallbox) return null;
@@ -578,13 +656,29 @@ export default function App() {
     if (myCar.powerCv != null && car.powerCv != null) {
       out.powerCv = car.powerCv - myCar.powerCv;
     }
+    let totalSavings = 0;
+    let hasSavings = false;
     if (myCar.kmPerLiter && myCar.fuelPrice && myCar.kmPerMonth && car.consumptionKwh100) {
       const fuelMonthly = (myCar.kmPerMonth / myCar.kmPerLiter) * myCar.fuelPrice;
       const energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
       out.fuelMonthly = fuelMonthly;
       out.energyMonthly = energyMonthly;
-      out.monthlySavings = fuelMonthly - energyMonthly;
+      out.fuelSavings = fuelMonthly - energyMonthly;
+      totalSavings += out.fuelSavings;
+      hasSavings = true;
     }
+    // maintenance: só dá pra comparar quando o EV tem custo de manutenção conhecido
+    const evMaintPer10k = maintCostPer10k(car);
+    if (myCar.maintenanceAnnual && myCar.kmPerMonth && evMaintPer10k != null) {
+      out.myMaintMonthly = myCar.maintenanceAnnual / 12;
+      out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
+      out.maintSavings = out.myMaintMonthly - out.evMaintMonthly;
+      totalSavings += out.maintSavings;
+      hasSavings = true;
+    } else if (myCar.maintenanceAnnual && myCar.kmPerMonth) {
+      out.maintUnavailable = true; // pediu a conta, mas este EV não tem dado de manutenção pra comparar
+    }
+    if (hasSavings) out.monthlySavings = totalSavings;
     return out;
   };
 
@@ -663,12 +757,14 @@ export default function App() {
               ref={tourRefs.myCarBtn}
               onClick={() => setShowMyCarForm(true)}
               style={{
-                display: "flex", alignItems: "center", gap: 6, background: myCar ? T.panelAlt : T.panel,
-                color: T.inkDim, border: `1px solid ${T.line}`,
-                borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer"
+                display: "flex", alignItems: "center", gap: 6,
+                background: myCar ? T.panelAlt : T.accent2,
+                color: myCar ? T.inkDim : T.bg,
+                border: `1px solid ${myCar ? T.line : T.accent2}`,
+                borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer"
               }}
             >
-              <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Meu carro"}
+              <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Cadastrar meu carro"}
             </button>
           </div>
         </div>
@@ -771,6 +867,38 @@ export default function App() {
           </div>
         </div>
 
+        {/* ---------- MY CAR CTA (só aparece antes de cadastrar) ---------- */}
+        {!myCar && (
+          <div style={{
+            marginBottom: 20, padding: 14, borderRadius: 12, background: "rgba(242,180,65,0.08)",
+            border: `1px dashed ${T.accent2}`, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap"
+          }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10, background: "rgba(242,180,65,0.15)",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+            }}>
+              <Fuel size={17} color={T.accent2} />
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: T.ink, marginBottom: 2 }}>
+                Quanto você economizaria trocando pra um elétrico?
+              </div>
+              <div style={{ fontSize: 12, color: T.inkDim, lineHeight: 1.4 }}>
+                Cadastre seu carro atual — leva menos de 1 minuto e não precisa saber todos os dados — pra ver a economia mensal estimada em cada card abaixo.
+              </div>
+            </div>
+            <button
+              onClick={() => setShowMyCarForm(true)}
+              style={{
+                flexShrink: 0, background: T.accent2, color: T.bg, border: "none", borderRadius: 8,
+                padding: "10px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer"
+              }}
+            >
+              Cadastrar meu carro
+            </button>
+          </div>
+        )}
+
         {/* ---------- CAR GRID ---------- */}
         <div style={{ fontSize: 11, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", marginBottom: 10 }}>
           {cars.length} modelos no total · {sortedCars.length} exibidos com os filtros atuais
@@ -834,6 +962,23 @@ export default function App() {
                           fontSize: 11, fontWeight: 600, color: cfg.color
                         }}>
                           <Plug size={12} /> {cfg.label}
+                        </div>
+                      );
+                    })()}
+                    {(() => {
+                      const hint = pcdPriceHint(car.price);
+                      if (!hint) return null;
+                      const label = hint === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD";
+                      return (
+                        <div
+                          title="Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária."
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
+                            borderRadius: 999, background: "rgba(61,214,199,0.08)", border: `1px dashed ${T.accent}`,
+                            fontSize: 11, fontWeight: 600, color: T.accent
+                          }}
+                        >
+                          <Accessibility size={12} /> {label}
                         </div>
                       );
                     })()}
@@ -996,13 +1141,26 @@ export default function App() {
                                   background: d.monthlySavings >= 0 ? "rgba(95,211,123,0.1)" : "rgba(232,121,74,0.1)",
                                   border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
                                 }}>
-                                  <div style={{ fontSize: 11, color: T.inkDim }}>
-                                    Combustível ({myCar.name || "seu carro"}): {money(d.fuelMonthly)}/mês · Energia (este EV): {money(d.energyMonthly)}/mês
-                                  </div>
+                                  {d.fuelMonthly != null && (
+                                    <div style={{ fontSize: 11, color: T.inkDim }}>
+                                      Combustível ({myCar.name || "seu carro"}): {money(d.fuelMonthly)}/mês · Energia (este EV): {money(d.energyMonthly)}/mês
+                                    </div>
+                                  )}
+                                  {d.myMaintMonthly != null && (
+                                    <div style={{ fontSize: 11, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
+                                      Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
+                                    </div>
+                                  )}
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
                                     {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
                                     {money(Math.abs(d.monthlySavings))}/mês
+                                    {d.myMaintMonthly == null && <span style={{ fontWeight: 400, fontSize: 10.5, color: T.inkDim }}> (só combustível/energia)</span>}
                                   </div>
+                                  {d.maintUnavailable && (
+                                    <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
+                                      Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -1017,31 +1175,42 @@ export default function App() {
           })}
         </div>
 
-        {/* ---------- MY CAR NOTE ---------- */}
-        <div style={{ marginTop: 24, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12.5, color: T.inkDim }}>
-          <Car size={13} style={{ verticalAlign: -2, marginRight: 6 }} color={T.accent2} />
-          {myCar ? (
-            <>
-              Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
-              {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
-              {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
-              <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
-                editar
-              </button>
-            </>
-          ) : (
-            <>
-              Ainda não definimos seu carro atual.{" "}
-              <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
-                Defina agora
-              </button>{" "}
-              pra ver vantagem/desvantagem de cada elétrico em relação a ele.
-            </>
-          )}
-        </div>
+        {/* ---------- MY CAR NOTE (só quando já cadastrado — antes disso o CTA acima já cobre) ---------- */}
+        {myCar && (
+          <div style={{ marginTop: 24, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12.5, color: T.inkDim }}>
+            <Car size={13} style={{ verticalAlign: -2, marginRight: 6 }} color={T.accent2} />
+            Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
+            {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
+            {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
+            <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
+              editar
+            </button>
+          </div>
+        )}
 
         <div style={{ marginTop: 10, fontSize: 11, color: T.inkDim, lineHeight: 1.5 }}>
           Critério de inclusão: só carros eletrificados (100% elétricos ou híbridos plug-in) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
+        </div>
+
+        <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12, color: T.inkDim, lineHeight: 1.6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, color: T.ink, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", fontSize: 13 }}>
+            <Accessibility size={14} color={T.accent} /> Incentivos PCD e compra via CNPJ
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <strong style={{ color: T.ink }}>Isso não é orientação tributária</strong> — são regras gerais do governo, não um benefício oferecido pela marca do carro. Confirme sempre com a concessionária, a Receita Federal e a Sefaz do seu estado antes de decidir.
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+            <Accessibility size={13} style={{ marginTop: 2, flexShrink: 0 }} />
+            <div>
+              <strong style={{ color: T.ink }}>PCD (pessoa com deficiência):</strong> por lei federal costuma haver isenção de IPI, e muitos estados também isentam ou reduzem o ICMS — mas cada estado define seu próprio teto de preço e regras (geralmente entre R$ 120 mil e R$ 200 mil, variando e mudando com frequência). Exige laudo médico e processo prévio na Receita Federal (IPI) e na Sefaz do seu estado (ICMS). O selo "teto de isenção PCD" nos cards acima é só uma referência aproximada com base nessa faixa — não confirma elegibilidade.
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+            <Briefcase size={13} style={{ marginTop: 2, flexShrink: 0 }} />
+            <div>
+              <strong style={{ color: T.ink }}>CNPJ / frota:</strong> não existe desconto automático só por comprar em nome de empresa. Os benefícios reais são pontuais: locadoras e táxis têm regime especial de redução de IPI; empresas no Lucro Real podem aproveitar crédito de PIS/COFINS/ICMS sobre o veículo como ativo; e vários estados dão desconto ou isenção de IPVA pra elétricos e híbridos plug-in — isso vale tanto pra pessoa física quanto jurídica, não é exclusivo de CNPJ.
+            </div>
+          </div>
         </div>
       </main>
 
@@ -1210,24 +1379,36 @@ function tdStyle(T) {
   return { padding: "8px 10px", borderBottom: `1px solid ${T.line}`, fontSize: 12.5, whiteSpace: "nowrap" };
 }
 
+// Chutes de consumo pra quem não sabe o km/L exato do próprio carro —
+// só um ponto de partida editável, não uma verdade absoluta.
+const FUEL_KMPL_PRESETS = [
+  { label: "Flex no álcool", value: 7.5 },
+  { label: "Flex na gasolina", value: 11 },
+  { label: "1.0/1.6 só gasolina", value: 13 },
+  { label: "SUV/picape a diesel", value: 10 },
+];
+
 function MyCarFormModal({ myCar, onSave, onClose, T }) {
   const [form, setForm] = useState(
     myCar || {
       name: "", groundClearance: "", trunkL: "", powerCv: "",
       kmPerLiter: "", fuelPrice: 6.0, energyPrice: 0.9, kmPerMonth: 1000,
+      maintenanceAnnual: "",
     }
+  );
+  // specs técnicas ficam recolhidas por padrão — a maioria não sabe de cabeça
+  // e não são necessárias pra ver a economia mensal, só pra comparar espaço/potência
+  const [showSpecs, setShowSpecs] = useState(
+    !!(myCar && (myCar.groundClearance || myCar.trunkL || myCar.powerCv))
   );
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  const numFields = [
-    ["groundClearance", "Vão livre (mm)"], ["trunkL", "Porta-malas (L)"], ["powerCv", "Potência (cv)"],
-  ];
-  const costFields = [
-    ["kmPerLiter", "Consumo do seu carro (km/L)"],
-    ["fuelPrice", "Preço do combustível (R$/L)"],
-    ["energyPrice", "Preço da energia (R$/kWh)"],
-    ["kmPerMonth", "Km rodados por mês"],
-  ];
+  const fieldStyle = {
+    background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px",
+    color: T.ink, fontSize: 13, boxSizing: "border-box", width: "100%"
+  };
+  const labelStyle = { fontSize: 12.5, color: T.ink, fontWeight: 600, display: "flex", flexDirection: "column", gap: 5 };
+  const hintStyle = { fontSize: 10.5, color: T.inkDim, fontWeight: 400, lineHeight: 1.4 };
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
@@ -1236,52 +1417,142 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Seu carro atual</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
-        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14 }}>
-          Usado só pra comparar (vão livre, porta-malas, potência e custo mensal) com os elétricos que você olhar. Fica salvo só no seu navegador — outras pessoas que abrirem este app não veem.
+        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 16, lineHeight: 1.5 }}>
+          Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois. Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
         </div>
 
-        <label style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
+        <label style={{ ...labelStyle, marginBottom: 16 }}>
           Nome do seu carro
           <input
             type="text"
             value={form.name ?? ""}
             onChange={(e) => set("name", e.target.value)}
             placeholder="Ex.: Nissan Versa 1.6 Exclusive 2021"
-            style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
+            style={fieldStyle}
           />
         </label>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
-          {numFields.map(([key, label]) => (
-            <label key={key} style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4 }}>
-              {label}
-              <input
-                type="number"
-                value={form[key] ?? ""}
-                onChange={(e) => set(key, e.target.value)}
-                style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "8px 9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
-              />
-            </label>
-          ))}
+        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.accent, marginBottom: 10, fontWeight: 700 }}>
+          Pra calcular sua economia mensal
         </div>
 
-        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5, color: T.inkDim, marginBottom: 8 }}>
-          Custo mensal (opcional, pra ver economia)
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Km rodados por mês
+          <input
+            type="number"
+            value={form.kmPerMonth ?? ""}
+            onChange={(e) => set("kmPerMonth", e.target.value)}
+            placeholder="Ex.: 1000"
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Não sabe o número exato? Uma estimativa de cabeça já ajuda — dá pra ajustar depois.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 6 }}>
+          Consumo do seu carro (km/L)
+          <input
+            type="number"
+            step="0.1"
+            value={form.kmPerLiter ?? ""}
+            onChange={(e) => set("kmPerLiter", e.target.value)}
+            placeholder="Ex.: 11"
+            style={fieldStyle}
+          />
+        </label>
+        <div style={{ marginBottom: 14 }}>
+          <span style={{ ...hintStyle, display: "block", marginBottom: 5 }}>
+            Não sabe de cabeça? Escolha o mais parecido (dá pra ajustar o número depois):
+          </span>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {FUEL_KMPL_PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => set("kmPerLiter", p.value)}
+                style={{
+                  fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
+                  background: Number(form.kmPerLiter) === p.value ? T.accent : T.panelAlt,
+                  color: Number(form.kmPerLiter) === p.value ? T.bg : T.inkDim,
+                  border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accent : T.line}`, fontWeight: 600
+                }}
+              >
+                {p.label} (~{p.value} km/L)
+              </button>
+            ))}
+          </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {costFields.map(([key, label]) => (
-            <label key={key} style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4 }}>
-              {label}
-              <input
-                type="number"
-                step="0.01"
-                value={form[key] ?? ""}
-                onChange={(e) => set(key, e.target.value)}
-                style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "8px 9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
-              />
-            </label>
-          ))}
-        </div>
+
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Preço do combustível (R$/L)
+          <input
+            type="number"
+            step="0.01"
+            value={form.fuelPrice ?? ""}
+            onChange={(e) => set("fuelPrice", e.target.value)}
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Preço médio no posto onde você costuma abastecer.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Preço da energia (R$/kWh)
+          <input
+            type="number"
+            step="0.01"
+            value={form.energyPrice ?? ""}
+            onChange={(e) => set("energyPrice", e.target.value)}
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Já vem preenchido com a tarifa média residencial do Brasil. Se souber a sua (olhe a conta de luz), ajuste aqui pra ficar mais preciso.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 18 }}>
+          Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>— opcional</span>
+          <input
+            type="number"
+            step="0.01"
+            value={form.maintenanceAnnual ?? ""}
+            onChange={(e) => set("maintenanceAnnual", e.target.value)}
+            placeholder="Ex.: 1200"
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco — a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
+        </label>
+
+        <button
+          type="button"
+          onClick={() => setShowSpecs((s) => !s)}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%",
+            background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "10px 12px",
+            color: T.inkDim, fontSize: 12, fontWeight: 600, cursor: "pointer"
+          }}
+        >
+          <span>Specs do carro (opcional — pra comparar espaço e potência)</span>
+          {showSpecs ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+
+        {showSpecs && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ ...hintStyle, marginBottom: 10 }}>
+              Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber — não afeta a economia mensal.
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+              <label style={labelStyle}>
+                Vão livre (mm)
+                <input type="number" value={form.groundClearance ?? ""} onChange={(e) => set("groundClearance", e.target.value)} placeholder="Ex.: 160" style={fieldStyle} />
+              </label>
+              <label style={labelStyle}>
+                Porta-malas (L)
+                <input type="number" value={form.trunkL ?? ""} onChange={(e) => set("trunkL", e.target.value)} placeholder="Ex.: 350" style={fieldStyle} />
+              </label>
+              <label style={labelStyle}>
+                Potência (cv)
+                <input type="number" value={form.powerCv ?? ""} onChange={(e) => set("powerCv", e.target.value)} placeholder="Ex.: 105" style={fieldStyle} />
+              </label>
+            </div>
+          </div>
+        )}
 
         <button
           onClick={() =>
@@ -1294,10 +1565,11 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               fuelPrice: form.fuelPrice ? Number(form.fuelPrice) : null,
               energyPrice: form.energyPrice ? Number(form.energyPrice) : 0.9,
               kmPerMonth: form.kmPerMonth ? Number(form.kmPerMonth) : null,
+              maintenanceAnnual: form.maintenanceAnnual ? Number(form.maintenanceAnnual) : null,
             })
           }
           style={{
-            width: "100%", marginTop: 16, background: T.accent, color: T.bg,
+            width: "100%", marginTop: 18, background: T.accent, color: T.bg,
             border: "none", borderRadius: 9, padding: "12px", fontWeight: 700, fontSize: 14, cursor: "pointer"
           }}
         >
