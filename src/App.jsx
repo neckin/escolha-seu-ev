@@ -475,6 +475,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "renault-kwid-e-tech",
+    imageUrl: "https://storage.googleapis.com/ire-74774-ope/files%2F%2Fimage_9e693e33-8699-4d2f-b9af-0d89354507ec.jpg",
     name: "Renault Kwid E-Tech",
     brand: "Renault",
     category: "Hatch compacto",
@@ -508,6 +509,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "renault-megane-e-tech",
+    imageUrl: "https://cdn.group.renault.com/ren/br/renault-new-cars/product-plans/2025/megane-/megane_design2.jpg.ximg.xsmall.jpg/696b5a6e02.jpg",
     name: "Renault Megane E-Tech",
     brand: "Renault",
     category: "Hatch médio",
@@ -541,6 +543,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-aya",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-AYA-4.png.webp",
     name: "Neta Aya",
     brand: "Neta",
     category: "Hatch compacto",
@@ -2781,6 +2784,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-x-400",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
     name: "Neta X 400",
     brand: "Neta",
     category: "SUV compacto",
@@ -2814,6 +2818,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-x-500",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
     name: "Neta X 500",
     brand: "Neta",
     category: "SUV compacto",
@@ -2847,6 +2852,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "neta-gt",
+    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2024/08/06_NetaGT_Azul_Estrada_Frente.png.webp",
     name: "Neta GT",
     brand: "Neta",
     category: "Cupê esportivo elétrico",
