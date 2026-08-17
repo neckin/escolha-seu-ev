@@ -338,6 +338,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "ora5",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/ora-5/lancamento/externas-cinza/ora-5-lateral-rigida-2-gwm-galeria.webp",
     name: "GWM Ora 5",
     brand: "GWM",
     category: "SUV compacto",
@@ -372,6 +373,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "dolphinse",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/dolphin-se/menu-dolphin-se-4.png",
     name: "BYD Dolphin SE",
     brand: "BYD",
     category: "Hatch compacto",
@@ -572,6 +574,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-ora-03",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/ora-03-bev58/placas-ajustadas/ora-bev-58-blue.webp",
     name: "GWM Ora 03",
     brand: "GWM",
     category: "Hatch compacto",
@@ -1595,6 +1598,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-haval-h6-phev",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/haval-h6-phev19-my25/lancamento-/phev-19-3-4-dianteira-ambientada.webp",
     name: "GWM Haval H6 PHEV19",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1628,6 +1632,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-tank-300",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/tank-300/gerais/banner-hero-tank-300.webp",
     name: "GWM Tank 300 Hi4-T",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1661,6 +1666,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gwm-wey-07",
+    imageUrl: "https://www.gwmmotors.com.br/content/dam/gwm/pages/br/pt/models/wey/wey-lateral.png",
     name: "GWM WEY 07",
     brand: "GWM",
     category: "SUV híbrido",
@@ -1694,6 +1700,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/dolphin-header-update.png",
     name: "BYD Dolphin",
     brand: "BYD",
     category: "Hatch compacto",
@@ -1727,6 +1734,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin-plus",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/dolphin-plus/section02.jpg",
     name: "BYD Dolphin Plus",
     brand: "BYD",
     category: "Hatch compacto",
@@ -1760,6 +1768,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-yuan-plus",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/yuan-plus-ev-br/yuanplus-2026/yuan-2026/menu_yuan-plus-2026-2.png",
     name: "BYD Yuan Plus",
     brand: "BYD",
     category: "SUV compacto",
@@ -1793,6 +1802,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-atto-2-gl",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/atto-2-dmi/atto2-header.webp",
     name: "BYD Atto 2 DM-i Flex GL",
     brand: "BYD",
     category: "SUV compacto",
@@ -1826,6 +1836,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-atto-2-gs",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/atto-2-dmi/atto2-header.webp",
     name: "BYD Atto 2 DM-i Flex GS",
     brand: "BYD",
     category: "SUV compacto",
@@ -1859,6 +1870,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-seal",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/seal/seal_glacier_blue.png",
     name: "BYD Seal",
     brand: "BYD",
     category: "Sedã médio",
@@ -1892,6 +1904,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-han-ev",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/han/han-black.png",
     name: "BYD Han EV",
     brand: "BYD",
     category: "Sedã grande premium",
@@ -1925,6 +1938,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-song-plus-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/br/song-plus---update-2025/page-finais/banner-key-vision-pc.webp",
     name: "BYD Song Plus PHEV",
     brand: "BYD",
     category: "SUV híbrido",
@@ -1958,6 +1972,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-king-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/king/king-Header1.png",
     name: "BYD King PHEV",
     brand: "BYD",
     category: "Sedã compacto híbrido",
@@ -1991,6 +2006,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-shark-phev",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/Header-BYD-SHARK.png",
     name: "BYD Shark PHEV",
     brand: "BYD",
     category: "Picape híbrida",
@@ -2029,6 +2045,7 @@ const SEED_CARS_DETAILED = [
   // foram recuperados com o mesmo conteúdo que já estava na main.
   {
     id: "byd-atto-8",
+    imageUrl: "https://www.byd.com/material/byd-site/br/atto-8/New_Atto_8_header_2.png",
     name: "BYD Atto 8",
     brand: "BYD",
     category: "SUV híbrido premium",
@@ -2062,6 +2079,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-sealion-7",
+    imageUrl: "https://www.byd.com/material/byd-site/br/product/sealion/imagens/header/Sealion7-header.webp",
     name: "BYD Sealion 7",
     brand: "BYD",
     category: "SUV médio premium",
@@ -2095,6 +2113,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-song-pro-dm-i-flex",
+    imageUrl: "https://www.byd.com/material/__CN/byd-site/br/product/songpro-flex/byd-song-pro-flex-HEADER-3.png",
     name: "BYD Song Pro DM-i Flex",
     brand: "BYD",
     category: "SUV híbrido",
@@ -2128,6 +2147,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-tan",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/new-tan-grey-header.png",
     name: "BYD Tan",
     brand: "BYD",
     category: "SUV grande premium",
@@ -2161,6 +2181,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-yuan-pro",
+    imageUrl: "https://www.byd.com/material/byd-site/america-public/header-product-image/header-yuanpro.png",
     name: "BYD Yuan Pro",
     brand: "BYD",
     category: "SUV híbrido",
