@@ -199,6 +199,7 @@ const BULK_CARS = BULK_RAW.map(([brand, model, category, price, powerCv, rangeKm
 const SEED_CARS_DETAILED = [
   {
     id: "ex2max",
+    imageUrl: "https://static.autodromo.com.br/uploads/8aab83a5-c041-4fa6-9440-b6c458ee1f1b_laGEE002725_ImagensSite_desktop_1920x756px_Design_01.webp",
     name: "Geely EX2 Max",
     brand: "Geely",
     category: "Hatch compacto",
@@ -233,6 +234,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg4urban",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/new-mg4-urban/banner.jpg",
     name: "MG4 Urban Luxury 54 kWh",
     brand: "MG",
     category: "Hatch médio",
@@ -267,6 +269,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "aionut",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202606/1780368380304-pc.webp",
     name: "GAC Aion UT Elite",
     brand: "GAC",
     category: "Hatch compacto",
@@ -301,6 +304,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-ut-premium",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202606/1780368380304-pc.webp",
     name: "GAC Aion UT Premium",
     brand: "GAC",
     category: "Hatch compacto",
@@ -402,6 +406,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex2-pro",
+    imageUrl: "https://static.autodromo.com.br/uploads/8aab83a5-c041-4fa6-9440-b6c458ee1f1b_laGEE002725_ImagensSite_desktop_1920x756px_Design_01.webp",
     name: "Geely EX2 Pro",
     brand: "Geely",
     category: "Hatch compacto",
@@ -2189,6 +2194,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-mg4",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/mg4/img-kv-mg4-cortada-3.webp",
     name: "MG4 Comfort",
     brand: "MG",
     category: "Hatch médio",
@@ -2222,6 +2228,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-s5",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/mgs5/mgs5-comfort.webp",
     name: "MG S5",
     brand: "MG",
     category: "SUV médio",
@@ -2255,6 +2262,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mg-cyberster",
+    imageUrl: "https://mgmotoroficial.com.br/imagens/cyberster/cyberster-color-sombra/cyberster-color-red.webp",
     name: "MG Cyberster",
     brand: "MG",
     category: "Roadster conversível premium",
@@ -2288,6 +2296,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-es",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202505/63deb344-57d5-449f-bcf7-1333ea1150f9.webp",
     name: "GAC Aion ES",
     brand: "GAC",
     category: "Sedã compacto",
@@ -2320,6 +2329,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-y",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202503/c9cae70c-c9ca-4488-b909-541e01608a37.jpg",
     name: "GAC Aion Y Premium",
     brand: "GAC",
     category: "SUV compacto",
@@ -2352,6 +2362,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-aion-v",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202509/1757388789199-%E5%B7%B4%E8%A5%BFv%E5%A4%96%E8%A7%82%E9%A2%9C%E8%89%B2-1.jpg",
     name: "GAC Aion V Elite",
     brand: "GAC",
     category: "SUV médio",
@@ -2384,6 +2395,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "gac-hyptec-ht",
+    imageUrl: "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202604/1776324386180-1-pc.webp",
     name: "GAC Hyptec HT Elite",
     brand: "GAC",
     category: "SUV médio premium",
@@ -2516,6 +2528,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex5",
+    imageUrl: "https://static.autodromo.com.br/uploads/51bca4b0-a28b-455b-9ed2-7647ccc8deec_4.webp",
     name: "Geely EX5 Pro",
     brand: "Geely",
     category: "SUV médio",
@@ -2549,6 +2562,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "geely-ex5-em-i",
+    imageUrl: "https://static.autodromo.com.br/uploads/51bca4b0-a28b-455b-9ed2-7647ccc8deec_4.webp",
     name: "Geely EX5 EM-i Pro",
     brand: "Geely",
     category: "SUV híbrido",
