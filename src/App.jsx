@@ -2017,9 +2017,11 @@ const SEED_CARS_DETAILED = [
       "Autonomia elétrica pura de 57km (PBEV/Inmetro) ou até 100km (NEDC). Caçamba com 1.200 litros de capacidade. Tração integral (AWD), com motor a combustão 1.5 turbo (183cv/260Nm) somado a dois motores elétricos (231cv dianteiro + 204cv traseiro).",
     personas: { urbano: 1, familia: 3, aventura: 5, performance: 5, custo: 1 },
   },
-  // -- Recuperando 5 carros que sumiram por acidente num merge/cherry-pick
-  // durante a auditoria de outras marcas (19/08/2026) — conteúdo idêntico ao
-  // que já estava mergeado na main antes desse trabalho começar.
+  // -- 5 modelos BYD que faltavam na base (site oficial byd.com/br lista 16
+  // nomes de modelo; só 11 estavam cadastrados) — adicionados em 17/08/2026
+  // após o usuário notar que a linha BYD estava incompleta. Sumiram por
+  // acidente num merge/cherry-pick durante a auditoria de outras marcas e
+  // foram recuperados com o mesmo conteúdo que já estava na main.
   {
     id: "byd-atto-8",
     name: "BYD Atto 8",
