@@ -1494,6 +1494,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-t2-phev",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-t2-hero.webp",
     name: "Jetour T2 PHEV",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1527,6 +1528,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-s06",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-s06-hero.webp",
     name: "Jetour S06",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1560,6 +1562,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jetour-t1",
+    imageUrl: "https://jetourbr.com/wp-content/uploads/2026/03/jetour-t1-hero.webp",
     name: "Jetour T1",
     brand: "Jetour",
     category: "SUV híbrido",
@@ -1593,6 +1596,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jaecoo-7-phev",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/vehicles-content/1665511444-j7_box-top_desk-v4.jpg",
     name: "JAECOO 7 PHEV",
     brand: "JAECOO",
     category: "SUV híbrido",
@@ -2478,6 +2482,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-b10",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/487/tac/2/2027/page/hero-webp/hero-0UB.webp",
     name: "Leapmotor B10",
     brand: "Leapmotor",
     category: "SUV compacto",
@@ -2511,6 +2516,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-c10",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/488/cab/2/2027/page/hero-webp/hero-0YF.webp",
     name: "Leapmotor C10",
     brand: "Leapmotor",
     category: "SUV médio",
@@ -2544,6 +2550,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "leapmotor-c10-reev",
+    imageUrl: "https://www.leapmotor.com.br/content/dam/leapmotor/products/488/cag/2/2027/page/hero-webp/hero-0GD.webp",
     name: "Leapmotor C10 REEV",
     brand: "Leapmotor",
     category: "SUV médio",
@@ -2645,6 +2652,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "omoda-e5",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/vehicles-content/1357281428-168782880-img-desk.jpg",
     name: "Omoda E5",
     brand: "Omoda",
     category: "SUV compacto",
@@ -2677,6 +2685,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "omoda-7-shs-p",
+    imageUrl: "https://cms.omodajaecoo.com.br/images/omoda7/O7_DESIGN_E_CONFORTO/O7_DeC_1920x1080_EXTERNA.jpg",
     name: "Omoda 7 SHS-P",
     brand: "Omoda",
     category: "SUV híbrido",
