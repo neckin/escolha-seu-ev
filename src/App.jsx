@@ -884,6 +884,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-equinox-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/electric/guide/guias-equinox-ev/mh-equinox-desk.jpg?imwidth=1200",
     name: "Chevrolet Equinox EV",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -1325,6 +1326,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "bmw-i5",
+    imageUrl: "https://bmw.scene7.com/is/image/BMW/g60-mp-bev-stage-ext-dsk-sl?qlt=80&wid=2000&fmt=webp",
     name: "BMW i5 M60 xDrive",
     brand: "BMW",
     category: "Sedã grande premium",
