@@ -680,6 +680,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "fiat-500e",
+    imageUrl: "https://500e.fiat.com.br/images/HeroDesktop/backgrounds/fiat-500e-novo-500-eletrico.webp",
     name: "Fiat 500e",
     brand: "Fiat",
     category: "Hatch compacto premium",
@@ -713,6 +714,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "peugeot-e-2008",
+    imageUrl: "https://www.peugeot.pt/content/dam/peugeot/portugal/b2c/our-range/e-2008-suv/canvas-aug25/E-2008_1920x1080-1.jpg",
     name: "Peugeot e-2008",
     brand: "Peugeot",
     category: "SUV compacto premium",
@@ -746,6 +748,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-cooper-se",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/cooper/all-electric/bodytype-hub/mini-J01-BEV-gallery-front-wide.webp",
     name: "Mini Cooper SE",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -779,6 +782,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-aceman-e",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
     name: "Mini Aceman E",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -812,6 +816,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-aceman-se",
+    imageUrl: "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
     name: "Mini Aceman SE",
     brand: "Mini",
     category: "Hatch compacto premium",
@@ -845,6 +850,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "mini-countryman-se-all4",
+    imageUrl: "https://www.mini.com/content/dam/MINI/common/Range/new-generation/countryman/bev/bodytype-hub/mini-U25-BEV-campaign-wide.webp",
     name: "MINI Countryman SE ALL4",
     brand: "Mini",
     category: "SUV compacto premium",
@@ -911,6 +917,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-blazer-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/2025-blazer-ev/01-images/mov/01-images/imagem-balzer-ev.jpg?imwidth=1200",
     name: "Chevrolet Blazer EV RS",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -944,6 +951,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-captiva-ev",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/captiva-ev/mov/banner-01/chevrolet-captiva-ev-suv-urbano.jpg?imwidth=1200",
     name: "Chevrolet Captiva EV Premier",
     brand: "Chevrolet",
     category: "SUV médio",
@@ -977,6 +985,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "chevrolet-spark-euv",
+    imageUrl: "https://www.chevrolet.com.br/content/dam/chevrolet/south-america/brazil/portuguese/index/visid/electric/spark-euv/refresh/gallery/fechada/chevrolet-spark-euv.jpeg?imwidth=1200",
     name: "Chevrolet Spark EUV",
     brand: "Chevrolet",
     category: "SUV compacto",
@@ -1451,6 +1460,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "hyundai-ioniq-5",
+    imageUrl: "https://www.hyundai.com.br/content/dam/hmb/product/ioniq-5/_new-assets/mkv/ioniq5_mkv_desk_1920x800.webp",
     name: "Hyundai Ioniq 5",
     brand: "Hyundai",
     category: "SUV médio premium",
