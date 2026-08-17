@@ -442,6 +442,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "jac-e-js1",
+    imageUrl: "https://www.jacmotors.com.br/wp-content/uploads/2025/12/01-jac-e-js1.webp",
     name: "JAC E-JS1",
     brand: "JAC",
     category: "Hatch compacto",
@@ -611,6 +612,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex30",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltd6c4bc738c705b81/67bba19c633cc722a1804cfa/Overview-exterior-gallery-2-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX30",
     brand: "Volvo",
     category: "SUV compacto premium",
@@ -644,6 +646,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex30-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt925a50f0601b1430/67bba201335a44fc7f411489/Overview-exterior-gallery-7-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX30 Ultra Twin Motor",
     brand: "Volvo",
     category: "SUV compacto premium",
@@ -1007,6 +1010,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex40",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5fe2e0ad60256848/685251c2c6e1436bffd9bde6/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EX40",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1040,6 +1044,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex40-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt36d2dc5cfa41f957/6852527a8319c416c2d91a22/overview-exterior-gallery-02-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EX40 Ultra P8",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1073,6 +1078,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ec40-plus",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5e9113fe09dfe427/685bf946947f79a03951f0cf/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EC40 Plus",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -1106,6 +1112,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ec40-ultra",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/bltdd9a3cddf17c1565/685bfa259f3389c127e2015d/overview-exterior-gallery-02-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
     name: "Volvo EC40 Ultra",
     brand: "Volvo",
     category: "SUV médio premium",
@@ -2886,6 +2893,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-ex90",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt88ae6c8936a0e087/68089476b435297d2888d1ae/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
     name: "Volvo EX90",
     brand: "Volvo",
     category: "SUV grande premium",
@@ -2919,6 +2927,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-xc60-recharge-t8",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/bltab26d231d43e6180/blted43c61a243553ba/67d020e6fabac283d0083243/xc60-phev-my25.png?branch=prod_alias&quality=85&format=auto&h=1080&w=1920",
     name: "Volvo XC60 Recharge T8",
     brand: "Volvo",
     category: "SUV híbrido premium",
@@ -2952,6 +2961,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "volvo-xc90-recharge-t8",
+    imageUrl: "https://www.volvocars.com/images/cs/v3/assets/bltab26d231d43e6180/blt13250d579061ab3e/67d154a186708c44edcaedf4/xc90-phev-my24.png?branch=prod_alias&quality=85&format=auto&h=1080&w=1920",
     name: "Volvo XC90 Recharge T8",
     brand: "Volvo",
     category: "SUV grande híbrido premium",
