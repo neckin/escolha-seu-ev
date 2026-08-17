@@ -757,12 +757,14 @@ export default function App() {
               ref={tourRefs.myCarBtn}
               onClick={() => setShowMyCarForm(true)}
               style={{
-                display: "flex", alignItems: "center", gap: 6, background: myCar ? T.panelAlt : T.panel,
-                color: T.inkDim, border: `1px solid ${T.line}`,
-                borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 600, cursor: "pointer"
+                display: "flex", alignItems: "center", gap: 6,
+                background: myCar ? T.panelAlt : T.accent2,
+                color: myCar ? T.inkDim : T.bg,
+                border: `1px solid ${myCar ? T.line : T.accent2}`,
+                borderRadius: 8, padding: "8px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer"
               }}
             >
-              <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Meu carro"}
+              <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Cadastrar meu carro"}
             </button>
           </div>
         </div>
@@ -864,6 +866,38 @@ export default function App() {
             })}
           </div>
         </div>
+
+        {/* ---------- MY CAR CTA (só aparece antes de cadastrar) ---------- */}
+        {!myCar && (
+          <div style={{
+            marginBottom: 20, padding: 14, borderRadius: 12, background: "rgba(242,180,65,0.08)",
+            border: `1px dashed ${T.accent2}`, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap"
+          }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10, background: "rgba(242,180,65,0.15)",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+            }}>
+              <Fuel size={17} color={T.accent2} />
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: T.ink, marginBottom: 2 }}>
+                Quanto você economizaria trocando pra um elétrico?
+              </div>
+              <div style={{ fontSize: 12, color: T.inkDim, lineHeight: 1.4 }}>
+                Cadastre seu carro atual — leva menos de 1 minuto e não precisa saber todos os dados — pra ver a economia mensal estimada em cada card abaixo.
+              </div>
+            </div>
+            <button
+              onClick={() => setShowMyCarForm(true)}
+              style={{
+                flexShrink: 0, background: T.accent2, color: T.bg, border: "none", borderRadius: 8,
+                padding: "10px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer"
+              }}
+            >
+              Cadastrar meu carro
+            </button>
+          </div>
+        )}
 
         {/* ---------- CAR GRID ---------- */}
         <div style={{ fontSize: 11, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", marginBottom: 10 }}>
@@ -1141,28 +1175,18 @@ export default function App() {
           })}
         </div>
 
-        {/* ---------- MY CAR NOTE ---------- */}
-        <div style={{ marginTop: 24, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12.5, color: T.inkDim }}>
-          <Car size={13} style={{ verticalAlign: -2, marginRight: 6 }} color={T.accent2} />
-          {myCar ? (
-            <>
-              Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
-              {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
-              {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
-              <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
-                editar
-              </button>
-            </>
-          ) : (
-            <>
-              Ainda não definimos seu carro atual.{" "}
-              <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
-                Defina agora
-              </button>{" "}
-              pra ver vantagem/desvantagem de cada elétrico em relação a ele.
-            </>
-          )}
-        </div>
+        {/* ---------- MY CAR NOTE (só quando já cadastrado — antes disso o CTA acima já cobre) ---------- */}
+        {myCar && (
+          <div style={{ marginTop: 24, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12.5, color: T.inkDim }}>
+            <Car size={13} style={{ verticalAlign: -2, marginRight: 6 }} color={T.accent2} />
+            Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
+            {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
+            {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
+            <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
+              editar
+            </button>
+          </div>
+        )}
 
         <div style={{ marginTop: 10, fontSize: 11, color: T.inkDim, lineHeight: 1.5 }}>
           Critério de inclusão: só carros eletrificados (100% elétricos ou híbridos plug-in) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
@@ -1355,6 +1379,15 @@ function tdStyle(T) {
   return { padding: "8px 10px", borderBottom: `1px solid ${T.line}`, fontSize: 12.5, whiteSpace: "nowrap" };
 }
 
+// Chutes de consumo pra quem não sabe o km/L exato do próprio carro —
+// só um ponto de partida editável, não uma verdade absoluta.
+const FUEL_KMPL_PRESETS = [
+  { label: "Flex no álcool", value: 7.5 },
+  { label: "Flex na gasolina", value: 11 },
+  { label: "1.0/1.6 só gasolina", value: 13 },
+  { label: "SUV/picape a diesel", value: 10 },
+];
+
 function MyCarFormModal({ myCar, onSave, onClose, T }) {
   const [form, setForm] = useState(
     myCar || {
@@ -1363,18 +1396,19 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
       maintenanceAnnual: "",
     }
   );
+  // specs técnicas ficam recolhidas por padrão — a maioria não sabe de cabeça
+  // e não são necessárias pra ver a economia mensal, só pra comparar espaço/potência
+  const [showSpecs, setShowSpecs] = useState(
+    !!(myCar && (myCar.groundClearance || myCar.trunkL || myCar.powerCv))
+  );
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  const numFields = [
-    ["groundClearance", "Vão livre (mm)"], ["trunkL", "Porta-malas (L)"], ["powerCv", "Potência (cv)"],
-  ];
-  const costFields = [
-    ["kmPerMonth", "Km rodados por mês"],
-    ["kmPerLiter", "Consumo do seu carro (km/L)"],
-    ["fuelPrice", "Preço do combustível (R$/L)"],
-    ["energyPrice", "Preço da energia (R$/kWh)"],
-    ["maintenanceAnnual", "Manutenção do seu carro (R$/ano)"],
-  ];
+  const fieldStyle = {
+    background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px",
+    color: T.ink, fontSize: 13, boxSizing: "border-box", width: "100%"
+  };
+  const labelStyle = { fontSize: 12.5, color: T.ink, fontWeight: 600, display: "flex", flexDirection: "column", gap: 5 };
+  const hintStyle = { fontSize: 10.5, color: T.inkDim, fontWeight: 400, lineHeight: 1.4 };
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
@@ -1383,55 +1417,142 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Seu carro atual</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
-        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14 }}>
-          Usado só pra comparar (vão livre, porta-malas, potência e custo mensal) com os elétricos que você olhar. Fica salvo só no seu navegador — outras pessoas que abrirem este app não veem.
+        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 16, lineHeight: 1.5 }}>
+          Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois. Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
         </div>
 
-        <label style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
+        <label style={{ ...labelStyle, marginBottom: 16 }}>
           Nome do seu carro
           <input
             type="text"
             value={form.name ?? ""}
             onChange={(e) => set("name", e.target.value)}
             placeholder="Ex.: Nissan Versa 1.6 Exclusive 2021"
-            style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
+            style={fieldStyle}
           />
         </label>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
-          {numFields.map(([key, label]) => (
-            <label key={key} style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4 }}>
-              {label}
-              <input
-                type="number"
-                value={form[key] ?? ""}
-                onChange={(e) => set(key, e.target.value)}
-                style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "8px 9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
-              />
-            </label>
-          ))}
+        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.accent, marginBottom: 10, fontWeight: 700 }}>
+          Pra calcular sua economia mensal
         </div>
 
-        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.5, color: T.inkDim, marginBottom: 4 }}>
-          Custo mensal (opcional, pra ver economia)
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Km rodados por mês
+          <input
+            type="number"
+            value={form.kmPerMonth ?? ""}
+            onChange={(e) => set("kmPerMonth", e.target.value)}
+            placeholder="Ex.: 1000"
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Não sabe o número exato? Uma estimativa de cabeça já ajuda — dá pra ajustar depois.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 6 }}>
+          Consumo do seu carro (km/L)
+          <input
+            type="number"
+            step="0.1"
+            value={form.kmPerLiter ?? ""}
+            onChange={(e) => set("kmPerLiter", e.target.value)}
+            placeholder="Ex.: 11"
+            style={fieldStyle}
+          />
+        </label>
+        <div style={{ marginBottom: 14 }}>
+          <span style={{ ...hintStyle, display: "block", marginBottom: 5 }}>
+            Não sabe de cabeça? Escolha o mais parecido (dá pra ajustar o número depois):
+          </span>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {FUEL_KMPL_PRESETS.map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => set("kmPerLiter", p.value)}
+                style={{
+                  fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
+                  background: Number(form.kmPerLiter) === p.value ? T.accent : T.panelAlt,
+                  color: Number(form.kmPerLiter) === p.value ? T.bg : T.inkDim,
+                  border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accent : T.line}`, fontWeight: 600
+                }}
+              >
+                {p.label} (~{p.value} km/L)
+              </button>
+            ))}
+          </div>
         </div>
-        <div style={{ fontSize: 11, color: T.inkDim, marginBottom: 8, lineHeight: 1.4 }}>
-          A quilometragem mensal é usada pra estimar quanto você gastaria com combustível/energia e com manutenção em cada carro comparado.
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {costFields.map(([key, label]) => (
-            <label key={key} style={{ fontSize: 11, color: T.inkDim, display: "flex", flexDirection: "column", gap: 4 }}>
-              {label}
-              <input
-                type="number"
-                step="0.01"
-                value={form[key] ?? ""}
-                onChange={(e) => set(key, e.target.value)}
-                style={{ background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "8px 9px", color: T.ink, fontSize: 13, boxSizing: "border-box" }}
-              />
-            </label>
-          ))}
-        </div>
+
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Preço do combustível (R$/L)
+          <input
+            type="number"
+            step="0.01"
+            value={form.fuelPrice ?? ""}
+            onChange={(e) => set("fuelPrice", e.target.value)}
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Preço médio no posto onde você costuma abastecer.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 14 }}>
+          Preço da energia (R$/kWh)
+          <input
+            type="number"
+            step="0.01"
+            value={form.energyPrice ?? ""}
+            onChange={(e) => set("energyPrice", e.target.value)}
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Já vem preenchido com a tarifa média residencial do Brasil. Se souber a sua (olhe a conta de luz), ajuste aqui pra ficar mais preciso.</span>
+        </label>
+
+        <label style={{ ...labelStyle, marginBottom: 18 }}>
+          Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>— opcional</span>
+          <input
+            type="number"
+            step="0.01"
+            value={form.maintenanceAnnual ?? ""}
+            onChange={(e) => set("maintenanceAnnual", e.target.value)}
+            placeholder="Ex.: 1200"
+            style={fieldStyle}
+          />
+          <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco — a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
+        </label>
+
+        <button
+          type="button"
+          onClick={() => setShowSpecs((s) => !s)}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%",
+            background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "10px 12px",
+            color: T.inkDim, fontSize: 12, fontWeight: 600, cursor: "pointer"
+          }}
+        >
+          <span>Specs do carro (opcional — pra comparar espaço e potência)</span>
+          {showSpecs ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
+
+        {showSpecs && (
+          <div style={{ marginTop: 12 }}>
+            <div style={{ ...hintStyle, marginBottom: 10 }}>
+              Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber — não afeta a economia mensal.
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+              <label style={labelStyle}>
+                Vão livre (mm)
+                <input type="number" value={form.groundClearance ?? ""} onChange={(e) => set("groundClearance", e.target.value)} placeholder="Ex.: 160" style={fieldStyle} />
+              </label>
+              <label style={labelStyle}>
+                Porta-malas (L)
+                <input type="number" value={form.trunkL ?? ""} onChange={(e) => set("trunkL", e.target.value)} placeholder="Ex.: 350" style={fieldStyle} />
+              </label>
+              <label style={labelStyle}>
+                Potência (cv)
+                <input type="number" value={form.powerCv ?? ""} onChange={(e) => set("powerCv", e.target.value)} placeholder="Ex.: 105" style={fieldStyle} />
+              </label>
+            </div>
+          </div>
+        )}
 
         <button
           onClick={() =>
@@ -1448,7 +1569,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
             })
           }
           style={{
-            width: "100%", marginTop: 16, background: T.accent, color: T.bg,
+            width: "100%", marginTop: 18, background: T.accent, color: T.bg,
             border: "none", borderRadius: 9, padding: "12px", fontWeight: 700, fontSize: 14, cursor: "pointer"
           }}
         >
