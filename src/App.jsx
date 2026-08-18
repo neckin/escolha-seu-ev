@@ -246,8 +246,8 @@ const SEED_CARS_DETAILED = [
     motorType: "PMSM dianteiro (FWD)",
     rangeKm: 358,
     accel: 9.5,
-    groundClearance: 140,
-    trunkL: 577,
+    groundClearance: 117,
+    trunkL: 568,
     weightKg: 1504,
     wallbox: "Não confirmado",
     acKw: 11,
@@ -264,7 +264,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 15.1,
     videoUrl: "https://www.youtube.com/watch?v=iOdnLV552FU",
     techNotes:
-      "Construído sobre a plataforma MSP (Modular Scalable Platform), a mesma usada na Europa — o que dá respaldo real ao resultado de 5 estrelas do MG4 Electric no Euro NCAP. Química LFP confirmada diretamente na concessionária, após divergência entre fontes públicas.",
+      "Construído sobre a plataforma MSP (Modular Scalable Platform), a mesma usada na Europa — o que dá respaldo real ao resultado de 5 estrelas do MG4 Electric no Euro NCAP. Química LFP confirmada diretamente na concessionária, após divergência entre fontes públicas. Specs conferidas na ficha técnica oficial MG (ago/2026): porta-malas 568L e altura livre do solo 117mm (valor único de fábrica, igual em todas as versões do MG4 Urban).",
     personas: { urbano: 4, familia: 5, aventura: 3, performance: 3, custo: 5 },
   },
   {
@@ -2254,21 +2254,21 @@ const SEED_CARS_DETAILED = [
     brand: "MG",
     category: "Hatch médio",
     price: 169990,
-    powerCv: 204,
+    powerCv: 190,
     torqueNm: 350,
-    batteryKwh: 51,
-    batteryChem: null,
+    batteryKwh: 64,
+    batteryChem: "LFP",
     motorType: "PMSM traseiro (RWD)",
-    rangeKm: 300,
-    accel: null,
-    groundClearance: null,
-    trunkL: 363,
-    weightKg: null,
+    rangeKm: 364,
+    accel: 7.2,
+    groundClearance: 132,
+    trunkL: 350,
+    weightKg: 1755,
     wallbox: "Incluso, sem custo",
-    acKw: null,
-    dcKw: 135,
+    acKw: 11,
+    dcKw: 140,
     airbags: 6,
-    warranty: "7 anos veículo, motor e bateria",
+    warranty: "7 anos/150.000 km veículo / 8 anos/160.000 km bateria",
     fuelType: "BEV",
     verified: true,
     priceVerifiedDate: "17/08/2026",
@@ -2278,7 +2278,7 @@ const SEED_CARS_DETAILED = [
     maintenanceTotalCost: null,
     consumptionKwh100: 17.0,
     techNotes:
-      "Versão de entrada da linha MG4 (distinta da 'MG4 Urban Luxury 54 kWh' já cadastrada separadamente). Existem também Luxury (R$189.800-199.000, bateria 64kWh, ~364km WLTP) e XPower (R$249.000, biMotor, até 435cv combinados). Autonomia CLTC chinesa (350km) é otimista; usamos aqui uma estimativa mais conservadora pro uso real.",
+      "Versão de entrada da linha MG4 (distinta da 'MG4 Urban Luxury 54 kWh' já cadastrada separadamente, um modelo menor e mais barato). Existem também Luxury RWD 64kWh (mesma potência/bateria, mais equipamento) e XPower AWD 64kWh (320kW/435cv, 0-100 em 3,8s, R$249.000). Autonomia 364km é a homologada Inmetro/PBEV (a WLTP divulgada pela MG é 467km, mas superestima o uso real no Brasil). Ficha conferida na ficha técnica oficial MG (ago/2026).",
     personas: { urbano: 4, familia: 4, aventura: 2, performance: 4, custo: 3 },
   },
   {
@@ -2295,13 +2295,13 @@ const SEED_CARS_DETAILED = [
     motorType: "PMSM traseiro (RWD)",
     rangeKm: 351,
     accel: 6.3,
-    groundClearance: null,
+    groundClearance: 136,
     trunkL: 453,
-    weightKg: null,
+    weightKg: 1705,
     wallbox: null,
-    acKw: null,
-    dcKw: null,
-    airbags: null,
+    acKw: 7,
+    dcKw: 150,
+    airbags: 6,
     warranty: "7 anos/150.000 km veículo, 8 anos/160.000 km bateria",
     fuelType: "BEV",
     verified: true,
@@ -2312,7 +2312,7 @@ const SEED_CARS_DETAILED = [
     maintenanceTotalCost: null,
     consumptionKwh100: 17.7,
     techNotes:
-      "Duas versões: Comfort (R$195.800, reajustada pra R$218.800 a partir de 5/jan/2026 — ficha usada aqui) e Luxury (R$219.800, R$238.800 após 5/jan/2026).",
+      "Duas versões: Comfort (R$195.800, reajustada pra R$218.800 a partir de 5/jan/2026 — ficha usada aqui, com 6 airbags) e Luxury (R$219.800, R$238.800 após 5/jan/2026, ganha 7º airbag central, teto solar e mais equipamento). Construído sobre a Plataforma Modular Escalável (MSP) da MG, 5 estrelas no Euro NCAP 2025.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 3 },
   },
   {
@@ -3064,7 +3064,6 @@ const wallboxStatus = (wallbox) => {
 // ---------------------------------------------------------------------------
 // STORAGE HELPERS
 // ---------------------------------------------------------------------------
-const CARS_KEY = "ev-comparador:cars:v9";
 const THEME_KEY = "ev-comparador:theme:v1";
 const MYCAR_KEY = "ev-comparador:mycar:v1";
 const TUTORIAL_KEY = "ev-comparador:tutorial-seen:v2";
@@ -3143,13 +3142,12 @@ export default function App() {
   useEffect(() => {
     (async () => {
       try {
-        let loadedCars = SEED_CARS;
-        try {
-          const res = await window.storage.get(CARS_KEY, true);
-          if (res && res.value) loadedCars = JSON.parse(res.value);
-        } catch {
-          await window.storage.set(CARS_KEY, JSON.stringify(SEED_CARS), true);
-        }
+        // O catálogo de carros vem sempre direto do código (SEED_CARS) — não é mais
+        // cacheado no localStorage. Antes fazia sentido cachear (o modo de edição
+        // salvava alterações do usuário ali), mas hoje a única forma de atualizar um
+        // carro é editando o código e publicando, então guardar em cache só travaria
+        // o catálogo desatualizado no navegador de quem já visitou o site antes.
+        const loadedCars = SEED_CARS;
         // personal preferences — not shared with other visitors
         try {
           const tRes = await window.storage.get(THEME_KEY, false);
