@@ -9,6 +9,7 @@ import {
   Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
   Accessibility, Briefcase
 } from "lucide-react";
+import { supabase } from "./supabaseClient";
 
 // ---------------------------------------------------------------------------
 // THEME TOKENS
@@ -3142,12 +3143,29 @@ export default function App() {
   useEffect(() => {
     (async () => {
       try {
-        // O catálogo de carros vem sempre direto do código (SEED_CARS) — não é mais
-        // cacheado no localStorage. Antes fazia sentido cachear (o modo de edição
-        // salvava alterações do usuário ali), mas hoje a única forma de atualizar um
-        // carro é editando o código e publicando, então guardar em cache só travaria
-        // o catálogo desatualizado no navegador de quem já visitou o site antes.
-        const loadedCars = SEED_CARS;
+        // Catálogo vem do Supabase (visto por todo mundo, atualizado sem rebuild do
+        // site). O código (SEED_CARS) continua sendo onde os dados são corrigidos —
+        // supabase/seed-cars.sql é gerado a partir daqui e sincroniza o banco — mas
+        // também serve de fallback: se o Supabase não estiver configurado (dev local
+        // sem .env) ou a consulta falhar, o app usa o catálogo embutido e não quebra.
+        let loadedCars = SEED_CARS;
+        if (supabase) {
+          const { data, error: dbError } = await supabase
+            .from("cars")
+            .select(
+              `id, name, brand, category, price,
+               powerCv:power_cv, torqueNm:torque_nm, batteryKwh:battery_kwh, batteryChem:battery_chem,
+               motorType:motor_type, rangeKm:range_km, accel, groundClearance:ground_clearance,
+               trunkL:trunk_l, weightKg:weight_kg, wallbox, acKw:ac_kw, dcKw:dc_kw, airbags, warranty,
+               fuelType:fuel_type, verified, priceVerifiedDate:price_verified_date,
+               maintenanceInterval:maintenance_interval, maintenanceFirstCost:maintenance_first_cost,
+               maintenanceKmBase:maintenance_km_base, maintenanceTotalCost:maintenance_total_cost,
+               consumptionKwh100:consumption_kwh_100, techNotes:tech_notes,
+               imageUrl:image_url, videoUrl:video_url, personas`
+            )
+            .order("name");
+          if (!dbError && data && data.length > 0) loadedCars = data;
+        }
         // personal preferences — not shared with other visitors
         try {
           const tRes = await window.storage.get(THEME_KEY, false);

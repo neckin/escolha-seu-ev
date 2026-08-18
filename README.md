@@ -17,24 +17,37 @@ Isso abre o site em `http://localhost:5173`.
 
 ## Estado atual dos dados
 
-Os dados (carros, tema, "meu carro atual") ficam salvos no **localStorage do
-navegador** (veja `src/storageShim.js`) — ou seja, só funcionam no seu próprio
-navegador/dispositivo. Duas pessoas abrindo o site em computadores diferentes
-NÃO veem os mesmos dados.
+O **catálogo de carros** vem de uma tabela `cars` num projeto Supabase
+(Postgres) — todo mundo que visita o site vê os mesmos carros, vindos do
+mesmo lugar. O código (`src/App.jsx`, constante `SEED_CARS`) continua sendo
+a fonte "oficial": é ali que cada carro é corrigido/adicionado, com a fonte
+da informação registrada no commit — igual sempre fizemos. Depois de mexer
+nos dados, roda `node scripts/generate-supabase-seed.mjs > supabase/seed-cars.sql`
+e executa o SQL gerado no **SQL Editor** do Supabase pra sincronizar o banco.
 
-## Próximo passo: banco de dados de verdade
+Se o Supabase não estiver configurado (falta `.env.local`) ou a consulta
+falhar por qualquer motivo, o app cai de volta pro catálogo embutido no
+código (`SEED_CARS`) — nunca quebra por causa disso.
 
-Para publicar isso como site "vivo" (todo mundo vendo os mesmos carros, dados
-persistentes, login real em vez do PIN), a próxima etapa é trocar
-`src/storageShim.js` por um banco de dados real. Sugestão: **Supabase**
-(gratuito, Postgres, com autenticação pronta).
+Coisas pessoais do visitante (tema claro/escuro, "meu carro atual", tutorial
+já visto) continuam no **localStorage do navegador** (`src/storageShim.js`)
+— isso é intencional, não precisa ser compartilhado entre dispositivos.
 
-Peça para o Claude Code fazer essa migração com um prompt como:
+### Configurar o Supabase (uma vez)
 
-> "Configure um projeto Supabase para este app. Crie uma tabela `cars` com os
-> mesmos campos usados no objeto `car` em src/App.jsx, e substitua as chamadas
-> de `window.storage` por chamadas ao cliente `@supabase/supabase-js`. Troque
-> também o sistema de PIN por autenticação de e-mail/senha do Supabase Auth."
+1. Crie um projeto grátis em [supabase.com](https://supabase.com)
+2. No **SQL Editor** do projeto, rode `supabase/schema.sql` (cria a tabela e
+   a política de leitura pública) e depois `supabase/seed-cars.sql` (popula
+   com os carros que já estão no código)
+3. Em **Settings → API Keys**, copie a **Project URL** e a chave **`anon`**
+   (não a `service_role` — essa é secreta e nunca deve aparecer no front)
+4. Crie um arquivo `.env.local` na raiz do projeto (não é versionado):
+   ```
+   VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+   VITE_SUPABASE_ANON_KEY=sua-chave-anon
+   ```
+5. Na Vercel, adicione as mesmas duas variáveis em **Settings → Environment
+   Variables** (Production, Preview e Development)
 
 ## Publicando (deploy)
 
@@ -81,8 +94,13 @@ pra adicionar ou remover canais.
 src/
   App.jsx                    <- toda a lógica e interface do app
   main.jsx                   <- ponto de entrada, instala o storageShim e renderiza o App
-  storageShim.js              <- substitui window.storage por localStorage (temporário)
+  storageShim.js              <- substitui window.storage por localStorage (preferências pessoais)
+  supabaseClient.js           <- client do Supabase (client-side, usa a chave anon pública)
+supabase/
+  schema.sql                  <- cria a tabela `cars` + RLS de leitura pública (roda 1x)
+  seed-cars.sql                <- gerado a partir do código, sincroniza o banco (roda a cada mudança)
 scripts/
+  generate-supabase-seed.mjs  <- gera o seed-cars.sql a partir de SEED_CARS em App.jsx
   channels.json               <- lista de canais do YouTube monitorados
   scan-channels.mjs           <- robô de triagem semanal
   pending-reviews/            <- relatórios gerados (um .md por semana)
