@@ -3657,8 +3657,13 @@ export default function App() {
                       <Spec label="Intervalo revisão" value={car.maintenanceInterval} T={T} />
                       <Spec label="1ª revisão" value={car.maintenanceFirstCost} T={T} />
                       <Spec
-                        label="Manutenção /10k km"
+                        label="Manutenção (média/10k km)"
                         value={maintCostPer10k(car) ? money(maintCostPer10k(car)) : null}
+                        hint={
+                          car.maintenanceKmBase
+                            ? `Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas até ${car.maintenanceKmBase.toLocaleString("pt-BR")} km, normalizada numa taxa comparável a cada 10.000 km rodados.`
+                            : "Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes."
+                        }
                         T={T}
                       />
                     </div>
@@ -3878,10 +3883,15 @@ function MiniStat({ label, value, T }) {
   );
 }
 
-function Spec({ label, value, T }) {
+function Spec({ label, value, T, hint }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${T.line}`, padding: "5px 0" }}>
-      <span style={{ color: T.inkDim }}>{label}</span>
+      <span
+        title={hint}
+        style={{ color: T.inkDim, ...(hint ? { borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" } : {}) }}
+      >
+        {label}
+      </span>
       <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 600 }}>{value ?? "—"}</span>
     </div>
   );
@@ -3902,26 +3912,32 @@ function DeltaRow({ label, delta, unit, T }) {
 }
 
 function CompareModal({ cars, onClose, T }) {
+  // Cada getter retorna null (não uma string tipo "null kg") quando falta o dado —
+  // só assim o "—" de fallback na renderização da célula funciona de verdade.
   const rows = [
     ["Preço", (c) => money(c.price)],
     ["Categoria", (c) => c.category],
     ["Grupo/Parceria", (c) => BRAND_GROUPS[c.brand] || "Independente / não mapeado"],
-    ["Potência", (c) => `${c.powerCv} cv`],
-    ["Torque", (c) => `${c.torqueNm} Nm`],
-    ["0–100 km/h", (c) => `${c.accel}s`],
-    ["Bateria", (c) => `${c.batteryKwh} kWh (${c.batteryChem})`],
+    ["Potência", (c) => (c.powerCv != null ? `${c.powerCv} cv` : null)],
+    ["Torque", (c) => (c.torqueNm != null ? `${c.torqueNm} Nm` : null)],
+    ["0–100 km/h", (c) => (c.accel != null ? `${c.accel}s` : null)],
+    ["Bateria", (c) => (c.batteryKwh != null ? `${c.batteryKwh} kWh${c.batteryChem ? ` (${c.batteryChem})` : ""}` : null)],
     ["Motor", (c) => c.motorType],
-    ["Autonomia", (c) => `${c.rangeKm} km`],
-    ["AC / DC", (c) => `${c.acKw} kW / ${c.dcKw} kW`],
-    ["Vão livre", (c) => `${c.groundClearance} mm`],
-    ["Porta-malas", (c) => `${c.trunkL} L`],
-    ["Peso", (c) => `${c.weightKg} kg`],
+    ["Autonomia", (c) => (c.rangeKm != null ? `${c.rangeKm} km` : null)],
+    ["AC / DC", (c) => (c.acKw != null || c.dcKw != null ? `${c.acKw ?? "—"} kW / ${c.dcKw ?? "—"} kW` : null)],
+    ["Vão livre", (c) => (c.groundClearance != null ? `${c.groundClearance} mm` : null)],
+    ["Porta-malas", (c) => (c.trunkL != null ? `${c.trunkL} L` : null)],
+    ["Peso", (c) => (c.weightKg != null ? `${c.weightKg} kg` : null)],
     ["Airbags", (c) => c.airbags],
     ["Wallbox", (c) => c.wallbox],
     ["Garantia", (c) => c.warranty],
     ["Intervalo revisão", (c) => c.maintenanceInterval],
     ["1ª revisão", (c) => c.maintenanceFirstCost],
-    ["Manutenção /10k km", (c) => (maintCostPer10k(c) ? money(maintCostPer10k(c)) : null)],
+    [
+      "Manutenção (média/10k km)",
+      (c) => (maintCostPer10k(c) ? money(maintCostPer10k(c)) : null),
+      "Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes.",
+    ],
   ];
   const distinctCategories = [...new Set(cars.map((c) => c.category))];
   return (
@@ -3953,9 +3969,15 @@ function CompareModal({ cars, onClose, T }) {
               </tr>
             </thead>
             <tbody>
-              {rows.map(([label, get]) => (
+              {rows.map(([label, get, hint]) => (
                 <tr key={label}>
-                  <td style={stickyLeftStyle(T)}>{label}</td>
+                  <td style={stickyLeftStyle(T)}>
+                    {hint ? (
+                      <span title={hint} style={{ borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" }}>{label}</span>
+                    ) : (
+                      label
+                    )}
+                  </td>
                   {cars.map((c) => (
                     <td key={c.id} style={{ ...tdStyle(T), fontFamily: "'IBM Plex Mono', monospace" }}>{get(c) ?? "—"}</td>
                   ))}
