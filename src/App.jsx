@@ -4214,6 +4214,16 @@ export default function App() {
     return [...new Set(cars.map((c) => c.category))].sort();
   }, [cars]);
 
+  // Teto do slider de preço: acompanha o carro mais caro do catálogo (arredondado
+  // pra cima), nunca menos que o teto original de R$550 mil. Sem isso, qualquer
+  // carro mais caro que o teto fixo antigo ficava impossível de alcançar no
+  // filtro, mesmo arrastando o slider até o fim.
+  const priceCeiling = useMemo(() => {
+    if (!cars) return 550000;
+    const max = Math.max(550000, ...cars.map((c) => c.price || 0));
+    return Math.ceil(max / 50000) * 50000;
+  }, [cars]);
+
   const sortedCars = useMemo(() => {
     if (!cars) return [];
     let list = cars.filter((c) => {
@@ -4418,10 +4428,10 @@ export default function App() {
 
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 11, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" }}>
-              até {money(maxPrice)}
+              {maxPrice >= priceCeiling ? "sem limite de preço" : `até ${money(maxPrice)}`}
             </span>
             <input
-              type="range" min={100000} max={550000} step={10000}
+              type="range" min={100000} max={priceCeiling} step={10000}
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               style={{ flex: 1 }}
