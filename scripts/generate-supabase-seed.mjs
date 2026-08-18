@@ -3,91 +3,54 @@
  * Gera o SQL de sincronização da tabela `cars` no Supabase, a partir dos
  * dados que já estão em src/App.jsx (SEED_CARS_DETAILED + BULK_CARS).
  *
- * O código (src/App.jsx) continua sendo a fonte "oficial" dos dados —
- * cada correção/adição de carro é feita ali, com fonte citada no commit,
- * do jeito que já vínhamos fazendo. Este script só extrai o resultado
- * final e gera um SQL de "upsert" pra rodar no SQL Editor do Supabase,
- * mantendo o banco sincronizado com o que está no git.
+ * Isso normalmente NÃO precisa ser rodado à mão — a GitHub Action
+ * .github/workflows/sync-supabase.yml já sincroniza automaticamente a cada
+ * push na main que mexe em src/App.jsx. Esse script aqui serve pra gerar o
+ * SQL manualmente (debug, revisão antes de aplicar, ou rodar fora da CI).
  *
  * Uso: node scripts/generate-supabase-seed.mjs > supabase/seed-cars.sql
  */
-import fs from "node:fs";
-import path from "node:path";
-import vm from "node:vm";
-import { fileURLToPath } from "node:url";
+import { extractSeedCars, carToRow } from "./lib/extract-seed-cars.mjs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const appPath = path.join(__dirname, "..", "src", "App.jsx");
-const src = fs.readFileSync(appPath, "utf8");
+const cars = extractSeedCars();
 
-// Extrai só o trecho puro de dados/funções auxiliares (sem JSX/React),
-// de "function custoScore" até a linha que monta SEED_CARS.
-const startMarker = "function custoScore(price) {";
-const endMarker = "const SEED_CARS = [...SEED_CARS_DETAILED, ...BULK_CARS];";
-const startIdx = src.indexOf(startMarker);
-const endIdx = src.indexOf(endMarker);
-if (startIdx === -1 || endIdx === -1) {
-  console.error("Não achei os marcadores esperados em App.jsx — o arquivo mudou de estrutura?");
-  process.exit(1);
-}
-// `const`/`let` de nível superior não viram propriedade do sandbox no vm do
-// Node — só existem dentro do próprio script. Por isso anexamos essa linha
-// extra pra conseguir ler o resultado depois de rodar.
-const dataBlock = src.slice(startIdx, endIdx + endMarker.length) + "\nglobalThis.__EXTRACTED_CARS__ = SEED_CARS;";
+const TEXT = (v) => (v == null ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
+const NUM = (v) => (v == null ? "NULL" : Number(v));
+const BOOL = (v) => (v == null ? "NULL" : v ? "true" : "false");
+const JSONB = (v) => (v == null ? "NULL" : `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`);
 
-const sandbox = {};
-vm.createContext(sandbox);
-vm.runInContext(dataBlock, sandbox);
-const cars = sandbox.__EXTRACTED_CARS__;
-
-if (!Array.isArray(cars) || cars.length === 0) {
-  console.error("SEED_CARS veio vazio — algo deu errado na extração.");
-  process.exit(1);
-}
-
-const esc = (v) => (v == null ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
-const num = (v) => (v == null ? "NULL" : Number(v));
-const bool = (v) => (v == null ? "NULL" : v ? "true" : "false");
-const jsonb = (v) => (v == null ? "NULL" : `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`);
-
-const cols = [
-  "id", "name", "brand", "category", "price", "power_cv", "torque_nm",
-  "battery_kwh", "battery_chem", "motor_type", "range_km", "accel",
-  "ground_clearance", "trunk_l", "weight_kg", "wallbox", "ac_kw", "dc_kw",
-  "airbags", "warranty", "fuel_type", "verified", "price_verified_date",
-  "maintenance_interval", "maintenance_first_cost", "maintenance_km_base",
-  "maintenance_total_cost", "consumption_kwh_100", "tech_notes",
-  "image_url", "video_url", "personas",
+// [nome da coluna, formatador] — explícito, pra não depender de adivinhar
+// "isso parece número" (foi assim que um bug de tipo passou despercebido
+// numa refatoração anterior: range_km virou string sem essa lista clara).
+const COLUMNS = [
+  ["id", TEXT], ["name", TEXT], ["brand", TEXT], ["category", TEXT], ["price", NUM],
+  ["power_cv", NUM], ["torque_nm", NUM], ["battery_kwh", NUM], ["battery_chem", TEXT],
+  ["motor_type", TEXT], ["range_km", NUM], ["accel", NUM], ["ground_clearance", NUM],
+  ["trunk_l", NUM], ["weight_kg", NUM], ["wallbox", TEXT], ["ac_kw", NUM], ["dc_kw", NUM],
+  ["airbags", NUM], ["warranty", TEXT], ["fuel_type", TEXT], ["verified", BOOL],
+  ["price_verified_date", TEXT], ["maintenance_interval", TEXT], ["maintenance_first_cost", TEXT],
+  ["maintenance_km_base", NUM], ["maintenance_total_cost", NUM], ["consumption_kwh_100", NUM],
+  ["tech_notes", TEXT], ["image_url", TEXT], ["video_url", TEXT], ["personas", JSONB],
 ];
 
 const lines = [];
-lines.push("-- Gerado automaticamente por scripts/generate-supabase-seed.mjs — não editar à mão.");
+lines.push("-- Gerado manualmente por scripts/generate-supabase-seed.mjs.");
 lines.push(`-- ${cars.length} carros extraídos de src/App.jsx em ${new Date().toISOString().slice(0, 10)}.`);
-lines.push("-- Roda no SQL Editor do Supabase. É um upsert: atualiza quem já existe (por id) e insere quem é novo.");
-lines.push("-- Não apaga carros removidos do código — se um carro sumir de App.jsx, remova a linha manualmente no Supabase.");
+lines.push("-- A sincronização normal é automática (GitHub Action) — isso aqui é só pra debug/revisão manual.");
 lines.push("");
-lines.push(`insert into cars (${cols.join(", ")})`);
+lines.push(`insert into cars (${COLUMNS.map(([col]) => col).join(", ")})`);
 lines.push("values");
 
 const rows = cars.map((c) => {
-  const vals = [
-    esc(c.id), esc(c.name), esc(c.brand), esc(c.category), num(c.price),
-    num(c.powerCv), num(c.torqueNm), num(c.batteryKwh), esc(c.batteryChem),
-    esc(c.motorType), num(c.rangeKm), num(c.accel), num(c.groundClearance),
-    num(c.trunkL), num(c.weightKg), esc(c.wallbox), num(c.acKw), num(c.dcKw),
-    num(c.airbags), esc(c.warranty), esc(c.fuelType), bool(c.verified),
-    esc(c.priceVerifiedDate), esc(c.maintenanceInterval), esc(c.maintenanceFirstCost),
-    num(c.maintenanceKmBase), num(c.maintenanceTotalCost), num(c.consumptionKwh100),
-    esc(c.techNotes), esc(c.imageUrl), esc(c.videoUrl), jsonb(c.personas),
-  ];
+  const r = carToRow(c);
+  const vals = COLUMNS.map(([col, fmt]) => fmt(r[col]));
   return `  (${vals.join(", ")})`;
 });
 lines.push(rows.join(",\n"));
 lines.push("on conflict (id) do update set");
 lines.push(
-  cols
-    .filter((c) => c !== "id")
-    .map((c) => `  ${c} = excluded.${c}`)
+  COLUMNS.filter(([col]) => col !== "id")
+    .map(([col]) => `  ${col} = excluded.${col}`)
     .join(",\n")
 );
 lines.push(";");

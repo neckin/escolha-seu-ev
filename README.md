@@ -21,12 +21,17 @@ O **catálogo de carros** vem de uma tabela `cars` num projeto Supabase
 (Postgres) — todo mundo que visita o site vê os mesmos carros, vindos do
 mesmo lugar. O código (`src/App.jsx`, constante `SEED_CARS`) continua sendo
 a fonte "oficial": é ali que cada carro é corrigido/adicionado, com a fonte
-da informação registrada no commit — igual sempre fizemos. Depois de mexer
-nos dados, roda `node scripts/generate-supabase-seed.mjs > supabase/seed-cars.sql`
-e executa o SQL gerado no **SQL Editor** do Supabase pra sincronizar o banco.
+da informação registrada no commit — igual sempre fizemos.
+
+A sincronização com o banco é **automática**: a GitHub Action
+`.github/workflows/sync-supabase.yml` roda sozinha a cada push na `main`
+que mexa em `src/App.jsx`, faz upsert dos carros no Supabase e remove de
+lá quem saiu do código. Não precisa copiar SQL à mão. Pra rodar manualmente
+(ex.: debug), tem o botão **Actions → Sincronizar carros com o Supabase →
+Run workflow** no GitHub.
 
 Se o Supabase não estiver configurado (falta `.env.local`) ou a consulta
-falhar por qualquer motivo, o app cai de volta pro catálogo embutido no
+falhar por qualquer motivo, o site cai de volta pro catálogo embutido no
 código (`SEED_CARS`) — nunca quebra por causa disso.
 
 Coisas pessoais do visitante (tema claro/escuro, "meu carro atual", tutorial
@@ -38,16 +43,25 @@ já visto) continuam no **localStorage do navegador** (`src/storageShim.js`)
 1. Crie um projeto grátis em [supabase.com](https://supabase.com)
 2. No **SQL Editor** do projeto, rode `supabase/schema.sql` (cria a tabela e
    a política de leitura pública) e depois `supabase/seed-cars.sql` (popula
-   com os carros que já estão no código)
-3. Em **Settings → API Keys**, copie a **Project URL** e a chave **`anon`**
-   (não a `service_role` — essa é secreta e nunca deve aparecer no front)
-4. Crie um arquivo `.env.local` na raiz do projeto (não é versionado):
+   com os carros que já estão no código — só na primeira vez; depois disso
+   a Action cuida de manter tudo sincronizado)
+3. Em **Settings → API Keys**, copie a **Project URL** e as duas chaves:
+   - **`anon`** (pública, usada pelo site pra ler os carros)
+   - **`service_role`** (secreta — usada só pela GitHub Action pra escrever;
+     nunca deve aparecer no front nem ser compartilhada)
+4. Crie um arquivo `.env.local` na raiz do projeto (não é versionado), só
+   com a chave pública:
    ```
    VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
    VITE_SUPABASE_ANON_KEY=sua-chave-anon
    ```
 5. Na Vercel, adicione as mesmas duas variáveis em **Settings → Environment
    Variables** (Production, Preview e Development)
+6. No repositório do GitHub, em **Settings → Secrets and variables →
+   Actions**, adicione:
+   - `SUPABASE_URL` (mesmo valor do `.env.local`)
+   - `SUPABASE_SERVICE_ROLE_KEY` (a chave secreta do passo 3 — só aqui,
+     nunca em `.env.local` nem em nenhum lugar que vá pro navegador)
 
 ## Publicando (deploy)
 
@@ -98,13 +112,16 @@ src/
   supabaseClient.js           <- client do Supabase (client-side, usa a chave anon pública)
 supabase/
   schema.sql                  <- cria a tabela `cars` + RLS de leitura pública (roda 1x)
-  seed-cars.sql                <- gerado a partir do código, sincroniza o banco (roda a cada mudança)
+  seed-cars.sql                <- SQL gerado (histórico/debug) — não é o que sincroniza de verdade
 scripts/
-  generate-supabase-seed.mjs  <- gera o seed-cars.sql a partir de SEED_CARS em App.jsx
+  lib/extract-seed-cars.mjs   <- extrai o SEED_CARS de App.jsx (usado pelos 2 scripts abaixo)
+  sync-supabase.mjs           <- sincroniza o Supabase de verdade, roda pela GitHub Action
+  generate-supabase-seed.mjs  <- gera SQL manualmente, só pra debug/revisão
   channels.json               <- lista de canais do YouTube monitorados
   scan-channels.mjs           <- robô de triagem semanal
   pending-reviews/            <- relatórios gerados (um .md por semana)
 .github/workflows/
+  sync-supabase.yml            <- sincroniza a tabela cars a cada push que mexe em App.jsx
   weekly-scan.yml              <- agendamento do robô (toda segunda-feira)
 index.html
 package.json

@@ -1,0 +1,29 @@
+name: Sincronizar carros com o Supabase
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/App.jsx"
+      - "scripts/sync-supabase.mjs"
+      - "scripts/lib/extract-seed-cars.mjs"
+  workflow_dispatch: {} # permite rodar manualmente também, pelo botão no GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Sincronizar tabela cars no Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/sync-supabase.mjs
