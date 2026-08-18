@@ -90,6 +90,7 @@ const BRAND_GROUPS = {
   "Land Rover": "Jaguar Land Rover (JLR) — controlada pela Tata Motors (Índia)",
   "Porsche": "Volkswagen Group",
   "Lexus": "Toyota Motor Corporation (marca de luxo)",
+  "Mitsubishi": "Aliança Renault-Nissan-Mitsubishi",
 };
 
 const PERSONAS = [
@@ -3610,6 +3611,40 @@ const SEED_CARS_DETAILED = [
     techNotes:
       "Primeiro elétrico 100% da Lexus no Brasil, entregas iniciadas em maio/2026 (o modelo global se chama RZ 450e, mas a versão vendida no Brasil é nomeada RZ 500e). Bateria de 77kWh com resfriamento líquido. Autonomia de 375km é o valor citado como 'Inmetro' pela imprensa (uma fonte cita até 600km em ciclo urbano WLTP europeu, bem mais otimista — não usado aqui). Tração integral DIRECT4 com motor em cada eixo (264Nm cada, torque total do sistema não divulgado). Recarga DC até 150kW (0-80% em ~30min). Financiamento com taxa a partir de 0% e recompra garantida de 80% da tabela FIPE fazem parte do programa de lançamento.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
+  },
+  {
+    id: "mitsubishi-outlander-phev",
+    imageUrl: "https://cdn.autopapo.com.br/box/uploads/2025/05/13185752/mitsubishi-outlander-phev-signature-branco-diamond-frente-em-movimento.jpg",
+    name: "Mitsubishi Outlander PHEV HPE-S",
+    brand: "Mitsubishi",
+    category: "SUV médio híbrido",
+    price: 374990,
+    powerCv: 252,
+    torqueNm: 450,
+    batteryKwh: 20,
+    batteryChem: null,
+    motorType: "PHEV combinado Twin Motor 4WD (2.4 Atkinson dianteiro + motor elétrico em cada eixo)",
+    rangeKm: null,
+    accel: 7.9,
+    groundClearance: null,
+    trunkL: 284,
+    weightKg: null,
+    wallbox: "Não incluso (carregador portátil 3,5kW de série)",
+    acKw: 3.5,
+    dcKw: null,
+    airbags: 11,
+    warranty: "5 anos veículo / 8 anos bateria",
+    fuelType: "PHEV",
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: null,
+    techNotes:
+      "Nova geração (4ª geração) do Outlander no Brasil vendida só como PHEV (não há mais versão a combustão pura). 7 lugares, tração integral elétrica Twin Motor 4WD (um motor elétrico em cada eixo + motor 2.4 ciclo Atkinson). Autonomia 100% elétrica de 58km (Inmetro) e autonomia combinada de até 680km. Porta-malas de apenas 284L com os 7 lugares em uso (637L com a 3ª fileira rebatida, 1.448L só com os dianteiros). Recarga só em AC 3,5kW via carregador portátil (~6h30 para carga completa) — não há confirmação de recarga DC rápida. Existe também a versão Signature (R$389.990, mesma mecânica, mais equipamentos) não cadastrada separadamente por não ter diferença de potência/bateria.",
+    personas: { urbano: 2, familia: 5, aventura: 3, performance: 3, custo: 3 },
   },
 ];
 
