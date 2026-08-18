@@ -85,6 +85,7 @@ const BRAND_GROUPS = {
   "Chevrolet": "General Motors",
   "Hyundai": "Hyundai Motor Group (inclui Kia e Genesis)",
   "Kia": "Hyundai Motor Group",
+  "Ford": "Ford Motor Company — independente (Mustang Mach-E vendido no Brasil via CAOA Ford)",
 };
 
 const PERSONAS = [
@@ -3197,6 +3198,40 @@ const SEED_CARS_DETAILED = [
     techNotes:
       "SUV grande híbrido plug-in de 7 lugares, ainda em linha no Brasil mesmo após o lançamento do EX90 (100% elétrico) — não foi substituído, coexistem no catálogo. Versão Plus, mesma mecânica T8 (462cv/709Nm) do XC60. Bateria de 18,8kWh dá 47km de autonomia elétrica. Porta-malas de 316L com as 3 fileiras em uso (500L com a 3ª rebatida). Vão livre de 223mm.",
     personas: { urbano: 2, familia: 5, aventura: 2, performance: 5, custo: 1 },
+  },
+  {
+    id: "ford-mustang-mach-e",
+    imageUrl: "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2026/mustang-mach-e/gt-performance/billboard/fbr-mustang-mach-gt-billboard.jpg",
+    name: "Ford Mustang Mach-E GT Performance",
+    brand: "Ford",
+    category: "SUV médio premium",
+    price: 449000,
+    powerCv: 487,
+    torqueNm: 860,
+    batteryKwh: 91,
+    batteryChem: "NMC",
+    motorType: "Bimotor e-AWD (tração integral)",
+    rangeKm: 379,
+    accel: 3.7,
+    groundClearance: null,
+    trunkL: 402,
+    weightKg: 2307,
+    wallbox: "Incluso (Ford Mobile Wall Box portátil, 32A)",
+    acKw: 11,
+    dcKw: 150,
+    airbags: 9,
+    warranty: "8 anos ou 100.000 km bateria de alta voltagem (ficha técnica oficial); imprensa cita garantia de veículo de 3 anos + propulsão 8 anos/160.000 km, termo exato não confirmado em fonte única",
+    fuelType: "BEV",
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: "Gratuita (3 anos, sem limite de km — fonte: imprensa, não confirmado no site oficial)",
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: 24.0,
+    techNotes:
+      "Única marca tradicional grande (não chinesa) além da BMW/Volvo/Chevrolet a vender elétrico oficialmente no Brasil hoje, via CAOA Ford (rede própria de concessionárias). Vendido em versão única, GT Performance (487cv/860Nm, bimotor e-AWD), a R$449.000 — preço reduzido em R$37 mil no início de 2026 (era ~R$486.000) por causa do baixo giro. Ficha técnica oficial do site Ford Brasil mostra dois valores de autonomia na mesma página: 379km (citado no texto, condizente com o padrão INMETRO/PBEV usado nos demais carros desta base) e 541km na tabela de specs (provavelmente WLTP) — usamos o menor por consistência com o resto da base. Consumo de 24,0 kWh/100km calculado a partir de bateria (91kWh) e autonomia oficiais (379km), não é valor direto de fonte. Porta-malas de 402L traseiro + frunk dianteiro de 139L (~541L total). Ford Territory PHEV (chinês, rebatizado, ~218cv) e Ranger PHEV ainda não têm venda oficial confirmada no Brasil — previstas para fim de 2026/2027, por isso não entraram na base.",
+    personas: { urbano: 3, familia: 3, aventura: 2, performance: 5, custo: 1 },
   },
 ];
 
