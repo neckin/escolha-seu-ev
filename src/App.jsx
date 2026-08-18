@@ -93,6 +93,7 @@ const BRAND_GROUPS = {
   "Mitsubishi": "Aliança Renault-Nissan-Mitsubishi",
   "Denza": "BYD Company (marca premium, joint venture original com a Mercedes-Benz, hoje majoritariamente BYD)",
   "Avatr": "Changan — joint venture com Huawei e CATL",
+  "Jeep": "Stellantis",
 };
 
 const PERSONAS = [
@@ -3715,6 +3716,40 @@ const SEED_CARS_DETAILED = [
     techNotes:
       "Avatr é a marca de luxo elétrico da Changan, joint venture com a Huawei e a CATL — vendida no Brasil pela CAOA Changan (rede própria, estreou no Salão de SP em nov/2025, já com mais de 20 unidades vendidas). Preço varia pela configuração de bancos: R$599.990 (5 lugares) ou R$619.900 (4 lugares, banco traseiro individual reclinável). Autonomia oficial Inmetro de 497km (710km WLTP). Sistema de condução assistida QianKun (Huawei ADS) com 3 radares a laser. Consumo de 23,3 kWh/100km calculado a partir de bateria/autonomia oficiais. Torque combinado (663Nm) e porta-malas (470L) vêm de fonte agregadora, não confirmados diretamente no site oficial da marca no Brasil, que não divulga esses dois valores.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
+  },
+  {
+    id: "jeep-grand-cherokee-4xe",
+    imageUrl: "https://cdn.autopapo.com.br/box/uploads/2023/10/08220058/jeep-grand-cherokee-4xe-2023-branco-frente-lateral-traseira-7.jpg",
+    name: "Jeep Grand Cherokee 4xe",
+    brand: "Jeep",
+    category: "SUV grande híbrido premium",
+    price: 569990,
+    powerCv: 380,
+    torqueNm: 637,
+    batteryKwh: 17.4,
+    batteryChem: null,
+    motorType: "PHEV combinado 4x4 (2.0 turbo 272cv + motor elétrico PF1 33kW + motor elétrico P2 100kW)",
+    rangeKm: null,
+    accel: null,
+    groundClearance: null,
+    trunkL: 580,
+    weightKg: 2466,
+    wallbox: null,
+    acKw: 7.2,
+    dcKw: null,
+    airbags: 8,
+    warranty: "3 anos veículo sem limite de km / 5 anos ou 100.000 km bateria",
+    fuelType: "PHEV",
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
+    maintenanceInterval: null,
+    maintenanceFirstCost: null,
+    maintenanceKmBase: null,
+    maintenanceTotalCost: null,
+    consumptionKwh100: null,
+    techNotes:
+      "Marca inteiramente ausente da base anterior. Grand Cherokee 4xe retornou ao Brasil em 2026 (primeiras 150 unidades importadas dos EUA já entregues às concessionárias), potência/torque combinados oficiais (documento técnico Stellantis): 380cv/637Nm. Autonomia elétrica de 29km (Inmetro) — bem abaixo dos 50km divulgados em outros mercados. Só recarrega em AC (até 7,2kW via wallbox tipo 2, ~2h30 para carga completa); não tem porta de recarga DC. Consumo combinado de 19,3 km/l (Inmetro). ATENÇÃO: o Jeep Compass 4xe (outro PHEV da marca) foi pesquisado mas NÃO foi incluído — saiu do site oficial da Jeep Brasil em fev/2026 e é considerado descontinuado (vendeu só ~100 unidades em 2025); a nova geração do Compass (com PHEV) só chega em 2027.",
+    personas: { urbano: 1, familia: 5, aventura: 3, performance: 4, custo: 1 },
   },
 ];
 
