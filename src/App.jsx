@@ -136,9 +136,10 @@ function defaultPersonasFor(category, price, cv, fuelType) {
 
 // -- Bulk-imported models (price/range/power from aggregate market source, ago/2026) --
 // Format: [brand, model, category, price, powerCv, rangeKm, consumptionKwh100, fuelType]
-const BULK_RAW = [
-  ["MG", "MG4 (versão importada)", "Hatch médio", 189990, 203, 435, 14.5, "BEV"],
-];
+// Vazio por enquanto: o único item que restava aqui ("MG4 versão importada")
+// foi removido em 19/08/2026 — o usuário conferiu contra o PDF oficial com
+// todos os modelos da MG e esse carro não existe na linha da marca.
+const BULK_RAW = [];
 
 // -- Carros removidos da base em 17/08/2026 após pesquisa (não são mais vendidos
 // oficialmente 0km no Brasil, ou não há confirmação de venda oficial):
