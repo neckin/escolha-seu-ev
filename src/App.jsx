@@ -1625,7 +1625,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 22.5,
     videoUrl: "https://www.youtube.com/watch?v=Rc8Vip7BkQ0",
     techNotes:
-      "Preço de lançamento (Signature) é R$394.990 — acima do valor de R$339.990 que circulava antes (havia descontos pontuais de estoque parado até R$294.990, mas não é preço de tabela). Autonomia oficial PBEV/INMETRO é 374 km, bem abaixo do WLTP de 480 km. DC de até 350 kW carrega de 10-80% em ~18 min. Wallbox residencial WEG 7,68kW incluso, com 1 ano de cobertura.",
+      "Preço de lançamento (Signature) é R$394.990 — acima do valor de R$339.990 que circulava antes (havia descontos pontuais de estoque parado até R$294.990, mas não é preço de tabela). Autonomia oficial PBEV/INMETRO é 374 km, bem abaixo do WLTP de 480 km. DC de até 350 kW carrega de 10-80% em ~18 min. Wallbox residencial WEG 7,68kW incluso, com 1 ano de cobertura. Checado em 19/08/2026: vendas muito baixas no Brasil (87 unidades emplacadas desde set/2024) levaram a promoções pontuais de até R$100 mil de desconto em estoque parado (encerradas em fev/2026, não são o preço de tabela atual). A parceria de fabricação entre a CAOA e a Hyundai também terminou em 2025 (após 26 anos), mas a Hyundai passou a poder importar modelos diretamente — o Ioniq 5 segue ativo no site oficial e em concessionárias em ago/2026, não há indício de descontinuação real apesar de rumores nesse sentido.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
   },
   {
@@ -3964,8 +3964,8 @@ const SEED_CARS_DETAILED = [
     brand: "Avatr",
     category: "SUV médio premium",
     price: 599990,
-    powerCv: 578,
-    torqueNm: 663,
+    powerCv: 585,
+    torqueNm: 680,
     batteryKwh: 116,
     batteryChem: null,
     motorType: "Bimotor AWD (265cv dianteiro + 313cv traseiro)",
@@ -3989,7 +3989,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 23.3,
     videoUrl: "https://www.youtube.com/watch?v=xna7gqkuyEA",
     techNotes:
-      "Avatr é a marca de luxo elétrico da Changan, joint venture com a Huawei e a CATL — vendida no Brasil pela CAOA Changan (rede própria, estreou no Salão de SP em nov/2025, já com mais de 20 unidades vendidas). Preço varia pela configuração de bancos: R$599.990 (5 lugares) ou R$619.900 (4 lugares, banco traseiro individual reclinável). Autonomia oficial Inmetro de 497km (710km WLTP). Sistema de condução assistida QianKun (Huawei ADS) com 3 radares a laser. Consumo de 23,3 kWh/100km calculado a partir de bateria/autonomia oficiais. Torque combinado (663Nm) e porta-malas (470L) vêm de fonte agregadora, não confirmados diretamente no site oficial da marca no Brasil, que não divulga esses dois valores.",
+      "Avatr é a marca de luxo elétrico da Changan, joint venture com a Huawei e a CATL — vendida no Brasil pela CAOA Changan (rede própria, estreou no Salão de SP em nov/2025, já com mais de 20 unidades vendidas). Preço varia pela configuração de bancos: R$599.990 (5 lugares) ou R$619.900 (4 lugares, banco traseiro individual reclinável). Autonomia oficial Inmetro de 497km (710km WLTP). Sistema de condução assistida QianKun (Huawei ADS) com 3 radares a laser. Consumo de 23,3 kWh/100km calculado a partir de bateria/autonomia oficiais. Potência/torque corrigidos em 19/08/2026: fontes de imprensa brasileira (ago/2026) confirmam 585cv/680Nm de forma consistente, valor de marketing um pouco diferente da soma bruta dos dois motores (265cv dianteiro + 313cv traseiro = 578cv/650Nm em bases de dados internacionais) — mantido o valor usado nas fontes brasileiras. Porta-malas (470L) ainda não confirmado diretamente no site oficial da marca no Brasil.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
   },
   {
