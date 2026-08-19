@@ -3203,10 +3203,10 @@ const SEED_CARS_DETAILED = [
     category: "SUV compacto",
     price: 194900,
     powerCv: 163,
-    torqueNm: null,
+    torqueNm: 210,
     batteryKwh: 52.5,
-    batteryChem: null,
-    motorType: null,
+    batteryChem: "LFP",
+    motorType: "PMSM dianteiro (FWD)",
     rangeKm: 258,
     accel: null,
     groundClearance: 135,
@@ -3227,7 +3227,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 20.3,
     videoUrl: "https://www.youtube.com/watch?v=IfPvTxhPaDQ",
     techNotes:
-      "Baterias fabricadas pela CATL. Carregamento AC completo em ~9h; DC de 30% a 80% em ~30min. Versão de entrada da linha Neta X.",
+      "Baterias fabricadas pela CATL (química LFP). Carregamento AC completo em ~9h; DC de 30% a 80% em ~30min. Versão de entrada da linha Neta X, que segue com 3 versões ativas no Brasil (400/500/500 Luxury) — confirmado em pente-fino 19/08/2026. Torque de 210Nm e tração dianteira (FWD) preenchidos nessa revisão (mesmo motor em todas as versões da linha X).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 2, custo: 3 },
   },
   {
@@ -3238,10 +3238,10 @@ const SEED_CARS_DETAILED = [
     category: "SUV compacto",
     price: 204900,
     powerCv: 163,
-    torqueNm: null,
+    torqueNm: 210,
     batteryKwh: 64.1,
-    batteryChem: null,
-    motorType: null,
+    batteryChem: "LFP",
+    motorType: "PMSM dianteiro (FWD)",
     rangeKm: 317,
     accel: null,
     groundClearance: 135,
@@ -3261,43 +3261,19 @@ const SEED_CARS_DETAILED = [
     maintenanceTotalCost: null,
     consumptionKwh100: 20.2,
     techNotes:
-      "Baterias fabricadas pela CATL. Carregamento AC completo em ~11h; DC de 30% a 80% em ~30min. Existe também a versão 500 Luxury, com peso e bateria equivalentes.",
+      "Baterias fabricadas pela CATL (química LFP). Carregamento AC completo em ~11h; DC de 30% a 80% em ~30min. Existe também a versão 500 Luxury, com peso e bateria equivalentes. Torque de 210Nm e tração dianteira (FWD) preenchidos em pente-fino 19/08/2026 (mesmo motor em todas as versões da linha X, confirmado em múltiplas fontes).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 2, custo: 3 },
   },
-  {
-    id: "neta-gt",
-    imageUrl: "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2024/08/06_NetaGT_Azul_Estrada_Frente.png.webp",
-    name: "Neta GT",
-    brand: "Neta",
-    category: "Cupê esportivo elétrico",
-    price: null,
-    powerCv: 394,
-    torqueNm: 620,
-    batteryKwh: 74.48,
-    batteryChem: null,
-    motorType: "Bimotor AWD (um em cada eixo, 145kW cada)",
-    rangeKm: 410,
-    accel: 3.7,
-    groundClearance: null,
-    trunkL: null,
-    weightKg: null,
-    wallbox: null,
-    acKw: null,
-    dcKw: null,
-    airbags: null,
-    warranty: null,
-    fuelType: "BEV",
-    verified: false,
-    priceVerifiedDate: null,
-    maintenanceInterval: null,
-    maintenanceFirstCost: null,
-    maintenanceKmBase: null,
-    maintenanceTotalCost: null,
-    consumptionKwh100: 18.2,
-    techNotes:
-      "Cupê esportivo 2+2 elétrico da Neta, revelado no Festival Interlagos (ago/2024) e comercializado desde set/2024 por concessionárias oficiais (netaauto.com.br, netaautopotenza.com.br), mas sem preço oficial divulgado publicamente até hoje (mesmo passados quase 2 anos do lançamento) — deixado como null. Bimotor AWD com 394cv/620Nm combinados, bateria de 74,48kWh, acelera 0-100km/h em 3,7s. Baterias CATL, como o resto da linha Neta.",
-    personas: { urbano: 2, familia: 2, aventura: 1, performance: 5, custo: 3 },
-  },
+  // NETA GT REMOVIDO em 19/08/2026 (pente-fino): confirmado pela Motor Show
+  // (14/10/2025, "Neta tem uma loja, vende 14 carros em setembro e diz que
+  // não vai deixar o Brasil") que o GT foi descontinuado no Brasil - a marca
+  // hoje vende só Aya e X por uma única concessionária (RJ). Dado Fenabrave
+  // de 2025 confirma zero unidades vendidas do GT (só Aya e X aparecem nos
+  // números). Bate com o que já estava documentado aqui: o carro nunca teve
+  // preço oficial publicado em quase 2 anos desde o "lançamento" (ago/2024),
+  // sinal de que nunca chegou a ter venda de fato. A página de marketing do
+  // GT (netaauto.com.br/neta-gt/) ainda existe no ar, mas sem ficha de
+  // preço/venda real - mesmo padrão do caso GWM Ora 03 GT.
   {
     id: "volvo-ex90",
     imageUrl: "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt88ae6c8936a0e087/68089476b435297d2888d1ae/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
