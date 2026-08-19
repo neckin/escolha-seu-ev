@@ -700,7 +700,7 @@ const SEED_CARS_DETAILED = [
     name: "Volvo EX30 Ultra Twin Motor",
     brand: "Volvo",
     category: "SUV compacto premium",
-    price: 310000,
+    price: 309950,
     powerCv: 428,
     torqueNm: 543,
     batteryKwh: 69,
@@ -726,7 +726,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 21.8,
     videoUrl: "https://www.youtube.com/watch?v=FP6qurMGmWk",
     techNotes:
-      "Versão topo de linha do EX30, bimotor AWD (428cv/543Nm) com bateria NMC de 69kWh — quase o dobro da potência da versão Single (272cv). Existe também a versão Cross Country (R$315.000, mesma bateria de 69kWh, suspensão elevada), provavelmente com potência semelhante à Ultra, mas sem ficha técnica própria confirmada em fonte confiável.",
+      "Versão topo de linha do EX30, bimotor AWD (428cv/543Nm) com bateria NMC de 69kWh — quase o dobro da potência da versão Single (272cv). Existe também a versão Cross Country (R$314.950, mesma bateria de 69kWh, suspensão elevada), provavelmente com potência semelhante à Ultra, mas sem ficha técnica própria confirmada em fonte confiável. Confirmado em 19/08/2026: a versão de entrada do EX30 foi renomeada de 'Core' pra 'Plus' (mesma bateria/preço), então o nome 'Core' não aparece mais no site oficial — não afeta esse card, que já usa o nome genérico 'Volvo EX30' sem especificar o trim de entrada.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
   },
   {
