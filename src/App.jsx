@@ -447,6 +447,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 13.6,
+    videoUrl: "https://www.youtube.com/watch?v=0wSwlKUMeYE",
     techNotes:
       "Compartilha com o EX2 Max a mesma plataforma, o motor traseiro (RWD) e a bateria LFP de 39,4 kWh — a versão Pro é a entrada de linha, com potência, torque e autonomia idênticos, mas com pacote de ADAS e itens de conforto reduzidos. Tração traseira é incomum nessa faixa de preço.",
     personas: { urbano: 5, familia: 2, aventura: 3, performance: 2, custo: 5 },
@@ -481,6 +482,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.3,
+    videoUrl: "https://www.youtube.com/watch?v=JjNsFo6umns",
     techNotes:
       "Um dos elétricos mais baratos do Brasil, com bateria LFP de 31,4 kWh e a menor autonomia INMETRO do grupo (181 km) — reflexo do foco em uso urbano de curta distância. Apenas 2 airbags (motorista e passageiro), abaixo do padrão de 6 já comum em concorrentes chineses mais recentes. Atenção (checado em 19/08/2026): a JAC descontinuou os outros dois elétricos de passeio da linha (E-JS4 e E-J7, removidos deste app) e está reposicionando a marca no Brasil quase inteiramente para picapes — reduziu de 46+ concessionárias físicas pra só 3 (São Paulo, Curitiba, Porto Alegre). O E-JS1 segue sendo vendido (ano-modelo 2027 confirmado), mas o comunicado oficial da marca sobre a nova estratégia não mencionou ele, deixando o futuro do modelo incerto — vale considerar isso antes de comprar.",
     personas: { urbano: 5, familia: 2, aventura: 2, performance: 1, custo: 4 },
@@ -1311,6 +1313,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.5,
+    videoUrl: "https://www.youtube.com/watch?v=80HhsqwRMwE",
     techNotes:
       "Existem duas versões: eDrive20 (FWD, R$359.950, 204cv/250Nm, bateria 64,7kWh, ~332km INMETRO — ficha usada aqui) e xDrive30 M Sport (AWD, R$485.950, 313cv/494Nm, bateria 66,5kWh, ~303km INMETRO). O preço que circulava antes (R$339.990 com 313cv) não corresponde a nenhuma das duas versões reais.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 2, custo: 1 },
@@ -1345,6 +1348,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20,
+    videoUrl: "https://www.youtube.com/watch?v=0zKFAwXLMSs",
     techNotes:
       "Versão elétrica cupê-SUV do X2, voltou a ser vendida oficialmente no Brasil (o iX2 já havia ficado fora de linha por um tempo). Bimotor AWD com 313cv/494Nm combinados. Preço de tabela oficial de agosto/2026 é R$495.950 — fontes de imprensa mais antigas (de 2024/2025) mencionam valores de R$443.950 a R$464.950, defasados pelos reajustes ao longo do período. Porta-malas de 525L (até 1.400L com bancos rebatidos).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 5, custo: 1 },
@@ -2042,6 +2046,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.8,
+    videoUrl: "https://www.youtube.com/watch?v=_y5b0XB3N7A",
     techNotes:
       "Correção em 19/08/2026: a BYD renovou o Yuan Plus pra linha 2027, abandonando o motor único dianteiro (204cv/310Nm, R$229.800) em favor de bimotor AWD com 449cv/560Nm — a versão FWD antiga não é mais vendida. Bateria também cresceu (74,88kWh vs 60,5kWh), com carregamento DC de até 205kW e AC de 11kW, ausentes na versão anterior. Autonomia PBEV/Inmetro oficial (site BYD) é 378km — bem mais conservadora que os 530km citados por parte da imprensa (provavelmente ciclo NEDC). Porta-malas cresceu de 312L pra 490L + frunk de 101L. Conhecido internacionalmente como BYD Atto 3. Peso não confirmado pra essa nova versão.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
@@ -2250,6 +2255,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=UTq32Kwh1Y4",
     techNotes:
       "Versão topo de linha do Song Plus (a versão FWD de entrada está cadastrada separadamente, id byd-song-plus-phev), lançada em mar/2026 como o SUV híbrido plug-in mais potente da BYD no Brasil até então. Tração integral com um motor elétrico em cada eixo (204cv dianteiro + 163cv traseiro) somados ao 1.5 turbo, 324cv/550Nm combinados. Autonomia elétrica de 87km PBEV e autonomia total de até 1.100km. Atualização em 19/08/2026: a versão FWD também ganhou motor 1.5 turbo e bateria de 26,6kWh na linha 2027 (antes 1.5 aspirado com 18,3kWh) — as duas versões (FWD e Premium AWD) agora compartilham a mesma capacidade de bateria, diferindo em potência e tração (239cv FWD vs 324cv AWD). Trunk reutilizado do valor da versão FWD (552L) — não confirmado se muda com o pacote AWD.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -2568,6 +2574,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.7,
+    videoUrl: "https://www.youtube.com/watch?v=mwChnno-pWo",
     techNotes:
       "Duas versões: Comfort (R$195.800, reajustada pra R$218.800 a partir de 5/jan/2026 — ficha usada aqui, com 6 airbags) e Luxury (R$219.800, R$238.800 após 5/jan/2026, ganha 7º airbag central, teto solar e mais equipamento). Construído sobre a Plataforma Modular Escalável (MSP) da MG, 5 estrelas no Euro NCAP 2025.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 3 },
@@ -2602,6 +2609,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.5,
+    videoUrl: "https://www.youtube.com/watch?v=yzryhpxIAbk",
     techNotes:
       "Roadster esportivo com portas de abertura tipo tesoura. Recarga DC de 150kW leva de 10% a 80% em ~38min.",
     personas: { urbano: 2, familia: 1, aventura: 1, performance: 5, custo: 1 },
@@ -2844,6 +2852,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.7,
+    videoUrl: "https://www.youtube.com/watch?v=UEB4-hYms-c",
     techNotes:
       "Existe também a versão REEV (com extensor de autonomia a combustão), cadastrada separadamente (id leapmotor-c10-reev) por ser um powertrain diferente (fuelType PHEV em vez de BEV).",
     personas: { urbano: 3, familia: 5, aventura: 3, performance: 4, custo: 2 },
@@ -2913,6 +2922,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 14.6,
+    videoUrl: "https://www.youtube.com/watch?v=85toAcg3Yj4",
     techNotes:
       "Ficha técnica oficial Geely conferida (ago/2026). Versão de entrada da linha EX5 — autonomia de 413km, a maior das duas versões elétricas (a Max, cadastrada separadamente, sacrifica autonomia por mais equipamento). Porta-malas 461L (1.877L com banco rebatido). Airbags: 2 frontais + 2 cortina dianteiros + 2 cortina traseiros (sem laterais de tórax). Existe também a versão híbrida plug-in EX5 EM-i, cadastrada separadamente (id geely-ex5-em-i) por ser outro powertrain (fuelType PHEV em vez de BEV).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 3 },
