@@ -342,6 +342,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=_7UwxujQXyo",
     techNotes:
       "Versão de entrada do Aion UT no Brasil (a Elite já está cadastrada separadamente, id 'aionut'), com bateria menor (44,12kWh vs 60kWh) e carregamento DC mais lento (64kW vs 87kW), resultando em autonomia de 253km vs 310km e aceleração mais lenta (8,6s vs 7,3s). Potência/torque do motor assumidos iguais aos da Elite (204cv/210Nm) — fontes brasileiras não indicam motor diferente entre as versões, só bateria e equipamentos (a Elite tem ADAS nível 2 e teto panorâmico que a Premium não tem).",
     personas: { urbano: 4, familia: 3, aventura: 4, performance: 5, custo: 5 },
@@ -786,6 +787,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 18.5,
+    videoUrl: "https://www.youtube.com/watch?v=HumjHve-vpo",
     techNotes:
       "Versão de entrada é a Action (R$219.990) — a Icon custa mais. Autonomia WLTP divulgada é 320 km, mas um veículo real registrado rodando no Brasil mediu 227 km com consumo de 18,5 kWh/100km, valores bem mais conservadores usados aqui. DC de 85 kW carrega de 0-80% em ~35 min.",
     personas: { urbano: 5, familia: 1, aventura: 1, performance: 2, custo: 2 },
@@ -1058,6 +1060,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.2,
+    videoUrl: "https://www.youtube.com/watch?v=HeBB2JogXBw",
     techNotes:
       "Preço real de tabela é ~R$419.000 — bem acima do valor de R$299.990 que circulava antes. Bateria NCMA (evolução da química NMC, com menos cobalto) de 85 kWh, a maior do grupo, com motor biMotor AWD de 2x146cv somando 292cv e 451Nm.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -1092,6 +1095,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.4,
+    videoUrl: "https://www.youtube.com/watch?v=EL5Xfsqx8XI",
     techNotes:
       "SUV elétrico esportivo da plataforma Ultium (mesma base do Equinox EV), vendido no Brasil só na versão RS (motor único traseiro, 347cv/450Nm). Preço subiu de R$479.000 no lançamento (2024) para R$503.190 atualmente. Autonomia declarada varia entre 481km (Inmetro, fonte de lançamento) e 526km (fonte mais recente) — usamos a mais recorrente. Uma versão AWD (305cv, bateria menor de 85kWh) foi anunciada para 2026 mas ainda sem ficha e preço confiáveis publicados.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1126,6 +1130,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.6,
+    videoUrl: "https://www.youtube.com/watch?v=YnYe6mbt0Dw",
     techNotes:
       "SUV elétrico familiar de produção nacional (Polo Automotivo do Ceará, junto com o Spark EUV), vendido só na versão Premier. Bateria LFP de 60kWh, motor único dianteiro de 201cv/310Nm. Preço oficial de lançamento é R$199.990 — algumas fontes mais recentes citam R$219.990, possivelmente um reajuste ainda não confirmado em múltiplas fontes. DC de até 120kW (30-80% em ~30min).",
     personas: { urbano: 3, familia: 5, aventura: 3, performance: 3, custo: 3 },
@@ -1160,6 +1165,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 16.1,
+    videoUrl: "https://www.youtube.com/watch?v=TwxcLEyWuY0",
     techNotes:
       "Mini SUV elétrico de entrada da Chevrolet no Brasil, com motor único dianteiro de 102cv/180Nm e bateria de 41,9kWh. Porta-malas de 355L (916L com bancos rebatidos). Carregador de parede (wall charger) de 7kW leva de 20% a 100% em ~7h; carregamento DC não confirmado em fonte confiável.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 1, custo: 4 },
@@ -2681,6 +2687,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.0,
+    videoUrl: "https://www.youtube.com/watch?v=SmPs9SD6dSQ",
     techNotes:
       "Também comercializado como minivan/SUV familiar. Apesar do nome, é a versão com MAIS equipamento de segurança: pacote completo de ADAS (assistente de congestionamento, permanência em faixa, mudança de faixa, frenagem autônoma de emergência, piloto adaptativo), rodas de 17\". A versão Elite (cadastrada separadamente) custa mais caro mas tem ADAS básico (só alerta de colisão frontal) e rodas de 18\" — confira as duas antes de decidir, o nome não indica qual é 'melhor'. Bateria LFP confirmada no site oficial GAC Brasil.",
     personas: { urbano: 3, familia: 5, aventura: 2, performance: 3, custo: 3 },
@@ -2749,6 +2756,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.4,
+    videoUrl: "https://www.youtube.com/watch?v=jl4ntNnDAEs",
     techNotes:
       "Versão única (Elite) no Brasil — confirmado em múltiplas fontes, diferente do Aion Y (que tem Premium e Elite). Bateria LFP confirmada. Recarga ultrarrápida: 30-80% em ~16min a 180kW DC, das mais rápidas do segmento. Peso, vão livre, airbags e garantia ainda sem fonte confiável — não adivinhados aqui.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 2 },
@@ -2783,6 +2791,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.3,
+    videoUrl: "https://www.youtube.com/watch?v=LNXwJksu7_c",
     techNotes:
       "SUV cupê elétrico da Hyptec, submarca premium da GAC. Linha 2027 lançada em 2026 com bateria ampliada (83kWh, arquitetura 800V) e mais potência (340cv/430Nm) que a geração anterior (245cv/72,7kWh). Duas versões: Elite (R$314.990 — ficha usada aqui) e Ultra (R$369.990, com portas traseiras de abertura vertical). Recarga DC de 30-80% em ~15min. Consumo de 19,3 kWh/100km calculado a partir de bateria/autonomia oficiais.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3428,6 +3437,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 24.0,
+    videoUrl: "https://www.youtube.com/watch?v=SJ8Gdwme5Hw",
     techNotes:
       "Única marca tradicional grande (não chinesa) além da BMW/Volvo/Chevrolet a vender elétrico oficialmente no Brasil hoje, via CAOA Ford (rede própria de concessionárias). Vendido em versão única, GT Performance (487cv/860Nm, bimotor e-AWD), a R$449.000 — preço reduzido em R$37 mil no início de 2026 (era ~R$486.000) por causa do baixo giro. Ficha técnica oficial do site Ford Brasil mostra dois valores de autonomia na mesma página: 379km (citado no texto, condizente com o padrão INMETRO/PBEV usado nos demais carros desta base) e 541km na tabela de specs (provavelmente WLTP) — usamos o menor por consistência com o resto da base. Consumo de 24,0 kWh/100km calculado a partir de bateria (91kWh) e autonomia oficiais (379km), não é valor direto de fonte. Porta-malas de 402L traseiro + frunk dianteiro de 139L (~541L total). Ford Territory PHEV (chinês, rebatizado, ~218cv) e Ranger PHEV ainda não têm venda oficial confirmada no Brasil — previstas para fim de 2026/2027, por isso não entraram na base.",
     personas: { urbano: 3, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3940,6 +3950,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=NFOO4Jm-m4o",
     techNotes:
       "Denza é a marca premium da BYD — chegou ao Brasil oficialmente em 10/12/2025 com concessionária própria em São Paulo (Grand Brasil Alphaville). B5 é um SUV off-road híbrido plug-in com bateria Blade LFP de 31,8kWh, autonomia elétrica de até 57km e autonomia total combinada de até 1.200km. Estrutura reforçada (resiste a 12 toneladas estáticas sobre o teto), suspensão hidráulica ativa DiSus-P com 16 modos de condução, 3 bloqueios de diferencial eletrônicos. Peso citado como 'mais de 3.000kg' em fonte agregadora, sem valor exato confirmado. Outros modelos da marca (Z9GT, Z, D9) ainda estão 'em breve' no site oficial — não incluídos por não terem venda confirmada.",
     personas: { urbano: 1, familia: 4, aventura: 5, performance: 5, custo: 2 },
