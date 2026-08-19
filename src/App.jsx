@@ -552,6 +552,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.8,
+    videoUrl: "https://www.youtube.com/watch?v=mNvf1xb9bOM",
     techNotes:
       "Hatch elétrico premium da Renault, com vendas bem baixas no Brasil (32 unidades emplacadas de jan-set/2025). Preço de tabela oficial é R$279.990, mas há descontos agressivos em concessionárias (achado por R$225.990 a R$199.900 em promoções pontuais) por conta do baixo giro de estoque. Recarga DC de 130kW (15-80% em ~36min) e AC de 22kW (carga completa em ~1h50).",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 4, custo: 2 },
@@ -933,6 +934,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.8,
+    videoUrl: "https://www.youtube.com/watch?v=QyOGaiSKIWY",
     techNotes:
       "SUV elétrico da MINI, compartilha plataforma com o BMW iX1/iX2. Versões Exclusive (R$294.990) e Top (R$339.990) têm a mesma mecânica (306cv/494Nm/66,45kWh) — só rodas e equipamentos mudam, por isso um card único. Preço oficial atual (site MINI Brasil, ago/2026) é R$409.990, bem acima dos valores de lançamento. Porta-malas de 450L (1.390L com bancos rebatidos). Recarga DC de até 130kW (10-80% em ~30min).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 5, custo: 1 },
@@ -1210,6 +1212,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.9,
+    videoUrl: "https://www.youtube.com/watch?v=7Kx8BQfQ9ME",
     techNotes:
       "Versão topo de linha do EX40 (P8 Ultra AWD), com bateria maior (82kWh vs 69kWh do P6) e bimotor (408cv/670Nm vs 238cv/420Nm), quase dobrando a potência. Preço tem bastante divergência entre fontes/datas — de R$329.703 (FIPE) a R$375.700 (maio/2026); usamos o valor mais recente encontrado. Porta-malas e airbags assumidos iguais ao P6 (mesma carroceria).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1244,6 +1247,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.9,
+    videoUrl: "https://www.youtube.com/watch?v=yGS2Fxvvsjw",
     techNotes:
       "Antigo Volvo C40 Recharge, renomeado EC40 em 2025 — versão cupê-SUV do EX40, com carroceria de teto mais baixo e inclinado, mas mesma base mecânica. Versão Plus (RWD, 238cv/420Nm, bateria 69kWh, ~385km Inmetro) é a entrada de linha. A versão Ultra (bimotor, mais potente) está cadastrada separadamente (id volvo-ec40-ultra). Porta-malas provavelmente menor que o EX40 (carroceria cupê), mas sem fonte confiável específica.",
     personas: { urbano: 3, familia: 3, aventura: 2, performance: 3, custo: 1 },
@@ -3314,6 +3318,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 24.2,
+    videoUrl: "https://www.youtube.com/watch?v=N9PdH8eDXZk",
     techNotes:
       "SUV elétrico grande e mais caro da Volvo, com 7 lugares — o primeiro totalmente elétrico da marca nessa configuração. Lançado no Brasil em abr/2025 por R$849.950; linha 2026 ganhou arquitetura 800V, permitindo recarga DC de até 350kW (10-80% em ~30min, adicionando até 250km em 10min). Bimotor AWD com 517cv/860Nm. Tem Lidar de série e 9 airbags. Porta-malas varia de 310L (7 lugares) a 654L (5 lugares).",
     personas: { urbano: 1, familia: 5, aventura: 2, performance: 5, custo: 1 },
