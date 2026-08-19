@@ -1381,7 +1381,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 19.1,
     videoUrl: "https://www.youtube.com/watch?v=vA6A1Fjqgrc",
     techNotes:
-      "Nova geração do iX3, estreou em pré-venda no Brasil em jul/2026 por R$582.950 — 'nova era' de plataforma elétrica da marca (arquitetura 800V, células cilíndricas integradas à estrutura). Maior autonomia declarada entre elétricos vendidos no país (570km PBEV/Inmetro). Carregamento DC de até 400kW (10-80% em ~21min). Consumo de 19,1 kWh/100km calculado a partir de bateria/autonomia oficiais (não divulgado diretamente pela BMW). Por estar em fase de pré-venda, unidades ainda podem não estar disponíveis para entrega imediata.",
+      "Nova geração do iX3, estreou em pré-venda no Brasil em jul/2026 por R$582.950 — 'nova era' de plataforma elétrica da marca (arquitetura 800V, células cilíndricas integradas à estrutura). Confirmado em concessionária autorizada (Original BMW) como modelo normal em oferta em ago/2026, já saiu da fase só-pré-venda. Maior autonomia declarada entre elétricos vendidos no país (570km PBEV/Inmetro). Carregamento DC de até 400kW (10-80% em ~21min). Consumo de 19,1 kWh/100km calculado a partir de bateria/autonomia oficiais (não divulgado diretamente pela BMW). É o modelo que a BMW citou como sucessor ao anunciar (mai/2026) a saída de linha do i5 e do iX no Brasil — mas ambos continuam sendo vendidos junto com o iX3 em ago/2026 (ver cards bmw-i5 e bmw-ix).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
   },
   {
@@ -1476,8 +1476,8 @@ const SEED_CARS_DETAILED = [
     airbags: null,
     warranty: null,
     fuelType: "BEV",
-    verified: false,
-    priceVerifiedDate: null,
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
     maintenanceInterval: null,
     maintenanceFirstCost: null,
     maintenanceKmBase: null,
@@ -1485,7 +1485,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 20.8,
     videoUrl: "https://www.youtube.com/watch?v=czkEt3Q05i0",
     techNotes:
-      "Sedã executivo elétrico, versão M60 xDrive (única versão vendida no Brasil), bimotor AWD com 601cv/820Nm combinados. Chegou ao Brasil em mar/2024 por R$759.950; fontes mais recentes (2025/2026) mencionam R$795.950, mas não achamos confirmação oficial datada de ago/2026 — trate o preço como aproximado até checar na concessionária. DC de até 205kW (10-80% em ~30min).",
+      "Sedã executivo elétrico, versão M60 xDrive (única versão vendida no Brasil), bimotor AWD com 601cv/820Nm combinados. Chegou ao Brasil em mar/2024 por R$759.950; preço de R$795.950 confirmado em concessionária autorizada BMW (Original BMW) com tabela válida em ago/2026 — reportagens de mai/2026 chegaram a anunciar a saída de linha do i5 e do iX no Brasil (por causa da chegada do novo iX3), mas concessionárias oficiais seguem vendendo os três em ago/2026, então mantido na base sem alteração. DC de até 205kW (10-80% em ~30min).",
     personas: { urbano: 2, familia: 4, aventura: 1, performance: 5, custo: 1 },
   },
   {
@@ -1529,7 +1529,7 @@ const SEED_CARS_DETAILED = [
     name: "BMW 530e M Sport",
     brand: "BMW",
     category: "Sedã grande híbrido",
-    price: null,
+    price: 643950,
     powerCv: 299,
     torqueNm: 450,
     batteryKwh: 19.4,
@@ -1546,8 +1546,8 @@ const SEED_CARS_DETAILED = [
     airbags: null,
     warranty: null,
     fuelType: "PHEV",
-    verified: false,
-    priceVerifiedDate: null,
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
     maintenanceInterval: null,
     maintenanceFirstCost: null,
     maintenanceKmBase: null,
@@ -1555,8 +1555,8 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: null,
     videoUrl: "https://www.youtube.com/watch?v=FNiYzsayAKA",
     techNotes:
-      "Sedã executivo híbrido plug-in (Série 5), conjunto combinado de 299cv/450Nm com bateria de 19,4kWh e ~61km de autonomia elétrica pura. Preço não confirmado com segurança — fontes de 2026 divergem muito entre si (de R$456.706 a R$643.950), possivelmente por diferença de ano-modelo/pacotes; deixado como null até confirmar diretamente na concessionária.",
-    personas: { urbano: 2, familia: 4, aventura: 1, performance: 4, custo: 2 },
+      "Sedã executivo híbrido plug-in (Série 5), conjunto combinado de 299cv/450Nm com bateria de 19,4kWh e ~61km de autonomia elétrica pura. Preço confirmado em 19/08/2026 direto no site oficial BMW Brasil: R$643.950 (preço público sugerido, ano-modelo 2025/2026, válido para ago/2026) — esse era o valor mais alto entre as fontes que antes divergiam (de R$456.706 a R$643.950); o valor mais baixo provavelmente era de um ano-modelo anterior.",
+    personas: { urbano: 2, familia: 4, aventura: 1, performance: 4, custo: 1 },
   },
   {
     id: "bmw-x5-xdrive50e",
