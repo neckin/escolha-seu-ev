@@ -482,7 +482,7 @@ const SEED_CARS_DETAILED = [
     maintenanceTotalCost: null,
     consumptionKwh100: 17.3,
     techNotes:
-      "Um dos elétricos mais baratos do Brasil, com bateria LFP de 31,4 kWh e a menor autonomia INMETRO do grupo (181 km) — reflexo do foco em uso urbano de curta distância. Apenas 2 airbags (motorista e passageiro), abaixo do padrão de 6 já comum em concorrentes chineses mais recentes.",
+      "Um dos elétricos mais baratos do Brasil, com bateria LFP de 31,4 kWh e a menor autonomia INMETRO do grupo (181 km) — reflexo do foco em uso urbano de curta distância. Apenas 2 airbags (motorista e passageiro), abaixo do padrão de 6 já comum em concorrentes chineses mais recentes. Atenção (checado em 19/08/2026): a JAC descontinuou os outros dois elétricos de passeio da linha (E-JS4 e E-J7, removidos deste app) e está reposicionando a marca no Brasil quase inteiramente para picapes — reduziu de 46+ concessionárias físicas pra só 3 (São Paulo, Curitiba, Porto Alegre). O E-JS1 segue sendo vendido (ano-modelo 2027 confirmado), mas o comunicado oficial da marca sobre a nova estratégia não mencionou ele, deixando o futuro do modelo incerto — vale considerar isso antes de comprar.",
     personas: { urbano: 5, familia: 2, aventura: 2, performance: 1, custo: 4 },
   },
   {
@@ -517,7 +517,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 14.9,
     videoUrl: "https://www.youtube.com/watch?v=_QV7utpKSTE",
     techNotes:
-      "O elétrico mais barato do Brasil. Autonomia real INMETRO é 180 km (não os 265 km WLTP que circulavam antes) e o consumo real fica em ~14,9 kWh/100km — bem mais alto que o valor otimista anterior. Carregamento DC de 30 kW leva a bateria de 20% a 80% em ~45 min. Vão livre de 172mm é alto pro segmento.",
+      "O elétrico mais barato do Brasil. Autonomia real INMETRO é 180 km (não os 265 km WLTP que circulavam antes) e o consumo real fica em ~14,9 kWh/100km — bem mais alto que o valor otimista anterior. Carregamento DC de 30 kW leva a bateria de 20% a 80% em ~45 min. Vão livre de 172mm é alto pro segmento. Atenção (achado em 19/08/2026): em abr/2026 a Renault suspendeu temporariamente o abastecimento do Kwid E-Tech nas concessionárias por problema de fornecimento, sem previsão de retorno confirmada na época (diretor comercial da marca disse não ter 'visibilidade de quando vamos receber os próximos lotes') — não achamos confirmação mais recente (ago/2026) de que o carro voltou ao estoque nem de descontinuação oficial, então mantido na base, mas vale confirmar disponibilidade real na concessionária antes de decidir.",
     personas: { urbano: 5, familia: 2, aventura: 3, performance: 1, custo: 5 },
   },
   {
@@ -4027,41 +4027,14 @@ const SEED_CARS_DETAILED = [
       "Marca inteiramente ausente da base anterior. Grand Cherokee 4xe retornou ao Brasil em 2026 (primeiras 150 unidades importadas dos EUA já entregues às concessionárias), potência/torque combinados oficiais (documento técnico Stellantis): 380cv/637Nm. Autonomia elétrica de 29km (Inmetro) — bem abaixo dos 50km divulgados em outros mercados. Só recarrega em AC (até 7,2kW via wallbox tipo 2, ~2h30 para carga completa); não tem porta de recarga DC. Consumo combinado de 19,3 km/l (Inmetro). ATENÇÃO: o Jeep Compass 4xe (outro PHEV da marca) foi pesquisado mas NÃO foi incluído — saiu do site oficial da Jeep Brasil em fev/2026 e é considerado descontinuado (vendeu só ~100 unidades em 2025); a nova geração do Compass (com PHEV) só chega em 2027.",
     personas: { urbano: 1, familia: 5, aventura: 3, performance: 4, custo: 1 },
   },
-  {
-    id: "jac-e-js4",
-    imageUrl: "https://www.jacmotors.com.br/wp-content/uploads/2025/11/Photo-6-min-1024x597.png",
-    name: "JAC E-JS4",
-    brand: "JAC",
-    category: "SUV médio",
-    price: 254900,
-    powerCv: 200,
-    torqueNm: 340,
-    batteryKwh: 55,
-    batteryChem: "LFP",
-    motorType: "PMSM dianteiro (FWD)",
-    rangeKm: 307,
-    accel: 7.5,
-    groundClearance: 180,
-    trunkL: 650,
-    weightKg: null,
-    wallbox: null,
-    acKw: null,
-    dcKw: null,
-    airbags: 6,
-    warranty: null,
-    fuelType: "BEV",
-    verified: true,
-    priceVerifiedDate: "19/08/2026",
-    maintenanceInterval: null,
-    maintenanceFirstCost: null,
-    maintenanceKmBase: null,
-    maintenanceTotalCost: null,
-    consumptionKwh100: null,
-    videoUrl: "https://www.youtube.com/watch?v=-Kxu_aJO2M8",
-    techNotes:
-      "SUV elétrico médio-grande da JAC, posicionado acima do E-JS1 (cadastrado separadamente, id jac-e-js1) na linha da marca no Brasil. Dados oficiais do site JAC Motors: 200cv/340Nm, bateria 55kWh, autonomia 307km (Inmetro), 0-100 em 7,5s. Porta-malas de 650L (1.210L com bancos rebatidos). Recarga AC portátil (20-100% em 7h20) e DC rápida (20-100% em 1h10) — potências em kW não divulgadas. Existe uma referência antiga a um modelo 'JAC iEV40/EV40' em fontes agregadoras, mas ele não consta no site oficial atual da JAC Brasil (só E-JS1 e E-JS4 entre os elétricos de passeio) — parece ser um modelo antigo (2020/2021) já descontinuado, por isso não foi incluído.",
-    personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 3 },
-  },
+  // JAC E-JS4 REMOVIDO em 19/08/2026: confirmado por múltiplas fontes (Auto+
+  // TV e Despachante DOK, ambas de 10-11/08/2026, a poucos dias desta revisão)
+  // que a JAC descontinuou o E-JS4 e o E-J7 no Brasil "sem aviso prévio",
+  // reposicionando a marca no país só pra picapes (Hunter, diesel e elétrica).
+  // O site da JAC ainda listava o carro com preço na data da reportagem, mas
+  // "não está mais disponível nas concessionárias e não há previsão de novos
+  // lotes" — sem sucessor. Ficha antiga (200cv/340Nm, bateria 55kWh, 307km,
+  // R$254.900) removida por não haver mais unidades 0km à venda oficialmente.
 ];
 
 const SEED_CARS = [...SEED_CARS_DETAILED, ...BULK_CARS];
