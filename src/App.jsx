@@ -3122,7 +3122,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 19.9,
     videoUrl: "https://www.youtube.com/watch?v=wyWjwuvF4FA",
     techNotes:
-      "O preço de R$189.990 que circulava antes está bem abaixo de qualquer versão real vendida no Brasil. Ficha usada aqui é a Flagship, biMotor AWD (R$338 mil). Existem versões de entrada mais baratas — Privilege (~R$309 mil) e Premium (~R$298 mil) — com potência e bateria menores, ainda não detalhadas em fonte confiável. Recarga DC de 150kW leva de 10% a 80% em ~20min; carga AC completa em ~3h.",
+      "O preço de R$189.990 que circulava antes está bem abaixo de qualquer versão real vendida no Brasil. Ficha usada aqui é a Flagship, biMotor AWD (R$338 mil), confirmada exatamente em pente-fino 19/08/2026. CORRIGIDO nessa revisão: a linha brasileira tem só 2 versões — Premium RWD (R$298 mil, monomotor 272cv/~343Nm, bateria 51kWh, 304km Inmetro) e Flagship AWD (esta ficha) — não 'Privilege + Premium' como constava antes (Privilege é nome usado em outros mercados, não no Brasil). Recarga DC de 150kW leva de 10% a 80% em ~20min; carga AC completa em ~3h.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
   },
   {
@@ -3192,7 +3192,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 23.6,
     videoUrl: "https://www.youtube.com/watch?v=cERdkl37ux0",
     techNotes:
-      "SUV elétrico mais potente da linha Zeekr no Brasil (646cv/710Nm combinados, bimotor AWD). Bateria de 100kWh dá 423km Inmetro. Recarga DC de até 200kW (80% em ~30min). Porta-malas de 539L.",
+      "SUV elétrico mais potente da linha Zeekr no Brasil (646cv/710Nm combinados, bimotor AWD) — ficha usada aqui é a versão Flagship (R$448 mil), confirmada exatamente em pente-fino 19/08/2026. Bateria de 100kWh dá 423km Inmetro. Recarga DC de até 200kW (80% em ~30min). Porta-malas de 539L. Existe também uma versão de entrada Premium (R$378 mil, monomotor RWD 421cv, foco em autonomia em vez de performance), lançada depois da Flagship e ainda não detalhada nesta base.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
   },
   {
