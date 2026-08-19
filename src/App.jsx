@@ -723,6 +723,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.4,
+    videoUrl: "https://www.youtube.com/watch?v=QmmwoKUdlY0",
     techNotes:
       "Existem duas configurações de bateria: Single (51 kWh LFP, RWD, ~250 km INMETRO — ficha usada aqui) e Twin/Extended Range (69 kWh NMC, ~316-338 km — cadastrada separadamente, id volvo-ex30-ultra). Faixa de preço por versão vai de R$212.554 a R$275.485. Houve recall no Brasil (~5.600 unidades) por risco de incêndio na bateria — vale checar se o carro já passou pelo reparo antes de comprar usado.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 4, custo: 2 },
@@ -757,6 +758,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 21.8,
+    videoUrl: "https://www.youtube.com/watch?v=FP6qurMGmWk",
     techNotes:
       "Versão topo de linha do EX30, bimotor AWD (428cv/543Nm) com bateria NMC de 69kWh — quase o dobro da potência da versão Single (272cv). Existe também a versão Cross Country (R$315.000, mesma bateria de 69kWh, suspensão elevada), provavelmente com potência semelhante à Ultra, mas sem ficha técnica própria confirmada em fonte confiável.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1205,6 +1207,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.9,
+    videoUrl: "https://www.youtube.com/watch?v=cJLtwz8TUQY",
     techNotes:
       "Antigo Volvo XC40 Recharge, renomeado EX40 em 2025. Duas versões: P6 (238cv/420Nm, RWD, bateria 69kWh, ~385km — ficha usada aqui, compatível com o preço de tabela Plus de R$329.950) e P8 (408cv/670Nm, AWD, bateria 82kWh, ~393km, 0-100 em 4,9s, mais cara — cadastrada separadamente, id volvo-ex40-ultra). Peso ~2.050kg é aproximado (fonte não especifica por versão).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 1 },
@@ -1307,6 +1310,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.3,
+    videoUrl: "https://www.youtube.com/watch?v=Rh3xn5flYWo",
     techNotes:
       "Versão topo de linha do EC40 (bimotor AWD, 408cv/670Nm, bateria 82kWh), com a maior autonomia da linha 2026 (404km Inmetro, +51km sobre a geração anterior). Mesmo conjunto mecânico do EX40 Ultra, em carroceria cupê-SUV.",
     personas: { urbano: 3, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3389,6 +3393,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=a-vEc29fLPE",
     techNotes:
       "SUV médio híbrido plug-in, líder de vendas entre híbridos da Volvo no Brasil (3.287 unidades em 2024). Quatro versões — Plus (R$459.950, ficha usada aqui), Ultra (~R$509.950), Ultra Dark (R$519.950) e Polestar Engineered (R$539.950) — compartilham a mesma mecânica T8 (462cv/696Nm combinados), só equipamento muda. Bateria de 18,8kWh dá até 44km de autonomia elétrica (Inmetro) ou 80km (WLTP).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3423,6 +3428,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=KAV5s0JXn4o",
     techNotes:
       "SUV grande híbrido plug-in de 7 lugares, ainda em linha no Brasil mesmo após o lançamento do EX90 (100% elétrico) — não foi substituído, coexistem no catálogo. Versão Plus, mesma mecânica T8 (462cv/709Nm) do XC60. Bateria de 18,8kWh dá 47km de autonomia elétrica. Porta-malas de 316L com as 3 fileiras em uso (500L com a 3ª rebatida). Vão livre de 223mm.",
     personas: { urbano: 2, familia: 5, aventura: 2, performance: 5, custo: 1 },
