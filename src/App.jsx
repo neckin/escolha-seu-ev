@@ -1914,6 +1914,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=7c2UEX4-YSg",
     techNotes:
       "O elétrico mais vendido do Brasil. Ficha conferida na ficha técnica oficial BYD (rev. 09/07/2026). Duas versões, GL (entrada, ficha usada aqui) e GS (cadastrada separadamente) — a diferença de preço é de só R$1.000, mas a GS tem bateria maior (38,9kWh vs 30,1kWh), mais autonomia (280 vs 224km) e mais equipamento (carregador de celular por indução, acabamento do volante, luzes de cortesia, vidro do motorista one-touch/antiesmagamento). Airbags: só frontais + cortina na GL (a GS ganha também os laterais dianteiros). Uso comercial reduz a garantia do veículo pra 6 anos/100.000km.",
     personas: { urbano: 5, familia: 1, aventura: 1, performance: 1, custo: 5 },
@@ -1982,6 +1983,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 14.0,
+    videoUrl: "https://www.youtube.com/watch?v=XJ_UY2FFoWk",
     techNotes:
       "Autonomia WLTP divulgada é de até 340km; usamos aqui uma estimativa mais realista de uso urbano (290-320km). Bateria Blade LFP, mesma tecnologia usada em toda a linha BYD, com estrutura que dispensa módulos intermediários. 5 estrelas no Latin NCAP.",
     personas: { urbano: 5, familia: 2, aventura: 1, performance: 2, custo: 4 },
@@ -2016,6 +2018,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 14.4,
+    videoUrl: "https://www.youtube.com/watch?v=yUo3gjK9p6s",
     techNotes:
       "Versão de maior autonomia da linha Dolphin, com bateria maior (60,5kWh) que a versão padrão. Fontes de preço variam entre R$168.800 e R$178.800 conforme configuração. DC de 60kW carrega de 20% a 80% em ~45min.",
     personas: { urbano: 4, familia: 2, aventura: 1, performance: 4, custo: 3 },
@@ -2084,6 +2087,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=PjMxVO1l3ls",
     techNotes:
       "Estreia mundial do sistema híbrido plug-in DM-i Flex da BYD — primeiro PHEV do mundo capaz de rodar com gasolina OU etanol. Lançado no Brasil em 9/jun/2026, fabricado em Camaçari (BA). Versão de entrada GL: bateria pequena (7,3kWh), autonomia elétrica de só 45km, carregamento AC de até 3,3kW. Autonomia combinada de 1.000km (gasolina, ciclo NEDC) ou 770km (etanol). Vendida inicialmente por canal de venda direta. A versão GS (mais equipada, com ADAS 2) está cadastrada separadamente (id byd-atto-2-gs).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 3 },
@@ -2152,6 +2156,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.2,
+    videoUrl: "https://www.youtube.com/watch?v=GY8P_chDd4o",
     techNotes:
       "Preço varia entre fontes de R$269.800 a R$296.800 conforme a versão/momento. Existe também a versão Performance AWD, mais potente e cara, com 0-100 em 3,8s. Autonomia real PBEV/Inmetro de 372km é bem mais conservadora que os 570km que circulavam antes (provavelmente CLTC chinês).",
     personas: { urbano: 2, familia: 3, aventura: 1, performance: 5, custo: 1 },
@@ -2186,6 +2191,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 16.0,
+    videoUrl: "https://www.youtube.com/watch?v=zNsuH49NXTI",
     techNotes:
       "Preço real de tabela é R$559.800 — bem acima dos R$429.800 que circulavam antes. Autonomia fica entre 450-500km em ciclo combinado/WLTP (usamos a média, 480km); recarga rápida de 30% a 80% em ~25min.",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -2220,6 +2226,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=cmXCT4p6R8g",
     techNotes:
       "Autonomia elétrica pura homologada de 68km (Inmetro). Existe também a versão Premium AWD (1.5 turbo + dois motores elétricos, 324cv, R$299.800, autonomia elétrica de 87km, cadastrada separadamente, id byd-song-plus-premium-dmi). Preço da versão FWD subiu de ~R$240 mil para ~R$250 mil entre gerações — bem acima dos R$219.800 que circulavam antes.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -2288,6 +2295,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=jxmcxD9X7qc",
     techNotes:
       "Preço real de tabela é R$175.990 (versão GS) — bem abaixo dos R$279.800 que circulavam antes; a versão de entrada GL custa R$147.990 com 209cv e só 32km de autonomia elétrica. Bateria pequena (6,6kWh) é perfil híbrido leve, não plugável de longa autonomia elétrica: até 78km NEDC na GS. Consumo no modo combustão: até 16,8 km/l na cidade.",
     personas: { urbano: 4, familia: 3, aventura: 1, performance: 3, custo: 3 },
@@ -2322,6 +2330,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=KNLNyKCTcWY",
     techNotes:
       "Autonomia elétrica pura de 57km (PBEV/Inmetro) ou até 100km (NEDC). Caçamba com 1.200 litros de capacidade. Tração integral (AWD), com motor a combustão 1.5 turbo (183cv/260Nm) somado a dois motores elétricos (231cv dianteiro + 204cv traseiro).",
     personas: { urbano: 1, familia: 3, aventura: 5, performance: 5, custo: 1 },
@@ -2361,6 +2370,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=PX-SAj7I5wk",
     techNotes:
       "SUV híbrido plug-in de 7 lugares com tração integral (AWD): motor 1.5 turbo (156cv) + motor elétrico dianteiro (272cv) + motor elétrico traseiro (216cv), somando 488cv combinados. Bateria Blade LFP de 35,6 kWh garante autonomia elétrica pura de até 152km; autonomia total combinada de até 900km (ciclo NEDC). Porta-malas de até 1.960L com os bancos rebatidos (capacidade com bancos em uso não divulgada). Recarga DC de 30-80% em ~20min (até 72kW). Lançado no Salão do Automóvel 2025.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -2395,6 +2405,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.9,
+    videoUrl: "https://www.youtube.com/watch?v=7wM2Y5EsIKQ",
     techNotes:
       "SUV cupê elétrico irmão do Seal, com tração integral AWD (531cv/690Nm) e 0-100km/h em 4,5s — um dos mais potentes e rápidos do comparativo inteiro. Bateria Blade LFP de 82,5kWh garante 360km de autonomia Inmetro. Porta-malas de 500L + frunk dianteiro de 58L. Recarga DC até 150kW (30-80% em ~30min).",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -2429,6 +2440,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=6XDL3SB1HsU",
     techNotes:
       "Lançado em 04/08/2026 com o sistema DM-i 5.0 (bicombustível de verdade — o mesmo motor 1.5 Atkinson roda com gasolina, etanol ou qualquer mistura dos dois). Ficha usada aqui é a versão de entrada GL: 13,1kWh Blade LFP, 57km elétricos PBEV, 218cv/300Nm, 8,8s 0-100, R$176.990. A GS (R$199.990) tem bateria maior (18,3kWh, até 72km elétricos PBEV), 219cv e 8,6s — praticamente a mesma potência mas mais autonomia elétrica. No etanol a autonomia total cai pra até 805km (GS)/775km (GL); a gasolina chega a 1.105km (GS)/1.075km (GL, usado aqui).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 4 },
@@ -2463,6 +2475,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 25.3,
+    videoUrl: "https://www.youtube.com/watch?v=aVeQavypdvE",
     techNotes:
       "SUV elétrico premium de 7 lugares, tração integral 4x4, 517cv e 700Nm, acelera de 0-100km/h em menos de 5s. Bateria Blade LFP gigante de 108,8kWh rende até 430km Inmetro (530km no ciclo WLTP, mais otimista). Porta-malas varia de 235L (7 lugares) a 940L (5 lugares) e 1.655L com os bancos rebatidos. Recarga DC de 30-80% em ~30min a 110kW. Preço confirmado em R$536.800 (fonte que antes divergia entre R$529.890 e R$536.800 já se consolidou nesse valor). Aceleração, peso, vão livre e airbags ainda sem fonte confiável.",
     personas: { urbano: 1, familia: 5, aventura: 2, performance: 4, custo: 1 },
@@ -2497,6 +2510,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=7Yo3JXUafDk",
     techNotes:
       "CORRIGIDO (18/08/2026): o Yuan Pro vendido oficialmente no Brasil é 100% ELÉTRICO (BEV), não híbrido plug-in como estava cadastrado antes — o ficha anterior descrevia a versão DM-i (PHEV) que existe em outros mercados (China, Argentina) mas ainda não tem lançamento confirmado no Brasil. Versão única (GS), R$182.990. Torque, vão livre, peso e airbags ainda sem fonte confiável.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 3, custo: 4 },
