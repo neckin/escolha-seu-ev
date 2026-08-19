@@ -3154,6 +3154,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.9,
+    videoUrl: "https://www.youtube.com/watch?v=wyWjwuvF4FA",
     techNotes:
       "O preço de R$189.990 que circulava antes está bem abaixo de qualquer versão real vendida no Brasil. Ficha usada aqui é a Flagship, biMotor AWD (R$338 mil). Existem versões de entrada mais baratas — Privilege (~R$309 mil) e Premium (~R$298 mil) — com potência e bateria menores, ainda não detalhadas em fonte confiável. Recarga DC de 150kW leva de 10% a 80% em ~20min; carga AC completa em ~3h.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3188,6 +3189,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.5,
+    videoUrl: "https://www.youtube.com/watch?v=sYq61oLKrQw",
     techNotes:
       "'Shooting brake premium' (sedã grande com traseira estilo perua), primeiro modelo da Zeekr no Brasil. Duas versões, Premium (R$495 mil — ficha usada aqui) e Flagship (R$542 mil), com mecânica idêntica (544cv/686Nm, bateria 100kWh NMC) — só vão livre (174mm vs 162mm) e equipamentos mudam. Preço subiu bastante desde o lançamento (R$428 mil). Porta-malas de 2.144L é o volume máximo com bancos rebatidos e frunk incluso. Recarga DC de até 200kW (arquitetura 800V).",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -3222,6 +3224,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.6,
+    videoUrl: "https://www.youtube.com/watch?v=cERdkl37ux0",
     techNotes:
       "SUV elétrico mais potente da linha Zeekr no Brasil (646cv/710Nm combinados, bimotor AWD). Bateria de 100kWh dá 423km Inmetro. Recarga DC de até 200kW (80% em ~30min). Porta-malas de 539L.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
