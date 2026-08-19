@@ -1070,7 +1070,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 19.4,
     videoUrl: "https://www.youtube.com/watch?v=EL5Xfsqx8XI",
     techNotes:
-      "SUV elétrico esportivo da plataforma Ultium (mesma base do Equinox EV), vendido no Brasil só na versão RS (motor único traseiro, 347cv/450Nm). Preço subiu de R$479.000 no lançamento (2024) para R$503.190 atualmente. Autonomia declarada varia entre 481km (Inmetro, fonte de lançamento) e 526km (fonte mais recente) — usamos a mais recorrente. Uma versão AWD (305cv, bateria menor de 85kWh) foi anunciada para 2026 mas ainda sem ficha e preço confiáveis publicados.",
+      "SUV elétrico esportivo da plataforma Ultium (mesma base do Equinox EV), vendido no Brasil só na versão RS (motor único traseiro, 347cv/450Nm). Preço subiu de R$479.000 no lançamento (2024) para R$503.190 atualmente. Autonomia declarada varia entre 481km (Inmetro, fonte de lançamento) e 526km (fonte mais recente) — usamos a mais recorrente. Pente-fino 19/08/2026: a versão AWD (bimotor, 305cv/~480Nm, bateria menor de 85kWh, menos autonomia) é uma opção ADICIONAL para 2026, não substitui a RWD atual — segue sem preço oficial publicado, então não foi cadastrada como card separado.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
   },
   {
