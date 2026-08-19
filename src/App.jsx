@@ -651,6 +651,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=YxBOWM38rnU",
     techNotes:
       "Versão de bateria maior do Haval H6 PHEV (a versão PHEV19, com bateria de 19kWh e 326cv, já está cadastrada separadamente, id gwm-haval-h6-phev): aqui a bateria de 35kWh e o sistema Hi4 com tração integral (motor elétrico em cada eixo) elevam a potência para 393cv/762Nm. Autonomia elétrica pura varia MUITO entre fontes consultadas (100km, 119km e até 170km, conforme o veículo e o ciclo de medição usado) — não incluída por falta de um valor confiável único. Existe também a versão GT (mesma mecânica 393cv, suspensão mais esportiva, 0-100 em 4,9s, ~R$315-325 mil), não cadastrada separadamente por não ter diferença de potência/bateria da PHEV35, só de calibração de suspensão e equipamentos.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
@@ -685,6 +686,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: 48000,
     maintenanceTotalCost: 0,
     consumptionKwh100: 15,
+    videoUrl: "https://www.youtube.com/watch?v=y1O7-tf51PQ",
     techNotes:
       "Mesmo motor da Skin (cadastrada separadamente), 171cv/250Nm — a diferença é a bateria maior (63kWh vs 48kWh, mais autonomia) e mais equipamento: freios maiores, teto solar panorâmico, banco do motorista elétrico. Peso não encontrado em fonte específica pra essa versão (deve ser um pouco maior que a Skin por causa da bateria). Tem frunk de 57L além dos 228L do porta-malas traseiro (858L com banco rebatido). 5 estrelas no Euro NCAP.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 3, custo: 3 },
@@ -1818,6 +1820,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=G2VdpuYBteI",
     techNotes:
       "Existem 4 variantes do Haval H6 em 2026: HEV2 (não é PHEV, R$223 mil), PHEV19 (ficha usada aqui, 326cv, R$248 mil — preço atualizado, o valor anterior de R$219.800 estava desatualizado), PHEV35 (393cv, R$288 mil) e GT (393cv, carroceria cupê, R$325 mil). Autonomia elétrica pura de 77km INMETRO (até 115km WLTP). Um dos poucos PHEVs com carregamento DC (até 33kW), incomum no segmento. Peso 1.890-1.910kg conforme fonte (usado o meio da faixa).",
     personas: { urbano: 2, familia: 4, aventura: 4, performance: 5, custo: 2 },
@@ -1852,6 +1855,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=gcbYeJLnzDs",
     techNotes:
       "SUV off-road de luxo, híbrido plug-in 4x4 com 394cv/750Nm combinados, bateria 37,1kWh NMC e autonomia elétrica pura de 74-75km (Inmetro) / até 106km (WLTP). Preço oficial no site da GWM Brasil é R$342.000 — agregadores de mercado citam valores de R$333.000 (lançamento, 2025) a R$389.990, possível reflexo de diferentes datas/versões. Autonomia total combinada (~1.290km) é uma estimativa calculada a partir do consumo híbrido divulgado (18,4-18,7 km/l) e do tanque de 70L — não é um valor divulgado diretamente pela GWM. Porta-malas de 863L (1.520L com bancos rebatidos). Vão livre de 222mm e ângulos de entrada/saída de 32°/33° — dos melhores off-road do grupo, com travessia de água até 700mm.",
     personas: { urbano: 1, familia: 3, aventura: 5, performance: 5, custo: 1 },
@@ -1886,6 +1890,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=wxLN-0nqQRA",
     techNotes:
       "SUV híbrido plug-in de luxo com 6 lugares da WEY, submarca premium da GWM. Lançado oficialmente no Brasil em out/2025 (vendas iniciadas em 23/10), preço R$429.000. Potência combinada de 517cv/820Nm, bateria 42,5kWh, autonomia elétrica de 128km (Inmetro) — até 185km citado em fonte WLTP. Autonomia total combinada supera 1.200km. Porta-malas de apenas 239L com a 3ª fileira em uso (1.040L com ela rebatida). Recarga DC de 60kW leva a bateria de 30% a 80% em ~26min; AC leva de 15% a 100% em ~6h30 (kW exato não confirmado). Garantia não confirmada em fonte disponível.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -2962,6 +2967,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.2,
+    videoUrl: "https://www.youtube.com/watch?v=vobriD-GSYw",
     techNotes:
       "Ficha técnica oficial Geely conferida (ago/2026). Mesmo motor/bateria da Pro (cadastrada separadamente), mas autonomia menor (349km vs 413km) por causa do peso extra (1.765kg vs 1.715kg) — mais equipamento: teto solar panorâmico, porta-malas elétrico, rodas 19\" (vs 18\" da Pro), bancos com massagem/ventilação, pacote ADAS completo (a Pro não tem ACC, LKA, AEB e outros assistentes — só a Max tem). Porta-malas 461L (1.877L com banco rebatido).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -3030,6 +3036,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=kH9AQ4Q3p6k",
     techNotes:
       "Versão topo de linha do EX5 EM-i (a versão Pro de entrada está cadastrada separadamente, id geely-ex5-em-i): mesma potência/torque (262cv/380Nm), mas bateria bem maior (29,8kWh vs 18,4kWh), quase dobrando a autonomia elétrica (112km vs 65km, Inmetro) e com carregamento DC de até 60kW (30-80% em ~16min, contra recarga só AC/lenta nas versões Pro/Max). Wallbox incluso de fábrica só na Ultra. Mesma autonomia combinada de até 1.300km e porta-malas de 428L do restante da linha.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
