@@ -1741,7 +1741,7 @@ const SEED_CARS_DETAILED = [
     category: "SUV híbrido",
     price: 234990,
     powerCv: 279,
-    torqueNm: null,
+    torqueNm: 365,
     batteryKwh: 18.3,
     batteryChem: "LFP",
     motorType: "PHEV combinado (1.5 turbo 135cv + elétrico 204cv)",
@@ -1756,8 +1756,8 @@ const SEED_CARS_DETAILED = [
     airbags: 7,
     warranty: "7 anos ou 150.000 km",
     fuelType: "PHEV",
-    verified: false,
-    priceVerifiedDate: null,
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
     maintenanceInterval: "12 meses/10.000 km, grátis nos 3 primeiros anos",
     maintenanceFirstCost: "Gratuita (3 primeiros anos)",
     maintenanceKmBase: null,
@@ -1765,7 +1765,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: null,
     videoUrl: "https://www.youtube.com/watch?v=ZbJTcTZdLcE",
     techNotes:
-      "Preço varia por versão: Elite R$179.990, Luxury R$234.990 (ficha usada aqui), Prestige R$256.990 — nenhuma bate exatamente com o valor anterior de R$199.990. A marca mudou a metodologia de medição de potência (UN R21): hoje anuncia 279cv pro mesmo conjunto mecânico (1.5 turbo 135cv + elétrico 204cv) que antes era anunciado com 339cv. Autonomia elétrica pura de 79km (INMETRO, bem confirmada). Consumo híbrido de 15,1 km/L urbano.",
+      "Preço varia por versão: Elite R$179.990 (adicionada depois, mais barata), Luxury R$234.990 (ficha usada aqui), Prestige R$256.990 — nenhuma bate exatamente com o valor anterior de R$199.990. A marca mudou a metodologia de medição de potência (UN R21): hoje anuncia 279cv pro mesmo conjunto mecânico (1.5 turbo 135cv/200Nm + elétrico 204cv/310Nm) que antes era anunciado com 339cv. Torque combinado de 365Nm preenchido em pente-fino 19/08/2026 (confirmado, mesmo conjunto do irmão Omoda 7 SHS-P, id omoda-7-shs-p). Autonomia elétrica pura de 79km (INMETRO, bem confirmada). Consumo híbrido de 15,1 km/L urbano.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
   },
   {
