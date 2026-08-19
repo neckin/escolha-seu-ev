@@ -3840,7 +3840,7 @@ const SEED_CARS_DETAILED = [
     batteryKwh: 77,
     batteryChem: null,
     motorType: "Bimotor AWD DIRECT4 (eAxle dianteiro + traseiro, 264Nm por eixo)",
-    rangeKm: 375,
+    rangeKm: 357,
     accel: 4.6,
     groundClearance: 200,
     trunkL: null,
@@ -3860,7 +3860,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: 20.5,
     videoUrl: "https://www.youtube.com/watch?v=ENDi5iP2BQg",
     techNotes:
-      "Primeiro elétrico 100% da Lexus no Brasil, entregas iniciadas em maio/2026 (o modelo global se chama RZ 450e, mas a versão vendida no Brasil é nomeada RZ 500e). Bateria de 77kWh com resfriamento líquido. Autonomia de 375km é o valor citado como 'Inmetro' pela imprensa (uma fonte cita até 600km em ciclo urbano WLTP europeu, bem mais otimista — não usado aqui). Tração integral DIRECT4 com motor em cada eixo (264Nm cada, torque total do sistema não divulgado). Recarga DC até 150kW (0-80% em ~30min). Financiamento com taxa a partir de 0% e recompra garantida de 80% da tabela FIPE fazem parte do programa de lançamento.",
+      "Primeiro elétrico 100% da Lexus no Brasil, lançado oficialmente em 15/05/2026 (o modelo global se chama RZ 450e, mas a versão vendida no Brasil é nomeada RZ 500e). Bateria de 77kWh com resfriamento líquido. Autonomia Inmetro de 357km corrigida em pente-fino 19/08/2026 (valor anterior de 375km estava errado — 357km é o número consistente em múltiplas fontes do lançamento oficial de mai/2026; uma fonte antiga citava até 600km em ciclo urbano WLTP europeu, bem mais otimista e não usado aqui). Tração integral DIRECT4 com motor em cada eixo (264Nm cada, torque total do sistema não divulgado). Recarga DC até 150kW (0-80% em ~30min). Financiamento com taxa a partir de 0% e recompra garantida de 80% da tabela FIPE fazem parte do programa de lançamento.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
   },
   {
