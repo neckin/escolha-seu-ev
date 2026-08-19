@@ -2836,6 +2836,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.5,
+    videoUrl: "https://www.youtube.com/watch?v=JPXpYqSLMpQ",
     techNotes:
       "Autonomia WLTP divulgada é 361km, mas a homologação Inmetro/PBEV real é 288km. Preço de tabela varia por público: R$182.990 padrão, com descontos pra troca de usado (R$175.990), taxista (R$141.190), PCD (R$161.390) e CNPJ (R$168.290). Será fabricado no Brasil em fábrica da Stellantis. Recarga rápida recupera 50% em ~15min.",
     personas: { urbano: 4, familia: 4, aventura: 2, performance: 4, custo: 3 },
@@ -2904,6 +2905,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=JQe4GJV94Qo",
     techNotes:
       "Versão REEV (range extender EV) do C10: motor a combustão 1.5 de 4 cilindros funciona só como gerador pra recarregar a bateria, sem tracionar as rodas diretamente — tração é sempre elétrica traseira. Bateria LFP de 28,4kWh dá ~145km de autonomia elétrica pura (WLTP); com o tanque de 50L cheio, a autonomia combinada chega a 950-1.150km. Recarga DC de 30-80% em 18-30min. Porta-malas assumido igual ao da versão BEV (mesma carroceria, 465L) — não há fonte específica confirmando pra versão REEV.",
     personas: { urbano: 3, familia: 5, aventura: 3, performance: 3, custo: 2 },
@@ -3655,6 +3657,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=LN8qlr-x59E",
     techNotes:
       "Preço e disponibilidade confirmados em estoque real de concessionárias oficiais Land Rover (rede JLR Brasil) em ago/2026, trims Autobiography (R$774.469-777.969) e Dynamic HSE (R$733.786-741.286, usado aqui por ser o mais barato). Autonomia elétrica declarada varia entre 38km e 51km conforme a fonte (não há valor único confiável). Mesmo motor híbrido P400e do Defender, que não aparece no estoque oficial atual (zero unidades) por conta da disrupção de produção da JLR após o ciberataque de 2025 — por isso o Defender P400e não foi incluído nesta base apesar de ter ficha técnica divulgada.",
     personas: { urbano: 3, familia: 3, aventura: 3, performance: 4, custo: 2 },
@@ -3826,6 +3829,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=bC-V-3Zqh-M",
     techNotes:
       "Primeiro híbrido plug-in da Lexus no Brasil. Sistema com 3 motores (1 a combustão + 2 elétricos, um por eixo) somando 308cv. Autonomia 100% elétrica de até 55km (Inmetro). Recarga completa em ~2h45 com wallbox WEG incluso sem custo. Garantia de 10 anos/200.000km é do programa LexusCare (sujeita a revisões periódicas na rede autorizada, não é incondicional). Irmã maior é o RX 450h+ (cadastrado separadamente, id lexus-rx-450h-plus), com a mesma mecânica.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
@@ -3860,6 +3864,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=bM1b3sjQ1kQ",
     techNotes:
       "Primeiro híbrido plug-in da linha RX no Brasil, mesma mecânica do NX 450h+ (cadastrado separadamente, id lexus-nx-450h-plus): 308cv combinados (2.5 aspirado + 2 motores elétricos), bateria 18,1kWh, autonomia elétrica de 56km (Inmetro). Recarga AC de 6,6kW (completa em ~2h45). Peso elevado (2.780kg) reflete o porte maior da carroceria SUV médio.",
     personas: { urbano: 2, familia: 5, aventura: 2, performance: 4, custo: 1 },
@@ -3894,6 +3899,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.5,
+    videoUrl: "https://www.youtube.com/watch?v=ENDi5iP2BQg",
     techNotes:
       "Primeiro elétrico 100% da Lexus no Brasil, entregas iniciadas em maio/2026 (o modelo global se chama RZ 450e, mas a versão vendida no Brasil é nomeada RZ 500e). Bateria de 77kWh com resfriamento líquido. Autonomia de 375km é o valor citado como 'Inmetro' pela imprensa (uma fonte cita até 600km em ciclo urbano WLTP europeu, bem mais otimista — não usado aqui). Tração integral DIRECT4 com motor em cada eixo (264Nm cada, torque total do sistema não divulgado). Recarga DC até 150kW (0-80% em ~30min). Financiamento com taxa a partir de 0% e recompra garantida de 80% da tabela FIPE fazem parte do programa de lançamento.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
