@@ -515,6 +515,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: 20000,
     maintenanceTotalCost: 686,
     consumptionKwh100: 14.9,
+    videoUrl: "https://www.youtube.com/watch?v=_QV7utpKSTE",
     techNotes:
       "O elétrico mais barato do Brasil. Autonomia real INMETRO é 180 km (não os 265 km WLTP que circulavam antes) e o consumo real fica em ~14,9 kWh/100km — bem mais alto que o valor otimista anterior. Carregamento DC de 30 kW leva a bateria de 20% a 80% em ~45 min. Vão livre de 172mm é alto pro segmento.",
     personas: { urbano: 5, familia: 2, aventura: 3, performance: 1, custo: 5 },
@@ -825,6 +826,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.7,
+    videoUrl: "https://www.youtube.com/watch?v=YBbVd2XFzTw",
     techNotes:
       "Nova geração eleva a potência pra 158cv (a versão anterior tinha 136cv) e a bateria pra 54 kWh (era 50 kWh). Autonomia oficial PBEV/INMETRO é 261 km — bem abaixo do WLTP europeu de 345 km. AC trifásico de 11 kW e DC de até 100 kW (0-80% em ~30 min). Preço de tabela vai de R$259.990 a R$269.990 conforme versão.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 2 },
@@ -3765,6 +3767,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.6,
+    videoUrl: "https://www.youtube.com/watch?v=JEpdP0UPYzY",
     techNotes:
       "Nova geração do Taycan desembarcou no Brasil (MY25/2026) com autonomia já no padrão INMETRO. Vendida em 10 versões (base, 4, 4S, GTS, Turbo, Turbo S, Turbo GT Weissach e a Cross Turismo Turbo), de R$893.115 a R$1.488.978 — cadastramos só a versão de entrada (RWD, 408cv/410Nm, bateria 89kWh, 453km) por ser a única com ficha técnica completa e confiável encontrada; as demais têm preço confirmado mas specs incompletas nas fontes consultadas. Recarga DC de até 320kW em arquitetura 800V. Consumo de 19,6 kWh/100km calculado a partir de bateria/autonomia oficiais. Peso, aceleração 0-100 e garantia da versão base não confirmados em fonte específica para o Brasil.",
     personas: { urbano: 2, familia: 2, aventura: 1, performance: 5, custo: 1 },
@@ -3799,6 +3802,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.6,
+    videoUrl: "https://www.youtube.com/watch?v=lwWGDFiRO3M",
     techNotes:
       "Comercializado no Brasil desde novembro/2024, versão de entrada RWD (base 'Macan Electric') da linha 100% elétrica. Bateria de 100kWh (95kWh úteis), arquitetura 800V com DC de até 270kW (10-80% em ~21min). Também existem as versões 4 Electric (R$580mil, 408cv overboost), 4S Electric (R$630mil, 516cv, 0-100 em 4,1s) e Turbo Electric (R$770mil, 639cv, 0-100 em 3,3s) — mesma bateria/porta-malas/garantia, mudando motor e tração (AWD nas versões 4/4S/Turbo); não cadastradas individualmente por já estarem bem representadas pela entrada e por não termos certeza sobre qual delas seguiu efetivamente à venda vs. só pré-venda da GTS (lançada em 2026, R$800mil, ainda não confirmada como entregue).",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
