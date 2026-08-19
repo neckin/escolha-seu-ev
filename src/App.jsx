@@ -1650,6 +1650,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.5,
+    videoUrl: "https://www.youtube.com/watch?v=Rc8Vip7BkQ0",
     techNotes:
       "Preço de lançamento (Signature) é R$394.990 — acima do valor de R$339.990 que circulava antes (havia descontos pontuais de estoque parado até R$294.990, mas não é preço de tabela). Autonomia oficial PBEV/INMETRO é 374 km, bem abaixo do WLTP de 480 km. DC de até 350 kW carrega de 10-80% em ~18 min. Wallbox residencial WEG 7,68kW incluso, com 1 ano de cobertura.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1684,6 +1685,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=yrI104wlJwU",
     techNotes:
       "Preço real de tabela é R$289.900 (Advance) a R$299.900 (Premium) — bem acima do valor anterior de R$189.990. Potência combinada real é de até 339cv (motor 1.5 turbo + elétrico), não 197cv. Autonomia elétrica pura ~75km (fontes variam entre 70-77km). Consumo híbrido de 11,4 km/L no ciclo urbano (gasolina). Porta-malas tem conflito entre fontes (450L vs 580L). Carregamento AC 7kW / DC 40kW (20-80% em ~30-36min).",
     personas: { urbano: 2, familia: 4, aventura: 4, performance: 4, custo: 1 },
@@ -1718,6 +1720,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=omWU5I14t4g",
     techNotes:
       "SUV de entrada da Jetour no Brasil, marca que estreou no país em 2026 com 3 modelos PHEV (S06, T1 e T2, este já cadastrado separadamente). Mesmo conjunto mecânico do T1 (1.5 turbo 135cv + elétrico 204cv, 315cv/510Nm combinados), mas com bateria menor (19,43kWh vs 26,7kWh), resultando em menos autonomia elétrica (70km vs 88km). Preço subiu de R$199.900 (pré-venda) pra R$204.900 (Advance, a partir de mai/2026); versão Premium custa R$239.900.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
@@ -1752,6 +1755,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=IiNbVwm3nwk",
     techNotes:
       "SUV intermediário da Jetour, entre o S06 (mais barato) e o T2 (mais caro/potente). Mesmo conjunto mecânico do S06 (315cv/510Nm), mas bateria maior (26,7kWh vs 19,43kWh) e mais autonomia elétrica (88km vs 70km) e porta-malas maior (574L vs 416L, até 1.455L com bancos rebatidos). Preço Advance subiu de R$249.900 (pré-venda) pra R$254.900 (a partir de mai/2026); versão Premium custa R$274.900.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1786,6 +1790,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=ZbJTcTZdLcE",
     techNotes:
       "Preço varia por versão: Elite R$179.990, Luxury R$234.990 (ficha usada aqui), Prestige R$256.990 — nenhuma bate exatamente com o valor anterior de R$199.990. A marca mudou a metodologia de medição de potência (UN R21): hoje anuncia 279cv pro mesmo conjunto mecânico (1.5 turbo 135cv + elétrico 204cv) que antes era anunciado com 339cv. Autonomia elétrica pura de 79km (INMETRO, bem confirmada). Consumo híbrido de 15,1 km/L urbano.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -4027,6 +4032,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=C47rgiZfiGk",
     techNotes:
       "Marca inteiramente ausente da base anterior. Grand Cherokee 4xe retornou ao Brasil em 2026 (primeiras 150 unidades importadas dos EUA já entregues às concessionárias), potência/torque combinados oficiais (documento técnico Stellantis): 380cv/637Nm. Autonomia elétrica de 29km (Inmetro) — bem abaixo dos 50km divulgados em outros mercados. Só recarrega em AC (até 7,2kW via wallbox tipo 2, ~2h30 para carga completa); não tem porta de recarga DC. Consumo combinado de 19,3 km/l (Inmetro). ATENÇÃO: o Jeep Compass 4xe (outro PHEV da marca) foi pesquisado mas NÃO foi incluído — saiu do site oficial da Jeep Brasil em fev/2026 e é considerado descontinuado (vendeu só ~100 unidades em 2025); a nova geração do Compass (com PHEV) só chega em 2027.",
     personas: { urbano: 1, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -4061,6 +4067,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=-Kxu_aJO2M8",
     techNotes:
       "SUV elétrico médio-grande da JAC, posicionado acima do E-JS1 (cadastrado separadamente, id jac-e-js1) na linha da marca no Brasil. Dados oficiais do site JAC Motors: 200cv/340Nm, bateria 55kWh, autonomia 307km (Inmetro), 0-100 em 7,5s. Porta-malas de 650L (1.210L com bancos rebatidos). Recarga AC portátil (20-100% em 7h20) e DC rápida (20-100% em 1h10) — potências em kW não divulgadas. Existe uma referência antiga a um modelo 'JAC iEV40/EV40' em fontes agregadoras, mas ele não consta no site oficial atual da JAC Brasil (só E-JS1 e E-JS4 entre os elétricos de passeio) — parece ser um modelo antigo (2020/2021) já descontinuado, por isso não foi incluído.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 3 },
