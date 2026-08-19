@@ -4897,7 +4897,7 @@ function CarImage({ src, alt, T }) {
       alt={alt}
       loading="lazy"
       onError={() => setBroken(true)}
-      style={{ width: "100%", height: 140, objectFit: "cover", display: "block", background: T.panelAlt }}
+      style={{ width: "100%", height: 150, objectFit: "contain", display: "block", background: T.panelAlt }}
     />
   );
 }
