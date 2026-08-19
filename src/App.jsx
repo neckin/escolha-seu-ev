@@ -583,6 +583,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 15.5,
+    videoUrl: "https://www.youtube.com/watch?v=a6XUsvgXxNk",
     techNotes:
       "Preço de tabela varia por versão: Comfort ~R$128.900, Luxury foi reajustada pra R$149.900 em jan/2026 (era R$134.900 no lançamento). Autonomia oficial PBEV/INMETRO de 263 km é bem confirmada; o consumo foi recalculado pra 15,5 kWh/100km pra bater com essa autonomia real (o valor de 12 kWh/100km batia só com a autonomia WLTP de 338 km, não com a brasileira).",
     personas: { urbano: 5, familia: 2, aventura: 2, performance: 2, custo: 5 },
@@ -3078,6 +3079,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.7,
+    videoUrl: "https://www.youtube.com/watch?v=1XXEiCyXSZ4",
     techNotes: "Derivado do modelo híbrido Omoda 5. Recarga DC de 80kW leva de 30% a 80% em ~30min.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 3 },
   },
@@ -3111,6 +3113,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=6s0moCSczw8",
     techNotes:
       "SUV híbrido plug-in irmão do JAECOO 7 PHEV (mesma plataforma Chery Super Hybrid System, specs quase idênticas: 279cv/365Nm, bateria 18,4kWh, ~60km elétricos Inmetro, 1.200km combinados). O 'SHS-P' (Plug-in) distingue do Omoda 5 SHS-H, que é HEV comum sem tomada — por isso não entrou na base. Duas versões: Luxury (R$254.990 — ficha usada aqui) e Prestige (R$279.990).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 1 },
@@ -3247,6 +3250,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.3,
+    videoUrl: "https://www.youtube.com/watch?v=IfPvTxhPaDQ",
     techNotes:
       "Baterias fabricadas pela CATL. Carregamento AC completo em ~9h; DC de 30% a 80% em ~30min. Versão de entrada da linha Neta X.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 2, custo: 3 },
@@ -3934,6 +3938,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=CFNx8aXuXH0",
     techNotes:
       "Nova geração (4ª geração) do Outlander no Brasil vendida só como PHEV (não há mais versão a combustão pura). 7 lugares, tração integral elétrica Twin Motor 4WD (um motor elétrico em cada eixo + motor 2.4 ciclo Atkinson). Autonomia 100% elétrica de 58km (Inmetro) e autonomia combinada de até 680km. Porta-malas de apenas 284L com os 7 lugares em uso (637L com a 3ª fileira rebatida, 1.448L só com os dianteiros). Recarga só em AC 3,5kW via carregador portátil (~6h30 para carga completa) — não há confirmação de recarga DC rápida. Existe também a versão Signature (R$389.990, mesma mecânica, mais equipamentos) não cadastrada separadamente por não ter diferença de potência/bateria.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 3, custo: 3 },
