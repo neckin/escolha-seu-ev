@@ -1651,8 +1651,8 @@ const SEED_CARS_DETAILED = [
     airbags: 6,
     warranty: "7 anos completa + 8 anos/160.000 km bateria e motor elétrico",
     fuelType: "PHEV",
-    verified: false,
-    priceVerifiedDate: null,
+    verified: true,
+    priceVerifiedDate: "19/08/2026",
     maintenanceInterval: null,
     maintenanceFirstCost: null,
     maintenanceKmBase: null,
@@ -1660,7 +1660,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: null,
     videoUrl: "https://www.youtube.com/watch?v=yrI104wlJwU",
     techNotes:
-      "Preço real de tabela é R$289.900 (Advance) a R$299.900 (Premium) — bem acima do valor anterior de R$189.990. Potência combinada real é de até 339cv (motor 1.5 turbo + elétrico), não 197cv. Autonomia elétrica pura ~75km (fontes variam entre 70-77km). Consumo híbrido de 11,4 km/L no ciclo urbano (gasolina). Porta-malas tem conflito entre fontes (450L vs 580L). Carregamento AC 7kW / DC 40kW (20-80% em ~30-36min).",
+      "Preço real de tabela é R$289.900 (Advance) a R$299.900 (Premium) — bem acima do valor anterior de R$189.990. Potência combinada real é de até 339cv/510Nm (motor 1.5 turbo 128cv/20,4kgfm + elétrico dianteiro 225cv/39,8kgfm), não 197cv — confirmado em pente-fino 19/08/2026 contra ficha técnica detalhada (bate exatamente: 52kgfm = 510Nm). Autonomia elétrica pura ~75km (fontes variam entre 70-77km). Consumo híbrido de 11,4 km/L no ciclo urbano (gasolina). Porta-malas tem conflito entre fontes (450L vs 580L). Carregamento AC 7kW / DC 40kW (20-80% em ~30-36min). ATENÇÃO: existe uma versão XWD 4x4 do T2 (R$349.990, tração integral) com potência bem maior, mas as fontes divergem muito sobre o número exato (375cv, 597cv e 620cv aparecem em fontes diferentes) — não cadastrada como card separado por falta de ficha confiável.",
     personas: { urbano: 2, familia: 4, aventura: 4, performance: 4, custo: 1 },
   },
   {
@@ -1695,7 +1695,7 @@ const SEED_CARS_DETAILED = [
     consumptionKwh100: null,
     videoUrl: "https://www.youtube.com/watch?v=omWU5I14t4g",
     techNotes:
-      "SUV de entrada da Jetour no Brasil, marca que estreou no país em 2026 com 3 modelos PHEV (S06, T1 e T2, este já cadastrado separadamente). Mesmo conjunto mecânico do T1 (1.5 turbo 135cv + elétrico 204cv, 315cv/510Nm combinados), mas com bateria menor (19,43kWh vs 26,7kWh), resultando em menos autonomia elétrica (70km vs 88km). Preço subiu de R$199.900 (pré-venda) pra R$204.900 (Advance, a partir de mai/2026); versão Premium custa R$239.900.",
+      "SUV de entrada da Jetour no Brasil, marca que estreou no país em 2026 com 3 modelos PHEV (S06, T1 e T2, este já cadastrado separadamente). Mesmo conjunto mecânico do T1 (1.5 turbo 135cv + elétrico 204cv, 315cv/510Nm combinados), mas com bateria menor (19,43kWh vs 26,7kWh), resultando em menos autonomia elétrica (70km vs 88km). Preço subiu de R$199.900 (pré-venda) pra R$204.900 (Advance, a partir de mai/2026); versão Premium custa R$229.900 (corrigido em pente-fino 19/08/2026 — valor anterior de R$239.900 estava errado, confirmado contra tabela FIPE e site oficial).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
   },
   {
