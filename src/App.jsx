@@ -342,6 +342,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=_7UwxujQXyo",
     techNotes:
       "Versão de entrada do Aion UT no Brasil (a Elite já está cadastrada separadamente, id 'aionut'), com bateria menor (44,12kWh vs 60kWh) e carregamento DC mais lento (64kW vs 87kW), resultando em autonomia de 253km vs 310km e aceleração mais lenta (8,6s vs 7,3s). Potência/torque do motor assumidos iguais aos da Elite (204cv/210Nm) — fontes brasileiras não indicam motor diferente entre as versões, só bateria e equipamentos (a Elite tem ADAS nível 2 e teto panorâmico que a Premium não tem).",
     personas: { urbano: 4, familia: 3, aventura: 4, performance: 5, custo: 5 },
@@ -514,6 +515,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: 20000,
     maintenanceTotalCost: 686,
     consumptionKwh100: 14.9,
+    videoUrl: "https://www.youtube.com/watch?v=_QV7utpKSTE",
     techNotes:
       "O elétrico mais barato do Brasil. Autonomia real INMETRO é 180 km (não os 265 km WLTP que circulavam antes) e o consumo real fica em ~14,9 kWh/100km — bem mais alto que o valor otimista anterior. Carregamento DC de 30 kW leva a bateria de 20% a 80% em ~45 min. Vão livre de 172mm é alto pro segmento.",
     personas: { urbano: 5, familia: 2, aventura: 3, performance: 1, custo: 5 },
@@ -582,6 +584,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 15.5,
+    videoUrl: "https://www.youtube.com/watch?v=a6XUsvgXxNk",
     techNotes:
       "Preço de tabela varia por versão: Comfort ~R$128.900, Luxury foi reajustada pra R$149.900 em jan/2026 (era R$134.900 no lançamento). Autonomia oficial PBEV/INMETRO de 263 km é bem confirmada; o consumo foi recalculado pra 15,5 kWh/100km pra bater com essa autonomia real (o valor de 12 kWh/100km batia só com a autonomia WLTP de 338 km, não com a brasileira).",
     personas: { urbano: 5, familia: 2, aventura: 2, performance: 2, custo: 5 },
@@ -650,6 +653,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=YxBOWM38rnU",
     techNotes:
       "Versão de bateria maior do Haval H6 PHEV (a versão PHEV19, com bateria de 19kWh e 326cv, já está cadastrada separadamente, id gwm-haval-h6-phev): aqui a bateria de 35kWh e o sistema Hi4 com tração integral (motor elétrico em cada eixo) elevam a potência para 393cv/762Nm. Autonomia elétrica pura varia MUITO entre fontes consultadas (100km, 119km e até 170km, conforme o veículo e o ciclo de medição usado) — não incluída por falta de um valor confiável único. Existe também a versão GT (mesma mecânica 393cv, suspensão mais esportiva, 0-100 em 4,9s, ~R$315-325 mil), não cadastrada separadamente por não ter diferença de potência/bateria da PHEV35, só de calibração de suspensão e equipamentos.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
@@ -684,6 +688,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: 48000,
     maintenanceTotalCost: 0,
     consumptionKwh100: 15,
+    videoUrl: "https://www.youtube.com/watch?v=y1O7-tf51PQ",
     techNotes:
       "Mesmo motor da Skin (cadastrada separadamente), 171cv/250Nm — a diferença é a bateria maior (63kWh vs 48kWh, mais autonomia) e mais equipamento: freios maiores, teto solar panorâmico, banco do motorista elétrico. Peso não encontrado em fonte específica pra essa versão (deve ser um pouco maior que a Skin por causa da bateria). Tem frunk de 57L além dos 228L do porta-malas traseiro (858L com banco rebatido). 5 estrelas no Euro NCAP.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 3, custo: 3 },
@@ -718,6 +723,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.4,
+    videoUrl: "https://www.youtube.com/watch?v=QmmwoKUdlY0",
     techNotes:
       "Existem duas configurações de bateria: Single (51 kWh LFP, RWD, ~250 km INMETRO — ficha usada aqui) e Twin/Extended Range (69 kWh NMC, ~316-338 km — cadastrada separadamente, id volvo-ex30-ultra). Faixa de preço por versão vai de R$212.554 a R$275.485. Houve recall no Brasil (~5.600 unidades) por risco de incêndio na bateria — vale checar se o carro já passou pelo reparo antes de comprar usado.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 4, custo: 2 },
@@ -752,6 +758,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 21.8,
+    videoUrl: "https://www.youtube.com/watch?v=FP6qurMGmWk",
     techNotes:
       "Versão topo de linha do EX30, bimotor AWD (428cv/543Nm) com bateria NMC de 69kWh — quase o dobro da potência da versão Single (272cv). Existe também a versão Cross Country (R$315.000, mesma bateria de 69kWh, suspensão elevada), provavelmente com potência semelhante à Ultra, mas sem ficha técnica própria confirmada em fonte confiável.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -786,6 +793,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 18.5,
+    videoUrl: "https://www.youtube.com/watch?v=HumjHve-vpo",
     techNotes:
       "Versão de entrada é a Action (R$219.990) — a Icon custa mais. Autonomia WLTP divulgada é 320 km, mas um veículo real registrado rodando no Brasil mediu 227 km com consumo de 18,5 kWh/100km, valores bem mais conservadores usados aqui. DC de 85 kW carrega de 0-80% em ~35 min.",
     personas: { urbano: 5, familia: 1, aventura: 1, performance: 2, custo: 2 },
@@ -820,6 +828,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.7,
+    videoUrl: "https://www.youtube.com/watch?v=YBbVd2XFzTw",
     techNotes:
       "Nova geração eleva a potência pra 158cv (a versão anterior tinha 136cv) e a bateria pra 54 kWh (era 50 kWh). Autonomia oficial PBEV/INMETRO é 261 km — bem abaixo do WLTP europeu de 345 km. AC trifásico de 11 kW e DC de até 100 kW (0-80% em ~30 min). Preço de tabela vai de R$259.990 a R$269.990 conforme versão.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 2 },
@@ -1058,6 +1067,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.2,
+    videoUrl: "https://www.youtube.com/watch?v=HeBB2JogXBw",
     techNotes:
       "Preço real de tabela é ~R$419.000 — bem acima do valor de R$299.990 que circulava antes. Bateria NCMA (evolução da química NMC, com menos cobalto) de 85 kWh, a maior do grupo, com motor biMotor AWD de 2x146cv somando 292cv e 451Nm.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -1092,6 +1102,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.4,
+    videoUrl: "https://www.youtube.com/watch?v=EL5Xfsqx8XI",
     techNotes:
       "SUV elétrico esportivo da plataforma Ultium (mesma base do Equinox EV), vendido no Brasil só na versão RS (motor único traseiro, 347cv/450Nm). Preço subiu de R$479.000 no lançamento (2024) para R$503.190 atualmente. Autonomia declarada varia entre 481km (Inmetro, fonte de lançamento) e 526km (fonte mais recente) — usamos a mais recorrente. Uma versão AWD (305cv, bateria menor de 85kWh) foi anunciada para 2026 mas ainda sem ficha e preço confiáveis publicados.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1126,6 +1137,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.6,
+    videoUrl: "https://www.youtube.com/watch?v=YnYe6mbt0Dw",
     techNotes:
       "SUV elétrico familiar de produção nacional (Polo Automotivo do Ceará, junto com o Spark EUV), vendido só na versão Premier. Bateria LFP de 60kWh, motor único dianteiro de 201cv/310Nm. Preço oficial de lançamento é R$199.990 — algumas fontes mais recentes citam R$219.990, possivelmente um reajuste ainda não confirmado em múltiplas fontes. DC de até 120kW (30-80% em ~30min).",
     personas: { urbano: 3, familia: 5, aventura: 3, performance: 3, custo: 3 },
@@ -1160,6 +1172,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 16.1,
+    videoUrl: "https://www.youtube.com/watch?v=TwxcLEyWuY0",
     techNotes:
       "Mini SUV elétrico de entrada da Chevrolet no Brasil, com motor único dianteiro de 102cv/180Nm e bateria de 41,9kWh. Porta-malas de 355L (916L com bancos rebatidos). Carregador de parede (wall charger) de 7kW leva de 20% a 100% em ~7h; carregamento DC não confirmado em fonte confiável.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 1, custo: 4 },
@@ -1194,6 +1207,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.9,
+    videoUrl: "https://www.youtube.com/watch?v=cJLtwz8TUQY",
     techNotes:
       "Antigo Volvo XC40 Recharge, renomeado EX40 em 2025. Duas versões: P6 (238cv/420Nm, RWD, bateria 69kWh, ~385km — ficha usada aqui, compatível com o preço de tabela Plus de R$329.950) e P8 (408cv/670Nm, AWD, bateria 82kWh, ~393km, 0-100 em 4,9s, mais cara — cadastrada separadamente, id volvo-ex40-ultra). Peso ~2.050kg é aproximado (fonte não especifica por versão).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 1 },
@@ -1296,6 +1310,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.3,
+    videoUrl: "https://www.youtube.com/watch?v=Rh3xn5flYWo",
     techNotes:
       "Versão topo de linha do EC40 (bimotor AWD, 408cv/670Nm, bateria 82kWh), com a maior autonomia da linha 2026 (404km Inmetro, +51km sobre a geração anterior). Mesmo conjunto mecânico do EX40 Ultra, em carroceria cupê-SUV.",
     personas: { urbano: 3, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -1398,6 +1413,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.1,
+    videoUrl: "https://www.youtube.com/watch?v=vA6A1Fjqgrc",
     techNotes:
       "Nova geração do iX3, estreou em pré-venda no Brasil em jul/2026 por R$582.950 — 'nova era' de plataforma elétrica da marca (arquitetura 800V, células cilíndricas integradas à estrutura). Maior autonomia declarada entre elétricos vendidos no país (570km PBEV/Inmetro). Carregamento DC de até 400kW (10-80% em ~21min). Consumo de 19,1 kWh/100km calculado a partir de bateria/autonomia oficiais (não divulgado diretamente pela BMW). Por estar em fase de pré-venda, unidades ainda podem não estar disponíveis para entrega imediata.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1432,6 +1448,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 21.1,
+    videoUrl: "https://www.youtube.com/watch?v=Q1CM6qljfis",
     techNotes:
       "SUV grande elétrico topo da linha i da BMW, R$923.950 (preço de tabela válido até 31/08/2026). Bimotor AWD sob demanda com 523cv/765Nm. Também existe a versão de entrada iX xDrive40 (a partir de R$726.950, motor único, bateria menor), não detalhada aqui por falta de ficha técnica completa confiável. Consumo de 21,1 kWh/100km calculado a partir de bateria/autonomia oficiais.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1500,6 +1517,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.8,
+    videoUrl: "https://www.youtube.com/watch?v=czkEt3Q05i0",
     techNotes:
       "Sedã executivo elétrico, versão M60 xDrive (única versão vendida no Brasil), bimotor AWD com 601cv/820Nm combinados. Chegou ao Brasil em mar/2024 por R$759.950; fontes mais recentes (2025/2026) mencionam R$795.950, mas não achamos confirmação oficial datada de ago/2026 — trate o preço como aproximado até checar na concessionária. DC de até 205kW (10-80% em ~30min).",
     personas: { urbano: 2, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -1534,6 +1552,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.9,
+    videoUrl: "https://www.youtube.com/watch?v=vr1Q50DDsnM",
     techNotes:
       "Sedã executivo elétrico topo de linha da BMW (versão elétrica do Série 7), R$1.373.950 — preço confirmado em vários concessionários oficiais em ago/2026. Bimotor AWD com 544cv/745Nm combinados, bateria de 101,7kWh. Recarga DC de 10-80% em ~34min.",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -1568,6 +1587,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=FNiYzsayAKA",
     techNotes:
       "Sedã executivo híbrido plug-in (Série 5), conjunto combinado de 299cv/450Nm com bateria de 19,4kWh e ~61km de autonomia elétrica pura. Preço não confirmado com segurança — fontes de 2026 divergem muito entre si (de R$456.706 a R$643.950), possivelmente por diferença de ano-modelo/pacotes; deixado como null até confirmar diretamente na concessionária.",
     personas: { urbano: 2, familia: 4, aventura: 1, performance: 4, custo: 2 },
@@ -1602,6 +1622,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=dM_g0MiRspU",
     techNotes:
       "SUV grande híbrido plug-in, motor a combustão 3.0 I6 turbo (313cv) somado a elétrico, com potência combinada de 489cv/700Nm. Preço de tabela R$864.950 (ago/2026). Bateria de 25,7kWh com ~76km de autonomia elétrica pura. AC de 22kW.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1636,6 +1657,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.5,
+    videoUrl: "https://www.youtube.com/watch?v=Rc8Vip7BkQ0",
     techNotes:
       "Preço de lançamento (Signature) é R$394.990 — acima do valor de R$339.990 que circulava antes (havia descontos pontuais de estoque parado até R$294.990, mas não é preço de tabela). Autonomia oficial PBEV/INMETRO é 374 km, bem abaixo do WLTP de 480 km. DC de até 350 kW carrega de 10-80% em ~18 min. Wallbox residencial WEG 7,68kW incluso, com 1 ano de cobertura.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1670,6 +1692,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=yrI104wlJwU",
     techNotes:
       "Preço real de tabela é R$289.900 (Advance) a R$299.900 (Premium) — bem acima do valor anterior de R$189.990. Potência combinada real é de até 339cv (motor 1.5 turbo + elétrico), não 197cv. Autonomia elétrica pura ~75km (fontes variam entre 70-77km). Consumo híbrido de 11,4 km/L no ciclo urbano (gasolina). Porta-malas tem conflito entre fontes (450L vs 580L). Carregamento AC 7kW / DC 40kW (20-80% em ~30-36min).",
     personas: { urbano: 2, familia: 4, aventura: 4, performance: 4, custo: 1 },
@@ -1704,6 +1727,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=omWU5I14t4g",
     techNotes:
       "SUV de entrada da Jetour no Brasil, marca que estreou no país em 2026 com 3 modelos PHEV (S06, T1 e T2, este já cadastrado separadamente). Mesmo conjunto mecânico do T1 (1.5 turbo 135cv + elétrico 204cv, 315cv/510Nm combinados), mas com bateria menor (19,43kWh vs 26,7kWh), resultando em menos autonomia elétrica (70km vs 88km). Preço subiu de R$199.900 (pré-venda) pra R$204.900 (Advance, a partir de mai/2026); versão Premium custa R$239.900.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 2 },
@@ -1738,6 +1762,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=IiNbVwm3nwk",
     techNotes:
       "SUV intermediário da Jetour, entre o S06 (mais barato) e o T2 (mais caro/potente). Mesmo conjunto mecânico do S06 (315cv/510Nm), mas bateria maior (26,7kWh vs 19,43kWh) e mais autonomia elétrica (88km vs 70km) e porta-malas maior (574L vs 416L, até 1.455L com bancos rebatidos). Preço Advance subiu de R$249.900 (pré-venda) pra R$254.900 (a partir de mai/2026); versão Premium custa R$274.900.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1772,6 +1797,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=ZbJTcTZdLcE",
     techNotes:
       "Preço varia por versão: Elite R$179.990, Luxury R$234.990 (ficha usada aqui), Prestige R$256.990 — nenhuma bate exatamente com o valor anterior de R$199.990. A marca mudou a metodologia de medição de potência (UN R21): hoje anuncia 279cv pro mesmo conjunto mecânico (1.5 turbo 135cv + elétrico 204cv) que antes era anunciado com 339cv. Autonomia elétrica pura de 79km (INMETRO, bem confirmada). Consumo híbrido de 15,1 km/L urbano.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -1806,6 +1832,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=G2VdpuYBteI",
     techNotes:
       "Existem 4 variantes do Haval H6 em 2026: HEV2 (não é PHEV, R$223 mil), PHEV19 (ficha usada aqui, 326cv, R$248 mil — preço atualizado, o valor anterior de R$219.800 estava desatualizado), PHEV35 (393cv, R$288 mil) e GT (393cv, carroceria cupê, R$325 mil). Autonomia elétrica pura de 77km INMETRO (até 115km WLTP). Um dos poucos PHEVs com carregamento DC (até 33kW), incomum no segmento. Peso 1.890-1.910kg conforme fonte (usado o meio da faixa).",
     personas: { urbano: 2, familia: 4, aventura: 4, performance: 5, custo: 2 },
@@ -1840,6 +1867,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=gcbYeJLnzDs",
     techNotes:
       "SUV off-road de luxo, híbrido plug-in 4x4 com 394cv/750Nm combinados, bateria 37,1kWh NMC e autonomia elétrica pura de 74-75km (Inmetro) / até 106km (WLTP). Preço oficial no site da GWM Brasil é R$342.000 — agregadores de mercado citam valores de R$333.000 (lançamento, 2025) a R$389.990, possível reflexo de diferentes datas/versões. Autonomia total combinada (~1.290km) é uma estimativa calculada a partir do consumo híbrido divulgado (18,4-18,7 km/l) e do tanque de 70L — não é um valor divulgado diretamente pela GWM. Porta-malas de 863L (1.520L com bancos rebatidos). Vão livre de 222mm e ângulos de entrada/saída de 32°/33° — dos melhores off-road do grupo, com travessia de água até 700mm.",
     personas: { urbano: 1, familia: 3, aventura: 5, performance: 5, custo: 1 },
@@ -1874,6 +1902,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=wxLN-0nqQRA",
     techNotes:
       "SUV híbrido plug-in de luxo com 6 lugares da WEY, submarca premium da GWM. Lançado oficialmente no Brasil em out/2025 (vendas iniciadas em 23/10), preço R$429.000. Potência combinada de 517cv/820Nm, bateria 42,5kWh, autonomia elétrica de 128km (Inmetro) — até 185km citado em fonte WLTP. Autonomia total combinada supera 1.200km. Porta-malas de apenas 239L com a 3ª fileira em uso (1.040L com ela rebatida). Recarga DC de 60kW leva a bateria de 30% a 80% em ~26min; AC leva de 15% a 100% em ~6h30 (kW exato não confirmado). Garantia não confirmada em fonte disponível.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1908,6 +1937,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=7c2UEX4-YSg",
     techNotes:
       "O elétrico mais vendido do Brasil. Ficha conferida na ficha técnica oficial BYD (rev. 09/07/2026). Duas versões, GL (entrada, ficha usada aqui) e GS (cadastrada separadamente) — a diferença de preço é de só R$1.000, mas a GS tem bateria maior (38,9kWh vs 30,1kWh), mais autonomia (280 vs 224km) e mais equipamento (carregador de celular por indução, acabamento do volante, luzes de cortesia, vidro do motorista one-touch/antiesmagamento). Airbags: só frontais + cortina na GL (a GS ganha também os laterais dianteiros). Uso comercial reduz a garantia do veículo pra 6 anos/100.000km.",
     personas: { urbano: 5, familia: 1, aventura: 1, performance: 1, custo: 5 },
@@ -1976,6 +2006,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 14.0,
+    videoUrl: "https://www.youtube.com/watch?v=XJ_UY2FFoWk",
     techNotes:
       "Autonomia WLTP divulgada é de até 340km; usamos aqui uma estimativa mais realista de uso urbano (290-320km). Bateria Blade LFP, mesma tecnologia usada em toda a linha BYD, com estrutura que dispensa módulos intermediários. 5 estrelas no Latin NCAP.",
     personas: { urbano: 5, familia: 2, aventura: 1, performance: 2, custo: 4 },
@@ -2010,6 +2041,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 14.4,
+    videoUrl: "https://www.youtube.com/watch?v=yUo3gjK9p6s",
     techNotes:
       "Versão de maior autonomia da linha Dolphin, com bateria maior (60,5kWh) que a versão padrão. Fontes de preço variam entre R$168.800 e R$178.800 conforme configuração. DC de 60kW carrega de 20% a 80% em ~45min.",
     personas: { urbano: 4, familia: 2, aventura: 1, performance: 4, custo: 3 },
@@ -2078,6 +2110,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=PjMxVO1l3ls",
     techNotes:
       "Estreia mundial do sistema híbrido plug-in DM-i Flex da BYD — primeiro PHEV do mundo capaz de rodar com gasolina OU etanol. Lançado no Brasil em 9/jun/2026, fabricado em Camaçari (BA). Versão de entrada GL: bateria pequena (7,3kWh), autonomia elétrica de só 45km, carregamento AC de até 3,3kW. Autonomia combinada de 1.000km (gasolina, ciclo NEDC) ou 770km (etanol). Vendida inicialmente por canal de venda direta. A versão GS (mais equipada, com ADAS 2) está cadastrada separadamente (id byd-atto-2-gs).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 3 },
@@ -2146,6 +2179,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.2,
+    videoUrl: "https://www.youtube.com/watch?v=GY8P_chDd4o",
     techNotes:
       "Preço varia entre fontes de R$269.800 a R$296.800 conforme a versão/momento. Existe também a versão Performance AWD, mais potente e cara, com 0-100 em 3,8s. Autonomia real PBEV/Inmetro de 372km é bem mais conservadora que os 570km que circulavam antes (provavelmente CLTC chinês).",
     personas: { urbano: 2, familia: 3, aventura: 1, performance: 5, custo: 1 },
@@ -2180,6 +2214,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 16.0,
+    videoUrl: "https://www.youtube.com/watch?v=zNsuH49NXTI",
     techNotes:
       "Preço real de tabela é R$559.800 — bem acima dos R$429.800 que circulavam antes. Autonomia fica entre 450-500km em ciclo combinado/WLTP (usamos a média, 480km); recarga rápida de 30% a 80% em ~25min.",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -2214,6 +2249,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=cmXCT4p6R8g",
     techNotes:
       "Autonomia elétrica pura homologada de 68km (Inmetro). Existe também a versão Premium AWD (1.5 turbo + dois motores elétricos, 324cv, R$299.800, autonomia elétrica de 87km, cadastrada separadamente, id byd-song-plus-premium-dmi). Preço da versão FWD subiu de ~R$240 mil para ~R$250 mil entre gerações — bem acima dos R$219.800 que circulavam antes.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -2282,6 +2318,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=jxmcxD9X7qc",
     techNotes:
       "Preço real de tabela é R$175.990 (versão GS) — bem abaixo dos R$279.800 que circulavam antes; a versão de entrada GL custa R$147.990 com 209cv e só 32km de autonomia elétrica. Bateria pequena (6,6kWh) é perfil híbrido leve, não plugável de longa autonomia elétrica: até 78km NEDC na GS. Consumo no modo combustão: até 16,8 km/l na cidade.",
     personas: { urbano: 4, familia: 3, aventura: 1, performance: 3, custo: 3 },
@@ -2316,6 +2353,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=KNLNyKCTcWY",
     techNotes:
       "Autonomia elétrica pura de 57km (PBEV/Inmetro) ou até 100km (NEDC). Caçamba com 1.200 litros de capacidade. Tração integral (AWD), com motor a combustão 1.5 turbo (183cv/260Nm) somado a dois motores elétricos (231cv dianteiro + 204cv traseiro).",
     personas: { urbano: 1, familia: 3, aventura: 5, performance: 5, custo: 1 },
@@ -2355,6 +2393,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=PX-SAj7I5wk",
     techNotes:
       "SUV híbrido plug-in de 7 lugares com tração integral (AWD): motor 1.5 turbo (156cv) + motor elétrico dianteiro (272cv) + motor elétrico traseiro (216cv), somando 488cv combinados. Bateria Blade LFP de 35,6 kWh garante autonomia elétrica pura de até 152km; autonomia total combinada de até 900km (ciclo NEDC). Porta-malas de até 1.960L com os bancos rebatidos (capacidade com bancos em uso não divulgada). Recarga DC de 30-80% em ~20min (até 72kW). Lançado no Salão do Automóvel 2025.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -2389,6 +2428,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.9,
+    videoUrl: "https://www.youtube.com/watch?v=7wM2Y5EsIKQ",
     techNotes:
       "SUV cupê elétrico irmão do Seal, com tração integral AWD (531cv/690Nm) e 0-100km/h em 4,5s — um dos mais potentes e rápidos do comparativo inteiro. Bateria Blade LFP de 82,5kWh garante 360km de autonomia Inmetro. Porta-malas de 500L + frunk dianteiro de 58L. Recarga DC até 150kW (30-80% em ~30min).",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -2423,6 +2463,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=6XDL3SB1HsU",
     techNotes:
       "Lançado em 04/08/2026 com o sistema DM-i 5.0 (bicombustível de verdade — o mesmo motor 1.5 Atkinson roda com gasolina, etanol ou qualquer mistura dos dois). Ficha usada aqui é a versão de entrada GL: 13,1kWh Blade LFP, 57km elétricos PBEV, 218cv/300Nm, 8,8s 0-100, R$176.990. A GS (R$199.990) tem bateria maior (18,3kWh, até 72km elétricos PBEV), 219cv e 8,6s — praticamente a mesma potência mas mais autonomia elétrica. No etanol a autonomia total cai pra até 805km (GS)/775km (GL); a gasolina chega a 1.105km (GS)/1.075km (GL, usado aqui).",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 4 },
@@ -2457,6 +2498,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 25.3,
+    videoUrl: "https://www.youtube.com/watch?v=aVeQavypdvE",
     techNotes:
       "SUV elétrico premium de 7 lugares, tração integral 4x4, 517cv e 700Nm, acelera de 0-100km/h em menos de 5s. Bateria Blade LFP gigante de 108,8kWh rende até 430km Inmetro (530km no ciclo WLTP, mais otimista). Porta-malas varia de 235L (7 lugares) a 940L (5 lugares) e 1.655L com os bancos rebatidos. Recarga DC de 30-80% em ~30min a 110kW. Preço confirmado em R$536.800 (fonte que antes divergia entre R$529.890 e R$536.800 já se consolidou nesse valor). Aceleração, peso, vão livre e airbags ainda sem fonte confiável.",
     personas: { urbano: 1, familia: 5, aventura: 2, performance: 4, custo: 1 },
@@ -2491,6 +2533,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=7Yo3JXUafDk",
     techNotes:
       "CORRIGIDO (18/08/2026): o Yuan Pro vendido oficialmente no Brasil é 100% ELÉTRICO (BEV), não híbrido plug-in como estava cadastrado antes — o ficha anterior descrevia a versão DM-i (PHEV) que existe em outros mercados (China, Argentina) mas ainda não tem lançamento confirmado no Brasil. Versão única (GS), R$182.990. Torque, vão livre, peso e airbags ainda sem fonte confiável.",
     personas: { urbano: 4, familia: 3, aventura: 2, performance: 3, custo: 4 },
@@ -2661,6 +2704,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.0,
+    videoUrl: "https://www.youtube.com/watch?v=SmPs9SD6dSQ",
     techNotes:
       "Também comercializado como minivan/SUV familiar. Apesar do nome, é a versão com MAIS equipamento de segurança: pacote completo de ADAS (assistente de congestionamento, permanência em faixa, mudança de faixa, frenagem autônoma de emergência, piloto adaptativo), rodas de 17\". A versão Elite (cadastrada separadamente) custa mais caro mas tem ADAS básico (só alerta de colisão frontal) e rodas de 18\" — confira as duas antes de decidir, o nome não indica qual é 'melhor'. Bateria LFP confirmada no site oficial GAC Brasil.",
     personas: { urbano: 3, familia: 5, aventura: 2, performance: 3, custo: 3 },
@@ -2729,6 +2773,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.4,
+    videoUrl: "https://www.youtube.com/watch?v=jl4ntNnDAEs",
     techNotes:
       "Versão única (Elite) no Brasil — confirmado em múltiplas fontes, diferente do Aion Y (que tem Premium e Elite). Bateria LFP confirmada. Recarga ultrarrápida: 30-80% em ~16min a 180kW DC, das mais rápidas do segmento. Peso, vão livre, airbags e garantia ainda sem fonte confiável — não adivinhados aqui.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 3, custo: 2 },
@@ -2763,6 +2808,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.3,
+    videoUrl: "https://www.youtube.com/watch?v=LNXwJksu7_c",
     techNotes:
       "SUV cupê elétrico da Hyptec, submarca premium da GAC. Linha 2027 lançada em 2026 com bateria ampliada (83kWh, arquitetura 800V) e mais potência (340cv/430Nm) que a geração anterior (245cv/72,7kWh). Duas versões: Elite (R$314.990 — ficha usada aqui) e Ultra (R$369.990, com portas traseiras de abertura vertical). Recarga DC de 30-80% em ~15min. Consumo de 19,3 kWh/100km calculado a partir de bateria/autonomia oficiais.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -2797,6 +2843,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.5,
+    videoUrl: "https://www.youtube.com/watch?v=JPXpYqSLMpQ",
     techNotes:
       "Autonomia WLTP divulgada é 361km, mas a homologação Inmetro/PBEV real é 288km. Preço de tabela varia por público: R$182.990 padrão, com descontos pra troca de usado (R$175.990), taxista (R$141.190), PCD (R$161.390) e CNPJ (R$168.290). Será fabricado no Brasil em fábrica da Stellantis. Recarga rápida recupera 50% em ~15min.",
     personas: { urbano: 4, familia: 4, aventura: 2, performance: 4, custo: 3 },
@@ -2865,6 +2912,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=JQe4GJV94Qo",
     techNotes:
       "Versão REEV (range extender EV) do C10: motor a combustão 1.5 de 4 cilindros funciona só como gerador pra recarregar a bateria, sem tracionar as rodas diretamente — tração é sempre elétrica traseira. Bateria LFP de 28,4kWh dá ~145km de autonomia elétrica pura (WLTP); com o tanque de 50L cheio, a autonomia combinada chega a 950-1.150km. Recarga DC de 30-80% em 18-30min. Porta-malas assumido igual ao da versão BEV (mesma carroceria, 465L) — não há fonte específica confirmando pra versão REEV.",
     personas: { urbano: 3, familia: 5, aventura: 3, performance: 3, custo: 2 },
@@ -2933,6 +2981,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.2,
+    videoUrl: "https://www.youtube.com/watch?v=vobriD-GSYw",
     techNotes:
       "Ficha técnica oficial Geely conferida (ago/2026). Mesmo motor/bateria da Pro (cadastrada separadamente), mas autonomia menor (349km vs 413km) por causa do peso extra (1.765kg vs 1.715kg) — mais equipamento: teto solar panorâmico, porta-malas elétrico, rodas 19\" (vs 18\" da Pro), bancos com massagem/ventilação, pacote ADAS completo (a Pro não tem ACC, LKA, AEB e outros assistentes — só a Max tem). Porta-malas 461L (1.877L com banco rebatido).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -3001,6 +3050,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=kH9AQ4Q3p6k",
     techNotes:
       "Versão topo de linha do EX5 EM-i (a versão Pro de entrada está cadastrada separadamente, id geely-ex5-em-i): mesma potência/torque (262cv/380Nm), mas bateria bem maior (29,8kWh vs 18,4kWh), quase dobrando a autonomia elétrica (112km vs 65km, Inmetro) e com carregamento DC de até 60kW (30-80% em ~16min, contra recarga só AC/lenta nas versões Pro/Max). Wallbox incluso de fábrica só na Ultra. Mesma autonomia combinada de até 1.300km e porta-malas de 428L do restante da linha.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 2 },
@@ -3035,6 +3085,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 17.7,
+    videoUrl: "https://www.youtube.com/watch?v=1XXEiCyXSZ4",
     techNotes: "Derivado do modelo híbrido Omoda 5. Recarga DC de 80kW leva de 30% a 80% em ~30min.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 3 },
   },
@@ -3068,6 +3119,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=6s0moCSczw8",
     techNotes:
       "SUV híbrido plug-in irmão do JAECOO 7 PHEV (mesma plataforma Chery Super Hybrid System, specs quase idênticas: 279cv/365Nm, bateria 18,4kWh, ~60km elétricos Inmetro, 1.200km combinados). O 'SHS-P' (Plug-in) distingue do Omoda 5 SHS-H, que é HEV comum sem tomada — por isso não entrou na base. Duas versões: Luxury (R$254.990 — ficha usada aqui) e Prestige (R$279.990).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 4, custo: 1 },
@@ -3102,6 +3154,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.9,
+    videoUrl: "https://www.youtube.com/watch?v=wyWjwuvF4FA",
     techNotes:
       "O preço de R$189.990 que circulava antes está bem abaixo de qualquer versão real vendida no Brasil. Ficha usada aqui é a Flagship, biMotor AWD (R$338 mil). Existem versões de entrada mais baratas — Privilege (~R$309 mil) e Premium (~R$298 mil) — com potência e bateria menores, ainda não detalhadas em fonte confiável. Recarga DC de 150kW leva de 10% a 80% em ~20min; carga AC completa em ~3h.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3136,6 +3189,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.5,
+    videoUrl: "https://www.youtube.com/watch?v=sYq61oLKrQw",
     techNotes:
       "'Shooting brake premium' (sedã grande com traseira estilo perua), primeiro modelo da Zeekr no Brasil. Duas versões, Premium (R$495 mil — ficha usada aqui) e Flagship (R$542 mil), com mecânica idêntica (544cv/686Nm, bateria 100kWh NMC) — só vão livre (174mm vs 162mm) e equipamentos mudam. Preço subiu bastante desde o lançamento (R$428 mil). Porta-malas de 2.144L é o volume máximo com bancos rebatidos e frunk incluso. Recarga DC de até 200kW (arquitetura 800V).",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -3170,6 +3224,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.6,
+    videoUrl: "https://www.youtube.com/watch?v=cERdkl37ux0",
     techNotes:
       "SUV elétrico mais potente da linha Zeekr no Brasil (646cv/710Nm combinados, bimotor AWD). Bateria de 100kWh dá 423km Inmetro. Recarga DC de até 200kW (80% em ~30min). Porta-malas de 539L.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3204,6 +3259,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.3,
+    videoUrl: "https://www.youtube.com/watch?v=IfPvTxhPaDQ",
     techNotes:
       "Baterias fabricadas pela CATL. Carregamento AC completo em ~9h; DC de 30% a 80% em ~30min. Versão de entrada da linha Neta X.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 2, custo: 3 },
@@ -3340,6 +3396,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=a-vEc29fLPE",
     techNotes:
       "SUV médio híbrido plug-in, líder de vendas entre híbridos da Volvo no Brasil (3.287 unidades em 2024). Quatro versões — Plus (R$459.950, ficha usada aqui), Ultra (~R$509.950), Ultra Dark (R$519.950) e Polestar Engineered (R$539.950) — compartilham a mesma mecânica T8 (462cv/696Nm combinados), só equipamento muda. Bateria de 18,8kWh dá até 44km de autonomia elétrica (Inmetro) ou 80km (WLTP).",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3374,6 +3431,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=KAV5s0JXn4o",
     techNotes:
       "SUV grande híbrido plug-in de 7 lugares, ainda em linha no Brasil mesmo após o lançamento do EX90 (100% elétrico) — não foi substituído, coexistem no catálogo. Versão Plus, mesma mecânica T8 (462cv/709Nm) do XC60. Bateria de 18,8kWh dá 47km de autonomia elétrica. Porta-malas de 316L com as 3 fileiras em uso (500L com a 3ª rebatida). Vão livre de 223mm.",
     personas: { urbano: 2, familia: 5, aventura: 2, performance: 5, custo: 1 },
@@ -3408,6 +3466,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 24.0,
+    videoUrl: "https://www.youtube.com/watch?v=SJ8Gdwme5Hw",
     techNotes:
       "Única marca tradicional grande (não chinesa) além da BMW/Volvo/Chevrolet a vender elétrico oficialmente no Brasil hoje, via CAOA Ford (rede própria de concessionárias). Vendido em versão única, GT Performance (487cv/860Nm, bimotor e-AWD), a R$449.000 — preço reduzido em R$37 mil no início de 2026 (era ~R$486.000) por causa do baixo giro. Ficha técnica oficial do site Ford Brasil mostra dois valores de autonomia na mesma página: 379km (citado no texto, condizente com o padrão INMETRO/PBEV usado nos demais carros desta base) e 541km na tabela de specs (provavelmente WLTP) — usamos o menor por consistência com o resto da base. Consumo de 24,0 kWh/100km calculado a partir de bateria (91kWh) e autonomia oficiais (379km), não é valor direto de fonte. Porta-malas de 402L traseiro + frunk dianteiro de 139L (~541L total). Ford Territory PHEV (chinês, rebatizado, ~218cv) e Ranger PHEV ainda não têm venda oficial confirmada no Brasil — previstas para fim de 2026/2027, por isso não entraram na base.",
     personas: { urbano: 3, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3442,6 +3501,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.6,
+    videoUrl: "https://www.youtube.com/watch?v=E9sNnGptKdw",
     techNotes:
       "Lançado oficialmente pela Audi do Brasil em 2026 (linha 2026), vendido em mais de 40 concessionárias da marca no país. Arquitetura 800V permite recarga DC de até 270kW (10-80% em ~20min). Autonomia de 424km é o valor INMETRO oficial. Porta-malas de 526L + frunk dianteiro de 64L (1.529L com bancos rebatidos). Substituiu a configuração anterior 'Performance Black' pela S Line. Também existe a versão Sportback (cadastrada separadamente, id audi-q6-sportback-e-tron) e a SQ6 Sportback de alta performance (id audi-sq6-sportback-e-tron). Peso e química da bateria não confirmados em fonte oficial brasileira.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3612,6 +3672,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=LN8qlr-x59E",
     techNotes:
       "Preço e disponibilidade confirmados em estoque real de concessionárias oficiais Land Rover (rede JLR Brasil) em ago/2026, trims Autobiography (R$774.469-777.969) e Dynamic HSE (R$733.786-741.286, usado aqui por ser o mais barato). Autonomia elétrica declarada varia entre 38km e 51km conforme a fonte (não há valor único confiável). Mesmo motor híbrido P400e do Defender, que não aparece no estoque oficial atual (zero unidades) por conta da disrupção de produção da JLR após o ciberataque de 2025 — por isso o Defender P400e não foi incluído nesta base apesar de ter ficha técnica divulgada.",
     personas: { urbano: 3, familia: 3, aventura: 3, performance: 4, custo: 2 },
@@ -3680,6 +3741,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.1,
+    videoUrl: "https://www.youtube.com/watch?v=OeWBj6FE8fI",
     techNotes:
       "Versão topo de linha e xDrive AWD do i4 (a versão eDrive40 de entrada já está cadastrada separadamente, id bmw-i4), com bimotor entregando 544cv/795Nm (vs 340cv da eDrive40 RWD) e 0-100 em 3,9s, mesmo tempo do BMW M3. Bateria de 81,3kWh, recarga DC ultrarrápida de até 200kW (0-80% em ~30min). Consumo de 20,1 kWh/100km calculado a partir de bateria/autonomia oficiais. Todos os BMW i4 chegam ao Brasil com o programa BMW Service Inclusive gratuito por 4 anos sem limite de km.",
     personas: { urbano: 2, familia: 2, aventura: 1, performance: 5, custo: 1 },
@@ -3714,6 +3776,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.6,
+    videoUrl: "https://www.youtube.com/watch?v=JEpdP0UPYzY",
     techNotes:
       "Nova geração do Taycan desembarcou no Brasil (MY25/2026) com autonomia já no padrão INMETRO. Vendida em 10 versões (base, 4, 4S, GTS, Turbo, Turbo S, Turbo GT Weissach e a Cross Turismo Turbo), de R$893.115 a R$1.488.978 — cadastramos só a versão de entrada (RWD, 408cv/410Nm, bateria 89kWh, 453km) por ser a única com ficha técnica completa e confiável encontrada; as demais têm preço confirmado mas specs incompletas nas fontes consultadas. Recarga DC de até 320kW em arquitetura 800V. Consumo de 19,6 kWh/100km calculado a partir de bateria/autonomia oficiais. Peso, aceleração 0-100 e garantia da versão base não confirmados em fonte específica para o Brasil.",
     personas: { urbano: 2, familia: 2, aventura: 1, performance: 5, custo: 1 },
@@ -3748,6 +3811,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 22.6,
+    videoUrl: "https://www.youtube.com/watch?v=lwWGDFiRO3M",
     techNotes:
       "Comercializado no Brasil desde novembro/2024, versão de entrada RWD (base 'Macan Electric') da linha 100% elétrica. Bateria de 100kWh (95kWh úteis), arquitetura 800V com DC de até 270kW (10-80% em ~21min). Também existem as versões 4 Electric (R$580mil, 408cv overboost), 4S Electric (R$630mil, 516cv, 0-100 em 4,1s) e Turbo Electric (R$770mil, 639cv, 0-100 em 3,3s) — mesma bateria/porta-malas/garantia, mudando motor e tração (AWD nas versões 4/4S/Turbo); não cadastradas individualmente por já estarem bem representadas pela entrada e por não termos certeza sobre qual delas seguiu efetivamente à venda vs. só pré-venda da GTS (lançada em 2026, R$800mil, ainda não confirmada como entregue).",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3782,6 +3846,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=bC-V-3Zqh-M",
     techNotes:
       "Primeiro híbrido plug-in da Lexus no Brasil. Sistema com 3 motores (1 a combustão + 2 elétricos, um por eixo) somando 308cv. Autonomia 100% elétrica de até 55km (Inmetro). Recarga completa em ~2h45 com wallbox WEG incluso sem custo. Garantia de 10 anos/200.000km é do programa LexusCare (sujeita a revisões periódicas na rede autorizada, não é incondicional). Irmã maior é o RX 450h+ (cadastrado separadamente, id lexus-rx-450h-plus), com a mesma mecânica.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
@@ -3816,6 +3881,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=bM1b3sjQ1kQ",
     techNotes:
       "Primeiro híbrido plug-in da linha RX no Brasil, mesma mecânica do NX 450h+ (cadastrado separadamente, id lexus-nx-450h-plus): 308cv combinados (2.5 aspirado + 2 motores elétricos), bateria 18,1kWh, autonomia elétrica de 56km (Inmetro). Recarga AC de 6,6kW (completa em ~2h45). Peso elevado (2.780kg) reflete o porte maior da carroceria SUV médio.",
     personas: { urbano: 2, familia: 5, aventura: 2, performance: 4, custo: 1 },
@@ -3850,6 +3916,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.5,
+    videoUrl: "https://www.youtube.com/watch?v=ENDi5iP2BQg",
     techNotes:
       "Primeiro elétrico 100% da Lexus no Brasil, entregas iniciadas em maio/2026 (o modelo global se chama RZ 450e, mas a versão vendida no Brasil é nomeada RZ 500e). Bateria de 77kWh com resfriamento líquido. Autonomia de 375km é o valor citado como 'Inmetro' pela imprensa (uma fonte cita até 600km em ciclo urbano WLTP europeu, bem mais otimista — não usado aqui). Tração integral DIRECT4 com motor em cada eixo (264Nm cada, torque total do sistema não divulgado). Recarga DC até 150kW (0-80% em ~30min). Financiamento com taxa a partir de 0% e recompra garantida de 80% da tabela FIPE fazem parte do programa de lançamento.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 4, custo: 2 },
@@ -3884,6 +3951,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=CFNx8aXuXH0",
     techNotes:
       "Nova geração (4ª geração) do Outlander no Brasil vendida só como PHEV (não há mais versão a combustão pura). 7 lugares, tração integral elétrica Twin Motor 4WD (um motor elétrico em cada eixo + motor 2.4 ciclo Atkinson). Autonomia 100% elétrica de 58km (Inmetro) e autonomia combinada de até 680km. Porta-malas de apenas 284L com os 7 lugares em uso (637L com a 3ª fileira rebatida, 1.448L só com os dianteiros). Recarga só em AC 3,5kW via carregador portátil (~6h30 para carga completa) — não há confirmação de recarga DC rápida. Existe também a versão Signature (R$389.990, mesma mecânica, mais equipamentos) não cadastrada separadamente por não ter diferença de potência/bateria.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 3, custo: 3 },
@@ -3918,6 +3986,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=NFOO4Jm-m4o",
     techNotes:
       "Denza é a marca premium da BYD — chegou ao Brasil oficialmente em 10/12/2025 com concessionária própria em São Paulo (Grand Brasil Alphaville). B5 é um SUV off-road híbrido plug-in com bateria Blade LFP de 31,8kWh, autonomia elétrica de até 57km e autonomia total combinada de até 1.200km. Estrutura reforçada (resiste a 12 toneladas estáticas sobre o teto), suspensão hidráulica ativa DiSus-P com 16 modos de condução, 3 bloqueios de diferencial eletrônicos. Peso citado como 'mais de 3.000kg' em fonte agregadora, sem valor exato confirmado. Outros modelos da marca (Z9GT, Z, D9) ainda estão 'em breve' no site oficial — não incluídos por não terem venda confirmada.",
     personas: { urbano: 1, familia: 4, aventura: 5, performance: 5, custo: 2 },
@@ -3952,6 +4021,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.3,
+    videoUrl: "https://www.youtube.com/watch?v=xna7gqkuyEA",
     techNotes:
       "Avatr é a marca de luxo elétrico da Changan, joint venture com a Huawei e a CATL — vendida no Brasil pela CAOA Changan (rede própria, estreou no Salão de SP em nov/2025, já com mais de 20 unidades vendidas). Preço varia pela configuração de bancos: R$599.990 (5 lugares) ou R$619.900 (4 lugares, banco traseiro individual reclinável). Autonomia oficial Inmetro de 497km (710km WLTP). Sistema de condução assistida QianKun (Huawei ADS) com 3 radares a laser. Consumo de 23,3 kWh/100km calculado a partir de bateria/autonomia oficiais. Torque combinado (663Nm) e porta-malas (470L) vêm de fonte agregadora, não confirmados diretamente no site oficial da marca no Brasil, que não divulga esses dois valores.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
@@ -3986,6 +4056,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=C47rgiZfiGk",
     techNotes:
       "Marca inteiramente ausente da base anterior. Grand Cherokee 4xe retornou ao Brasil em 2026 (primeiras 150 unidades importadas dos EUA já entregues às concessionárias), potência/torque combinados oficiais (documento técnico Stellantis): 380cv/637Nm. Autonomia elétrica de 29km (Inmetro) — bem abaixo dos 50km divulgados em outros mercados. Só recarrega em AC (até 7,2kW via wallbox tipo 2, ~2h30 para carga completa); não tem porta de recarga DC. Consumo combinado de 19,3 km/l (Inmetro). ATENÇÃO: o Jeep Compass 4xe (outro PHEV da marca) foi pesquisado mas NÃO foi incluído — saiu do site oficial da Jeep Brasil em fev/2026 e é considerado descontinuado (vendeu só ~100 unidades em 2025); a nova geração do Compass (com PHEV) só chega em 2027.",
     personas: { urbano: 1, familia: 5, aventura: 3, performance: 4, custo: 1 },
@@ -4020,6 +4091,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=-Kxu_aJO2M8",
     techNotes:
       "SUV elétrico médio-grande da JAC, posicionado acima do E-JS1 (cadastrado separadamente, id jac-e-js1) na linha da marca no Brasil. Dados oficiais do site JAC Motors: 200cv/340Nm, bateria 55kWh, autonomia 307km (Inmetro), 0-100 em 7,5s. Porta-malas de 650L (1.210L com bancos rebatidos). Recarga AC portátil (20-100% em 7h20) e DC rápida (20-100% em 1h10) — potências em kW não divulgadas. Existe uma referência antiga a um modelo 'JAC iEV40/EV40' em fontes agregadoras, mas ele não consta no site oficial atual da JAC Brasil (só E-JS1 e E-JS4 entre os elétricos de passeio) — parece ser um modelo antigo (2020/2021) já descontinuado, por isso não foi incluído.",
     personas: { urbano: 3, familia: 4, aventura: 2, performance: 3, custo: 3 },
