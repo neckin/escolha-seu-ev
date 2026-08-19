@@ -830,7 +830,7 @@ const SEED_CARS_DETAILED = [
     maintenanceTotalCost: null,
     consumptionKwh100: 17.9,
     techNotes:
-      "Um dos modelos mais consistentes entre as fontes pesquisadas — poucas divergências. Porta-malas de 210L (800L com bancos rebatidos). O pacote MINI Service Inclusive (4 anos, km ilimitado) inclui um MINI Wallbox Essential 11kW de cortesia. Carga AC completa em ~5h15.",
+      "Um dos modelos mais consistentes entre as fontes pesquisadas — poucas divergências. Porta-malas de 210L (800L com bancos rebatidos). O pacote MINI Service Inclusive (4 anos, km ilimitado) inclui um MINI Wallbox Essential 11kW de cortesia. Carga AC completa em ~5h15. Checagem em 19/08/2026: existe também um MINI Cooper E de entrada (184cv/290Nm, sem o 'S', menos potente que este SE), confirmado pelo BMW Group Brasil como parte da linha, mas não cadastrado aqui por falta de preço confiável e consistente entre fontes (achamos valores de R$264.990 a R$314.990 pra ele, sem confirmação clara de qual é o atual). O preço deste card (Cooper SE, R$259.990) tem fontes recentes conflitantes também (algumas citam R$264.990 ou até R$310.990+), mas nenhuma o suficientemente clara/recorrente pra justificar mudar o valor já verificado — vale reconferir na concessionária antes de decidir.",
     personas: { urbano: 5, familia: 1, aventura: 1, performance: 4, custo: 2 },
   },
   {
