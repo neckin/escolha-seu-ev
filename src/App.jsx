@@ -1398,6 +1398,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.1,
+    videoUrl: "https://www.youtube.com/watch?v=vA6A1Fjqgrc",
     techNotes:
       "Nova geração do iX3, estreou em pré-venda no Brasil em jul/2026 por R$582.950 — 'nova era' de plataforma elétrica da marca (arquitetura 800V, células cilíndricas integradas à estrutura). Maior autonomia declarada entre elétricos vendidos no país (570km PBEV/Inmetro). Carregamento DC de até 400kW (10-80% em ~21min). Consumo de 19,1 kWh/100km calculado a partir de bateria/autonomia oficiais (não divulgado diretamente pela BMW). Por estar em fase de pré-venda, unidades ainda podem não estar disponíveis para entrega imediata.",
     personas: { urbano: 3, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -1432,6 +1433,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 21.1,
+    videoUrl: "https://www.youtube.com/watch?v=Q1CM6qljfis",
     techNotes:
       "SUV grande elétrico topo da linha i da BMW, R$923.950 (preço de tabela válido até 31/08/2026). Bimotor AWD sob demanda com 523cv/765Nm. Também existe a versão de entrada iX xDrive40 (a partir de R$726.950, motor único, bateria menor), não detalhada aqui por falta de ficha técnica completa confiável. Consumo de 21,1 kWh/100km calculado a partir de bateria/autonomia oficiais.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -1500,6 +1502,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.8,
+    videoUrl: "https://www.youtube.com/watch?v=czkEt3Q05i0",
     techNotes:
       "Sedã executivo elétrico, versão M60 xDrive (única versão vendida no Brasil), bimotor AWD com 601cv/820Nm combinados. Chegou ao Brasil em mar/2024 por R$759.950; fontes mais recentes (2025/2026) mencionam R$795.950, mas não achamos confirmação oficial datada de ago/2026 — trate o preço como aproximado até checar na concessionária. DC de até 205kW (10-80% em ~30min).",
     personas: { urbano: 2, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -1534,6 +1537,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 19.9,
+    videoUrl: "https://www.youtube.com/watch?v=vr1Q50DDsnM",
     techNotes:
       "Sedã executivo elétrico topo de linha da BMW (versão elétrica do Série 7), R$1.373.950 — preço confirmado em vários concessionários oficiais em ago/2026. Bimotor AWD com 544cv/745Nm combinados, bateria de 101,7kWh. Recarga DC de 10-80% em ~34min.",
     personas: { urbano: 1, familia: 4, aventura: 1, performance: 5, custo: 1 },
@@ -1568,6 +1572,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=FNiYzsayAKA",
     techNotes:
       "Sedã executivo híbrido plug-in (Série 5), conjunto combinado de 299cv/450Nm com bateria de 19,4kWh e ~61km de autonomia elétrica pura. Preço não confirmado com segurança — fontes de 2026 divergem muito entre si (de R$456.706 a R$643.950), possivelmente por diferença de ano-modelo/pacotes; deixado como null até confirmar diretamente na concessionária.",
     personas: { urbano: 2, familia: 4, aventura: 1, performance: 4, custo: 2 },
@@ -1602,6 +1607,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: null,
+    videoUrl: "https://www.youtube.com/watch?v=dM_g0MiRspU",
     techNotes:
       "SUV grande híbrido plug-in, motor a combustão 3.0 I6 turbo (313cv) somado a elétrico, com potência combinada de 489cv/700Nm. Preço de tabela R$864.950 (ago/2026). Bateria de 25,7kWh com ~76km de autonomia elétrica pura. AC de 22kW.",
     personas: { urbano: 2, familia: 5, aventura: 3, performance: 5, custo: 1 },
@@ -3442,6 +3448,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.6,
+    videoUrl: "https://www.youtube.com/watch?v=E9sNnGptKdw",
     techNotes:
       "Lançado oficialmente pela Audi do Brasil em 2026 (linha 2026), vendido em mais de 40 concessionárias da marca no país. Arquitetura 800V permite recarga DC de até 270kW (10-80% em ~20min). Autonomia de 424km é o valor INMETRO oficial. Porta-malas de 526L + frunk dianteiro de 64L (1.529L com bancos rebatidos). Substituiu a configuração anterior 'Performance Black' pela S Line. Também existe a versão Sportback (cadastrada separadamente, id audi-q6-sportback-e-tron) e a SQ6 Sportback de alta performance (id audi-sq6-sportback-e-tron). Peso e química da bateria não confirmados em fonte oficial brasileira.",
     personas: { urbano: 2, familia: 4, aventura: 3, performance: 5, custo: 1 },
@@ -3680,6 +3687,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 20.1,
+    videoUrl: "https://www.youtube.com/watch?v=OeWBj6FE8fI",
     techNotes:
       "Versão topo de linha e xDrive AWD do i4 (a versão eDrive40 de entrada já está cadastrada separadamente, id bmw-i4), com bimotor entregando 544cv/795Nm (vs 340cv da eDrive40 RWD) e 0-100 em 3,9s, mesmo tempo do BMW M3. Bateria de 81,3kWh, recarga DC ultrarrápida de até 200kW (0-80% em ~30min). Consumo de 20,1 kWh/100km calculado a partir de bateria/autonomia oficiais. Todos os BMW i4 chegam ao Brasil com o programa BMW Service Inclusive gratuito por 4 anos sem limite de km.",
     personas: { urbano: 2, familia: 2, aventura: 1, performance: 5, custo: 1 },
@@ -3952,6 +3960,7 @@ const SEED_CARS_DETAILED = [
     maintenanceKmBase: null,
     maintenanceTotalCost: null,
     consumptionKwh100: 23.3,
+    videoUrl: "https://www.youtube.com/watch?v=xna7gqkuyEA",
     techNotes:
       "Avatr é a marca de luxo elétrico da Changan, joint venture com a Huawei e a CATL — vendida no Brasil pela CAOA Changan (rede própria, estreou no Salão de SP em nov/2025, já com mais de 20 unidades vendidas). Preço varia pela configuração de bancos: R$599.990 (5 lugares) ou R$619.900 (4 lugares, banco traseiro individual reclinável). Autonomia oficial Inmetro de 497km (710km WLTP). Sistema de condução assistida QianKun (Huawei ADS) com 3 radares a laser. Consumo de 23,3 kWh/100km calculado a partir de bateria/autonomia oficiais. Torque combinado (663Nm) e porta-malas (470L) vêm de fonte agregadora, não confirmados diretamente no site oficial da marca no Brasil, que não divulga esses dois valores.",
     personas: { urbano: 2, familia: 3, aventura: 2, performance: 5, custo: 1 },
