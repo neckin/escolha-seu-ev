@@ -7,9 +7,11 @@ import {
   Zap, Battery, Users, Mountain, TrendingUp, DollarSign, Plus, X,
   ChevronDown, ChevronUp, Car, Gauge, Check,
   Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
-  Accessibility, Briefcase
+  Accessibility, Briefcase, ShieldCheck
 } from "lucide-react";
 import { supabase } from "./supabaseClient";
+import InsuranceModal from "./InsuranceModal.jsx";
+import PrivacyPage from "./PrivacyPage.jsx";
 
 // ---------------------------------------------------------------------------
 // THEME TOKENS
@@ -4109,12 +4111,23 @@ const TUTORIAL_STEPS = [
 ];
 
 export default function App() {
+  // rota simples via hash (#/privacidade) — sem dependência de router nem
+  // de configuração de servidor para fallback de SPA
+  const [route, setRoute] = useState(() => window.location.hash.replace(/^#\/?/, ""));
+  useEffect(() => {
+    const onHashChange = () => setRoute(window.location.hash.replace(/^#\/?/, ""));
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
   const [cars, setCars] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [theme, setTheme] = useState("light");
   const T = theme === "dark" ? DARK_T : LIGHT_T;
+
+  const [insuranceCar, setInsuranceCar] = useState(null);
 
   const [myCar, setMyCar] = useState(null);
   const [showMyCarForm, setShowMyCarForm] = useState(false);
@@ -4141,6 +4154,9 @@ export default function App() {
 
   // ---- load ----
   useEffect(() => {
+    // página estática, não precisa do catálogo; e se o usuário só passou por
+    // aqui e já tinha carregado antes, não recarrega ao voltar
+    if (route === "privacidade" || cars !== null) { setLoading(false); return; }
     (async () => {
       try {
         // Catálogo vem do Supabase (visto por todo mundo, atualizado sem rebuild do
@@ -4191,7 +4207,7 @@ export default function App() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [route]);
 
   const toggleTheme = async () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -4296,6 +4312,10 @@ export default function App() {
       prev.includes(id) ? prev.filter((x) => x !== id) : prev.length >= 4 ? prev : [...prev, id]
     );
   };
+
+  if (route === "privacidade") {
+    return <PrivacyPage T={T} onBack={() => { window.location.hash = ""; }} />;
+  }
 
   if (loading) {
     return (
@@ -4630,6 +4650,17 @@ export default function App() {
                       <Play size={15} fill={T.warn} />
                     </a>
                   </div>
+
+                  <button
+                    onClick={() => setInsuranceCar(car)}
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%",
+                      marginTop: 8, background: "transparent", border: `1px solid ${T.accent2}`, color: T.accent2,
+                      borderRadius: 8, padding: "9px", fontSize: 12, fontWeight: 700, cursor: "pointer"
+                    }}
+                  >
+                    <ShieldCheck size={14} /> Contratar seguro
+                  </button>
                 </div>
 
                 {isOpen && (
@@ -4822,6 +4853,16 @@ export default function App() {
         </div>
       </main>
 
+      {/* ---------- FOOTER ---------- */}
+      <footer style={{ borderTop: `1px solid ${T.line}`, padding: "18px 16px 90px", textAlign: "center" }}>
+        <a
+          href="#/privacidade"
+          style={{ fontSize: 11.5, color: T.inkDim, textDecoration: "underline" }}
+        >
+          Privacidade e proteção de dados (LGPD)
+        </a>
+      </footer>
+
       {/* ---------- COMPARE BAR ---------- */}
       {compareIds.length > 0 && (
         <div style={{
@@ -4867,6 +4908,16 @@ export default function App() {
           onClose={closeTutorial}
           tourRefs={tourRefs}
           T={T}
+        />
+      )}
+
+      {/* ---------- INSURANCE (Segfy) ---------- */}
+      {insuranceCar && (
+        <InsuranceModal
+          car={insuranceCar}
+          onClose={() => setInsuranceCar(null)}
+          T={T}
+          onOpenPrivacy={() => { setInsuranceCar(null); window.location.hash = "#/privacidade"; }}
         />
       )}
     </div>
