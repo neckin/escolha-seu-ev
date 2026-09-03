@@ -1883,7 +1883,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin-mini-gl",
-    imageUrl: "https://www.byd.com/material/__CN/byd-site/br/product/dolphin-mini/menu-dolphin-mini.png",
+    imageUrl: "https://www.webmotors.com.br/imagens/prod/380183/BYD_DOLPHIN_MINI_38_KW_ELETRICO_GL_38018311072993194.webp",
     name: "BYD Dolphin Mini GL",
     brand: "BYD",
     category: "Hatch compacto",
@@ -1918,7 +1918,7 @@ const SEED_CARS_DETAILED = [
   },
   {
     id: "byd-dolphin-mini-gs",
-    imageUrl: "https://www.byd.com/material/__CN/byd-site/br/product/dolphin-mini/menu-dolphin-mini.png",
+    imageUrl: "https://www.webmotors.com.br/imagens/prod/380184/BYD_DOLPHIN_MINI_38_KW_ELETRICO_GS_38018411071538784.webp",
     name: "BYD Dolphin Mini GS",
     brand: "BYD",
     category: "Hatch compacto",
@@ -4897,7 +4897,7 @@ function CarImage({ src, alt, T }) {
       alt={alt}
       loading="lazy"
       onError={() => setBroken(true)}
-      style={{ width: "100%", height: 140, objectFit: "cover", display: "block", background: T.panelAlt }}
+      style={{ width: "100%", height: 150, objectFit: "contain", display: "block", background: T.panelAlt }}
     />
   );
 }
