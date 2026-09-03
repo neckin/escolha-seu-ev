@@ -4136,8 +4136,8 @@ const TUTORIAL_STEPS = [
   },
   {
     icon: Fuel,
-    title: "Seu carro atual",
-    text: "Cadastre o carro que você tem hoje aqui. Cada elétrico passa a mostrar vantagens e desvantagens reais em relação a ele, incluindo economia mensal estimada.",
+    title: "Sua mobilidade",
+    text: "Já tem carro? Cadastre aqui. Ainda não tem? Também dá — é só dizer quanto você gasta hoje com Uber/99/transporte público. Nos dois casos, cada elétrico passa a mostrar a economia mensal estimada.",
     refKey: "myCarBtn",
   },
 ];
@@ -4292,25 +4292,45 @@ export default function App() {
     }
     let totalSavings = 0;
     let hasSavings = false;
-    if (myCar.kmPerLiter && myCar.fuelPrice && myCar.kmPerMonth && car.consumptionKwh100) {
-      const fuelMonthly = (myCar.kmPerMonth / myCar.kmPerLiter) * myCar.fuelPrice;
-      const energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
-      out.fuelMonthly = fuelMonthly;
-      out.energyMonthly = energyMonthly;
-      out.fuelSavings = fuelMonthly - energyMonthly;
-      totalSavings += out.fuelSavings;
-      hasSavings = true;
-    }
-    // maintenance: só dá pra comparar quando o EV tem custo de manutenção conhecido
-    const evMaintPer10k = maintCostPer10k(car);
-    if (myCar.maintenanceAnnual && myCar.kmPerMonth && evMaintPer10k != null) {
-      out.myMaintMonthly = myCar.maintenanceAnnual / 12;
-      out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
-      out.maintSavings = out.myMaintMonthly - out.evMaintMonthly;
-      totalSavings += out.maintSavings;
-      hasSavings = true;
-    } else if (myCar.maintenanceAnnual && myCar.kmPerMonth) {
-      out.maintUnavailable = true; // pediu a conta, mas este EV não tem dado de manutenção pra comparar
+    // "ainda não tenho carro": não tem km/L nem preço de combustível pra comparar —
+    // compara com o que a pessoa já gasta hoje se locomovendo (Uber/99/ônibus/metrô).
+    if (myCar.hasCar === false) {
+      // custo de posse: independe de a pessoa ter preenchido o gasto atual — dá pra
+      // mostrar "quanto custaria rodar" mesmo sem nenhuma base de comparação.
+      if (myCar.kmPerMonth && car.consumptionKwh100) {
+        out.energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
+        const evMaintPer10k = maintCostPer10k(car);
+        if (evMaintPer10k != null) out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
+        out.ownershipMonthly = out.energyMonthly + (out.evMaintMonthly || 0);
+      }
+      // comparação com o que a pessoa já gasta hoje se locomovendo (Uber/99/ônibus/metrô) — opcional.
+      if (myCar.monthlyMobilitySpend && out.energyMonthly != null) {
+        out.fuelMonthly = Number(myCar.monthlyMobilitySpend);
+        out.fuelSavings = out.fuelMonthly - out.energyMonthly;
+        totalSavings += out.fuelSavings;
+        hasSavings = true;
+      }
+    } else {
+      if (myCar.kmPerLiter && myCar.fuelPrice && myCar.kmPerMonth && car.consumptionKwh100) {
+        const fuelMonthly = (myCar.kmPerMonth / myCar.kmPerLiter) * myCar.fuelPrice;
+        const energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
+        out.fuelMonthly = fuelMonthly;
+        out.energyMonthly = energyMonthly;
+        out.fuelSavings = fuelMonthly - energyMonthly;
+        totalSavings += out.fuelSavings;
+        hasSavings = true;
+      }
+      // maintenance: só dá pra comparar quando o EV tem custo de manutenção conhecido
+      const evMaintPer10k = maintCostPer10k(car);
+      if (myCar.maintenanceAnnual && myCar.kmPerMonth && evMaintPer10k != null) {
+        out.myMaintMonthly = myCar.maintenanceAnnual / 12;
+        out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
+        out.maintSavings = out.myMaintMonthly - out.evMaintMonthly;
+        totalSavings += out.maintSavings;
+        hasSavings = true;
+      } else if (myCar.maintenanceAnnual && myCar.kmPerMonth) {
+        out.maintUnavailable = true; // pediu a conta, mas este EV não tem dado de manutenção pra comparar
+      }
     }
     if (hasSavings) out.monthlySavings = totalSavings;
     return out;
@@ -4400,7 +4420,7 @@ export default function App() {
                 borderRadius: 8, padding: "9px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer"
               }}
             >
-              <Fuel size={14} /> {myCar ? myCar.name || "Meu carro" : "Cadastrar meu carro"}
+              <Fuel size={14} /> {myCar ? (myCar.hasCar === false ? "Minha mobilidade" : myCar.name || "Meu carro") : "Simular meu gasto mensal"}
             </button>
           </div>
         </div>
@@ -4517,10 +4537,10 @@ export default function App() {
             </div>
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontWeight: 700, fontSize: 13, color: T.ink, marginBottom: 2 }}>
-                Quanto você economizaria trocando pra um elétrico?
+                Quanto custaria um elétrico pra você — com ou sem carro hoje?
               </div>
               <div style={{ fontSize: 12, color: T.inkDim, lineHeight: 1.4 }}>
-                Cadastre seu carro atual — leva menos de 1 minuto e não precisa saber todos os dados — pra ver a economia mensal estimada em cada card abaixo.
+                Leva menos de 1 minuto e não precisa saber todos os dados. Já tem carro? Comparamos com o combustível. Ainda não tem? Comparamos com o que você já gasta em Uber/99/transporte público.
               </div>
             </div>
             <button
@@ -4530,7 +4550,7 @@ export default function App() {
                 padding: "10px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer"
               }}
             >
-              Cadastrar meu carro
+              Simular meu gasto mensal
             </button>
           </div>
         )}
@@ -4753,14 +4773,14 @@ export default function App() {
                     {/* ---- vs. meu carro atual ---- */}
                     <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
                       <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                        <Fuel size={12} /> Vs. seu carro atual
+                        <Fuel size={12} /> {myCar && myCar.hasCar === false ? "Vs. sua mobilidade hoje" : "Vs. seu carro atual"}
                       </div>
                       {!myCar ? (
                         <button
                           onClick={() => setShowMyCarForm(true)}
                           style={{ fontSize: 12.5, color: T.accent, background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", width: "100%", textAlign: "left" }}
                         >
-                          Defina seu carro atual pra ver vantagens e desvantagens deste modelo →
+                          Diga como você se locomove hoje (com ou sem carro) pra ver a economia deste modelo →
                         </button>
                       ) : (
                         (() => {
@@ -4785,24 +4805,49 @@ export default function App() {
                                 }}>
                                   {d.fuelMonthly != null && (
                                     <div style={{ fontSize: 11, color: T.inkDim }}>
-                                      Combustível ({myCar.name || "seu carro"}): {money(d.fuelMonthly)}/mês · Energia (este EV): {money(d.energyMonthly)}/mês
+                                      {myCar.hasCar === false
+                                        ? `Sua mobilidade hoje: ${money(d.fuelMonthly)}/mês`
+                                        : `Combustível (${myCar.name || "seu carro"}): ${money(d.fuelMonthly)}/mês`}
+                                      {" · Energia (este EV): "}{money(d.energyMonthly)}/mês
                                     </div>
                                   )}
-                                  {d.myMaintMonthly != null && (
-                                    <div style={{ fontSize: 11, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
-                                      Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
-                                    </div>
-                                  )}
+                                  {myCar.hasCar === false
+                                    ? d.evMaintMonthly != null && (
+                                        <div style={{ fontSize: 11, color: T.inkDim, marginTop: 2 }}>
+                                          Manutenção estimada (este EV): {money(d.evMaintMonthly)}/mês
+                                        </div>
+                                      )
+                                    : d.myMaintMonthly != null && (
+                                        <div style={{ fontSize: 11, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
+                                          Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
+                                        </div>
+                                      )}
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
                                     {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
                                     {money(Math.abs(d.monthlySavings))}/mês
-                                    {d.myMaintMonthly == null && <span style={{ fontWeight: 400, fontSize: 10.5, color: T.inkDim }}> (só combustível/energia)</span>}
+                                    {d.myMaintMonthly == null && myCar.hasCar !== false && <span style={{ fontWeight: 400, fontSize: 10.5, color: T.inkDim }}> (só combustível/energia)</span>}
                                   </div>
                                   {d.maintUnavailable && (
                                     <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
                                       Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
                                     </div>
                                   )}
+                                </div>
+                              )}
+                              {/* custo de posse absoluto: aparece pra quem ainda não tem carro mesmo sem
+                                  ter preenchido o gasto atual — não depende de nenhuma comparação. */}
+                              {myCar.hasCar === false && d.monthlySavings == null && d.ownershipMonthly != null && (
+                                <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}` }}>
+                                  <div style={{ fontSize: 11, color: T.inkDim }}>
+                                    Energia: {money(d.energyMonthly)}/mês
+                                    {d.evMaintMonthly != null && <> · Manutenção estimada: {money(d.evMaintMonthly)}/mês</>}
+                                  </div>
+                                  <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.ink, marginTop: 3 }}>
+                                    ~{money(d.ownershipMonthly)}/mês pra rodar este elétrico
+                                  </div>
+                                  <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
+                                    Não inclui parcela de financiamento nem seguro — só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
+                                  </div>
                                 </div>
                               )}
                             </div>
@@ -4821,9 +4866,17 @@ export default function App() {
         {myCar && (
           <div style={{ marginTop: 24, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12.5, color: T.inkDim }}>
             <Car size={13} style={{ verticalAlign: -2, marginRight: 6 }} color={T.accent2} />
-            Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
-            {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
-            {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
+            {myCar.hasCar === false ? (
+              <>
+                Sua mobilidade hoje: <strong style={{ color: T.ink }}>{myCar.monthlyMobilitySpend ? `${money(Number(myCar.monthlyMobilitySpend))}/mês com Uber/99/transporte` : "ainda sem gasto informado"}</strong>.{" "}
+              </>
+            ) : (
+              <>
+                Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
+                {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
+                {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
+              </>
+            )}
             <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
               editar
             </button>
@@ -5241,11 +5294,14 @@ function matchCommonCar(typedName) {
 function MyCarFormModal({ myCar, onSave, onClose, T }) {
   const [form, setForm] = useState(
     myCar || {
-      name: "", groundClearance: "", trunkL: "", powerCv: "",
+      hasCar: true, name: "", groundClearance: "", trunkL: "", powerCv: "",
       kmPerLiter: "", fuelPrice: 6.0, energyPrice: 0.9, kmPerMonth: 1000,
-      maintenanceAnnual: "",
+      maintenanceAnnual: "", monthlyMobilitySpend: "",
     }
   );
+  // dado salvo antes dessa opção existir não tem o campo — trata como "tenho carro"
+  // (era o único fluxo que existia), sem quebrar quem já tinha cadastrado.
+  const hasCar = form.hasCar !== false;
   // specs técnicas ficam recolhidas por padrão — a maioria não sabe de cabeça
   // e não são necessárias pra ver a economia mensal, só pra comparar espaço/potência
   const [showSpecs, setShowSpecs] = useState(
@@ -5280,39 +5336,87 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
       <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "88vh", overflow: "auto", padding: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Seu carro atual</div>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Sua mobilidade</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
-        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 16, lineHeight: 1.5 }}>
-          Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois. Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
+        <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14, lineHeight: 1.5 }}>
+          {hasCar
+            ? "Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois."
+            : "Preenchendo quanto você gasta hoje se locomovendo e quanto rodaria por mês, cada elétrico já mostra se compensaria trocar isso por um carro."}{" "}
+          Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
         </div>
 
-        <label style={{ ...labelStyle, marginBottom: 6 }}>
-          Nome do seu carro
-          <input
-            type="text"
-            list="commonCarsList"
-            value={form.name ?? ""}
-            onChange={(e) => { set("name", e.target.value); if (autoFillNote) setAutoFillNote(null); }}
-            onBlur={tryAutoFill}
-            placeholder="Ex.: Nissan Versa 1.6 Exclusive 2021"
-            style={fieldStyle}
-          />
-          <datalist id="commonCarsList">
-            {COMMON_CARS.map((c) => <option key={c.label} value={c.label} />)}
-          </datalist>
-        </label>
-        <div style={{ ...hintStyle, marginBottom: autoFillNote ? 8 : 16 }}>
-          Se reconhecermos a marca/modelo (ex.: os {COMMON_CARS.length} carros mais vendidos no Brasil), preenchemos vão livre, porta-malas, potência e consumo aproximados — dá pra ajustar qualquer valor depois.
-        </div>
-        {autoFillNote && (
-          <div style={{
-            display: "flex", alignItems: "center", gap: 6, marginBottom: 16, padding: "8px 10px",
-            borderRadius: 7, background: "rgba(61,214,199,0.1)", border: `1px solid ${T.accent}`,
-            fontSize: 11.5, color: T.accent, fontWeight: 600
-          }}>
-            <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
+        <div style={{ ...labelStyle, marginBottom: 16 }}>
+          Você já tem carro?
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => set("hasCar", true)}
+              style={{
+                flex: 1, padding: "9px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12.5, fontWeight: 700,
+                background: hasCar ? T.accent : T.panelAlt, color: hasCar ? T.bg : T.inkDim,
+                border: `1px solid ${hasCar ? T.accent : T.line}`,
+              }}
+            >
+              Já tenho carro
+            </button>
+            <button
+              type="button"
+              onClick={() => set("hasCar", false)}
+              style={{
+                flex: 1, padding: "9px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12.5, fontWeight: 700,
+                background: !hasCar ? T.accent : T.panelAlt, color: !hasCar ? T.bg : T.inkDim,
+                border: `1px solid ${!hasCar ? T.accent : T.line}`,
+              }}
+            >
+              Ainda não tenho carro
+            </button>
           </div>
+        </div>
+
+        {hasCar ? (
+          <>
+            <label style={{ ...labelStyle, marginBottom: 6 }}>
+              Nome do seu carro
+              <input
+                type="text"
+                list="commonCarsList"
+                value={form.name ?? ""}
+                onChange={(e) => { set("name", e.target.value); if (autoFillNote) setAutoFillNote(null); }}
+                onBlur={tryAutoFill}
+                placeholder="Ex.: Nissan Versa 1.6 Exclusive 2021"
+                style={fieldStyle}
+              />
+              <datalist id="commonCarsList">
+                {COMMON_CARS.map((c) => <option key={c.label} value={c.label} />)}
+              </datalist>
+            </label>
+            <div style={{ ...hintStyle, marginBottom: autoFillNote ? 8 : 16 }}>
+              Se reconhecermos a marca/modelo (ex.: os {COMMON_CARS.length} carros mais vendidos no Brasil), preenchemos vão livre, porta-malas, potência e consumo aproximados — dá pra ajustar qualquer valor depois.
+            </div>
+            {autoFillNote && (
+              <div style={{
+                display: "flex", alignItems: "center", gap: 6, marginBottom: 16, padding: "8px 10px",
+                borderRadius: 7, background: "rgba(61,214,199,0.1)", border: `1px solid ${T.accent}`,
+                fontSize: 11.5, color: T.accent, fontWeight: 600
+              }}>
+                <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
+              </div>
+            )}
+          </>
+        ) : (
+          <label style={{ ...labelStyle, marginBottom: 14 }}>
+            Quanto você gasta hoje com transporte? (R$/mês)
+            <input
+              type="number"
+              step="0.01"
+              value={form.monthlyMobilitySpend ?? ""}
+              onChange={(e) => set("monthlyMobilitySpend", e.target.value)}
+              placeholder="Ex.: 450"
+              style={fieldStyle}
+            />
+            <span style={hintStyle}>Some Uber/99, ônibus, metrô, aluguel de carro por app — o que você já gasta hoje pra se locomover.</span>
+          </label>
         )}
 
         <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.accent, marginBottom: 10, fontWeight: 700 }}>
@@ -5320,7 +5424,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
         </div>
 
         <label style={{ ...labelStyle, marginBottom: 14 }}>
-          Km rodados por mês
+          {hasCar ? "Km rodados por mês" : "Quantos km por mês você rodaria com o carro"}
           <input
             type="number"
             value={form.kmPerMonth ?? ""}
@@ -5331,51 +5435,55 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           <span style={hintStyle}>Não sabe o número exato? Uma estimativa de cabeça já ajuda — dá pra ajustar depois.</span>
         </label>
 
-        <label style={{ ...labelStyle, marginBottom: 6 }}>
-          Consumo do seu carro (km/L)
-          <input
-            type="number"
-            step="0.1"
-            value={form.kmPerLiter ?? ""}
-            onChange={(e) => set("kmPerLiter", e.target.value)}
-            placeholder="Ex.: 11"
-            style={fieldStyle}
-          />
-        </label>
-        <div style={{ marginBottom: 14 }}>
-          <span style={{ ...hintStyle, display: "block", marginBottom: 5 }}>
-            Não sabe de cabeça? Escolha o mais parecido (dá pra ajustar o número depois):
-          </span>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {FUEL_KMPL_PRESETS.map((p) => (
-              <button
-                key={p.label}
-                type="button"
-                onClick={() => set("kmPerLiter", p.value)}
-                style={{
-                  fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
-                  background: Number(form.kmPerLiter) === p.value ? T.accent : T.panelAlt,
-                  color: Number(form.kmPerLiter) === p.value ? T.bg : T.inkDim,
-                  border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accent : T.line}`, fontWeight: 600
-                }}
-              >
-                {p.label} (~{p.value} km/L)
-              </button>
-            ))}
-          </div>
-        </div>
+        {hasCar && (
+          <>
+            <label style={{ ...labelStyle, marginBottom: 6 }}>
+              Consumo do seu carro (km/L)
+              <input
+                type="number"
+                step="0.1"
+                value={form.kmPerLiter ?? ""}
+                onChange={(e) => set("kmPerLiter", e.target.value)}
+                placeholder="Ex.: 11"
+                style={fieldStyle}
+              />
+            </label>
+            <div style={{ marginBottom: 14 }}>
+              <span style={{ ...hintStyle, display: "block", marginBottom: 5 }}>
+                Não sabe de cabeça? Escolha o mais parecido (dá pra ajustar o número depois):
+              </span>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {FUEL_KMPL_PRESETS.map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => set("kmPerLiter", p.value)}
+                    style={{
+                      fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
+                      background: Number(form.kmPerLiter) === p.value ? T.accent : T.panelAlt,
+                      color: Number(form.kmPerLiter) === p.value ? T.bg : T.inkDim,
+                      border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accent : T.line}`, fontWeight: 600
+                    }}
+                  >
+                    {p.label} (~{p.value} km/L)
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        <label style={{ ...labelStyle, marginBottom: 14 }}>
-          Preço do combustível (R$/L)
-          <input
-            type="number"
-            step="0.01"
-            value={form.fuelPrice ?? ""}
-            onChange={(e) => set("fuelPrice", e.target.value)}
-            style={fieldStyle}
-          />
-          <span style={hintStyle}>Preço médio no posto onde você costuma abastecer.</span>
-        </label>
+            <label style={{ ...labelStyle, marginBottom: 14 }}>
+              Preço do combustível (R$/L)
+              <input
+                type="number"
+                step="0.01"
+                value={form.fuelPrice ?? ""}
+                onChange={(e) => set("fuelPrice", e.target.value)}
+                style={fieldStyle}
+              />
+              <span style={hintStyle}>Preço médio no posto onde você costuma abastecer.</span>
+            </label>
+          </>
+        )}
 
         <label style={{ ...labelStyle, marginBottom: 14 }}>
           Preço da energia (R$/kWh)
@@ -5389,66 +5497,72 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           <span style={hintStyle}>Já vem preenchido com a tarifa média residencial do Brasil. Se souber a sua (olhe a conta de luz), ajuste aqui pra ficar mais preciso.</span>
         </label>
 
-        <label style={{ ...labelStyle, marginBottom: 18 }}>
-          Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>— opcional</span>
-          <input
-            type="number"
-            step="0.01"
-            value={form.maintenanceAnnual ?? ""}
-            onChange={(e) => set("maintenanceAnnual", e.target.value)}
-            placeholder="Ex.: 1200"
-            style={fieldStyle}
-          />
-          <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco — a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
-        </label>
+        {hasCar && (
+          <>
+            <label style={{ ...labelStyle, marginBottom: 18 }}>
+              Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>— opcional</span>
+              <input
+                type="number"
+                step="0.01"
+                value={form.maintenanceAnnual ?? ""}
+                onChange={(e) => set("maintenanceAnnual", e.target.value)}
+                placeholder="Ex.: 1200"
+                style={fieldStyle}
+              />
+              <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco — a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
+            </label>
 
-        <button
-          type="button"
-          onClick={() => setShowSpecs((s) => !s)}
-          style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%",
-            background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "10px 12px",
-            color: T.inkDim, fontSize: 12, fontWeight: 600, cursor: "pointer"
-          }}
-        >
-          <span>Specs do carro (opcional — pra comparar espaço e potência)</span>
-          {showSpecs ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
+            <button
+              type="button"
+              onClick={() => setShowSpecs((s) => !s)}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%",
+                background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "10px 12px",
+                color: T.inkDim, fontSize: 12, fontWeight: 600, cursor: "pointer"
+              }}
+            >
+              <span>Specs do carro (opcional — pra comparar espaço e potência)</span>
+              {showSpecs ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
 
-        {showSpecs && (
-          <div style={{ marginTop: 12 }}>
-            <div style={{ ...hintStyle, marginBottom: 10 }}>
-              Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber — não afeta a economia mensal.
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
-              <label style={labelStyle}>
-                Vão livre (mm)
-                <input type="number" value={form.groundClearance ?? ""} onChange={(e) => set("groundClearance", e.target.value)} placeholder="Ex.: 160" style={fieldStyle} />
-              </label>
-              <label style={labelStyle}>
-                Porta-malas (L)
-                <input type="number" value={form.trunkL ?? ""} onChange={(e) => set("trunkL", e.target.value)} placeholder="Ex.: 350" style={fieldStyle} />
-              </label>
-              <label style={labelStyle}>
-                Potência (cv)
-                <input type="number" value={form.powerCv ?? ""} onChange={(e) => set("powerCv", e.target.value)} placeholder="Ex.: 105" style={fieldStyle} />
-              </label>
-            </div>
-          </div>
+            {showSpecs && (
+              <div style={{ marginTop: 12 }}>
+                <div style={{ ...hintStyle, marginBottom: 10 }}>
+                  Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber — não afeta a economia mensal.
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
+                  <label style={labelStyle}>
+                    Vão livre (mm)
+                    <input type="number" value={form.groundClearance ?? ""} onChange={(e) => set("groundClearance", e.target.value)} placeholder="Ex.: 160" style={fieldStyle} />
+                  </label>
+                  <label style={labelStyle}>
+                    Porta-malas (L)
+                    <input type="number" value={form.trunkL ?? ""} onChange={(e) => set("trunkL", e.target.value)} placeholder="Ex.: 350" style={fieldStyle} />
+                  </label>
+                  <label style={labelStyle}>
+                    Potência (cv)
+                    <input type="number" value={form.powerCv ?? ""} onChange={(e) => set("powerCv", e.target.value)} placeholder="Ex.: 105" style={fieldStyle} />
+                  </label>
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         <button
           onClick={() =>
             onSave({
               ...form,
-              groundClearance: form.groundClearance ? Number(form.groundClearance) : null,
-              trunkL: form.trunkL ? Number(form.trunkL) : null,
-              powerCv: form.powerCv ? Number(form.powerCv) : null,
-              kmPerLiter: form.kmPerLiter ? Number(form.kmPerLiter) : null,
-              fuelPrice: form.fuelPrice ? Number(form.fuelPrice) : null,
+              hasCar,
+              groundClearance: hasCar && form.groundClearance ? Number(form.groundClearance) : null,
+              trunkL: hasCar && form.trunkL ? Number(form.trunkL) : null,
+              powerCv: hasCar && form.powerCv ? Number(form.powerCv) : null,
+              kmPerLiter: hasCar && form.kmPerLiter ? Number(form.kmPerLiter) : null,
+              fuelPrice: hasCar && form.fuelPrice ? Number(form.fuelPrice) : null,
               energyPrice: form.energyPrice ? Number(form.energyPrice) : 0.9,
               kmPerMonth: form.kmPerMonth ? Number(form.kmPerMonth) : null,
-              maintenanceAnnual: form.maintenanceAnnual ? Number(form.maintenanceAnnual) : null,
+              maintenanceAnnual: hasCar && form.maintenanceAnnual ? Number(form.maintenanceAnnual) : null,
+              monthlyMobilitySpend: !hasCar && form.monthlyMobilitySpend ? Number(form.monthlyMobilitySpend) : null,
             })
           }
           style={{
@@ -5456,7 +5570,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
             border: "none", borderRadius: 9, padding: "12px", fontWeight: 700, fontSize: 14, cursor: "pointer"
           }}
         >
-          Salvar meu carro
+          {hasCar ? "Salvar meu carro" : "Salvar minha mobilidade"}
         </button>
       </div>
     </div>
