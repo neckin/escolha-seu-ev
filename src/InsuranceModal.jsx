@@ -20,6 +20,16 @@
 //     abaixo (dados fictícios), só para validar a experiência com o parceiro.
 //   - Com VITE_SEGFY_TOKEN configurado (.env.local) → injeta o bundle real
 //     da Segfy automaticamente, sem precisar mexer em código.
+//
+// TODO (confirmar com a corretora parceira ANTES do go-live, ou seja, antes
+// de configurar VITE_SEGFY_TOKEN em produção): o callback `impressao` sugere
+// que o widget cobre cotação + EMISSÃO da apólice de ponta a ponta — mas não
+// sabemos se isso é 100% self-service (pessoa paga e já recebe a apólice) ou
+// se, para algumas seguradoras do painel, cai em análise manual e alguém da
+// corretora precisa entrar em contato antes de emitir. É regra de negócio de
+// cada seguradora dentro do painel da Segfy, não algo visível no código.
+// Confirmar na doc "V2 Ramo auto" (ClickUp) ou direto com o contato da
+// corretora antes de divulgar isso como contratação instantânea pro usuário.
 // ---------------------------------------------------------------------------
 
 import React, { useEffect, useRef, useState } from "react";
