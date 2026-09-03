@@ -5002,9 +5002,39 @@ function CompareModal({ cars, onClose, T }) {
     ],
   ];
   const distinctCategories = [...new Set(cars.map((c) => c.category))];
+
+  // ---- carrossel (telas estreitas): 1 carro por vez, specs empilhadas ----
+  // Tabela de scroll horizontal é ótima em desktop, mas num celular sobra
+  // largura só pra uma fração de coluna por vez — a pessoa fica arrastando
+  // pro lado a cada uma das ~19 linhas. O carrossel troca isso por um gesto
+  // que todo mundo já conhece (swipe entre telas cheias), com uma faixa-
+  // resumo fixa no topo pra não perder a comparação lado a lado dos 2 dados
+  // mais decisivos (preço e autonomia).
+  const [activeIdx, setActiveIdx] = useState(0);
+  const touchStartX = useRef(null);
+  const goTo = (idx) => setActiveIdx(Math.max(0, Math.min(cars.length - 1, idx)));
+  const onTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const onTouchEnd = (e) => {
+    if (touchStartX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) < 40) return; // gesto curto demais, ignora (evita trocar de carro sem querer)
+    goTo(activeIdx + (dx < 0 ? 1 : -1));
+  };
+  const active = cars[activeIdx];
+
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
       <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "85vh", overflow: "auto", padding: 16 }}>
+        {/* breakpoint só de exibição — as duas versões ficam no DOM, o CSS decide qual mostrar */}
+        <style>{`
+          .ev-compare-table { display: block; }
+          .ev-compare-carousel { display: none; }
+          @media (max-width: 680px) {
+            .ev-compare-table { display: none; }
+            .ev-compare-carousel { display: block; }
+          }
+        `}</style>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Comparação</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
@@ -5017,36 +5047,114 @@ function CompareModal({ cars, onClose, T }) {
             Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}) — pra uma comparação mais justa, prefira carros da mesma categoria.
           </div>
         )}
-        <div style={{ fontSize: 10.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
-          <ArrowRight size={11} /> Arraste pros lados pra ver mais carros — o nome do carro e o nome do atributo ficam fixos na tela.
-        </div>
-        <div style={{ overflowX: "auto", maxHeight: "60vh", overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: 8 }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", minWidth: cars.length * 150 }}>
-            <thead>
-              <tr>
-                <th style={stickyCornerStyle(T)}></th>
-                {cars.map((c) => (
-                  <th key={c.id} style={{ ...stickyTopStyle(T), fontFamily: "'Space Grotesk', sans-serif" }}>{c.name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(([label, get, hint]) => (
-                <tr key={label}>
-                  <td style={stickyLeftStyle(T)}>
-                    {hint ? (
-                      <span title={hint} style={{ borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" }}>{label}</span>
-                    ) : (
-                      label
-                    )}
-                  </td>
+
+        {/* ---------- TABELA (telas largas) ---------- */}
+        <div className="ev-compare-table">
+          <div style={{ fontSize: 10.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
+            <ArrowRight size={11} /> Arraste pros lados pra ver mais carros — o nome do carro e o nome do atributo ficam fixos na tela.
+          </div>
+          <div style={{ overflowX: "auto", maxHeight: "60vh", overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: 8 }}>
+            <table style={{ borderCollapse: "collapse", width: "100%", minWidth: cars.length * 150 }}>
+              <thead>
+                <tr>
+                  <th style={stickyCornerStyle(T)}></th>
                   {cars.map((c) => (
-                    <td key={c.id} style={{ ...tdStyle(T), fontFamily: "'IBM Plex Mono', monospace" }}>{get(c) ?? "—"}</td>
+                    <th key={c.id} style={{ ...stickyTopStyle(T), fontFamily: "'Space Grotesk', sans-serif" }}>{c.name}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map(([label, get, hint]) => (
+                  <tr key={label}>
+                    <td style={stickyLeftStyle(T)}>
+                      {hint ? (
+                        <span title={hint} style={{ borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" }}>{label}</span>
+                      ) : (
+                        label
+                      )}
+                    </td>
+                    {cars.map((c) => (
+                      <td key={c.id} style={{ ...tdStyle(T), fontFamily: "'IBM Plex Mono', monospace" }}>{get(c) ?? "—"}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ---------- CARROSSEL (celular) ---------- */}
+        <div className="ev-compare-carousel">
+          {/* faixa-resumo: preço + autonomia de todos os carros, sempre visível */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+            {cars.map((c, i) => (
+              <button
+                key={c.id}
+                onClick={() => goTo(i)}
+                style={{
+                  flex: "1 1 auto", minWidth: 96, textAlign: "left", cursor: "pointer",
+                  background: i === activeIdx ? "rgba(61,214,199,0.1)" : T.panelAlt,
+                  border: `1px solid ${i === activeIdx ? T.accent : T.line}`,
+                  borderRadius: 8, padding: "7px 9px",
+                }}
+              >
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: T.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
+                <div style={{ fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: T.accent2, marginTop: 2 }}>{money(c.price)}</div>
+                <div style={{ fontSize: 10, color: T.inkDim }}>{c.rangeKm != null ? `${c.rangeKm} km` : "—"}</div>
+              </button>
+            ))}
+          </div>
+
+          {/* navegação entre carros */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
+            <button
+              onClick={() => goTo(activeIdx - 1)}
+              disabled={activeIdx === 0}
+              style={{ ...iconBtnStyle(T), opacity: activeIdx === 0 ? 0.35 : 1, cursor: activeIdx === 0 ? "default" : "pointer" }}
+            >
+              <ArrowLeft size={15} />
+            </button>
+            <div style={{ fontSize: 12.5, fontWeight: 700, textAlign: "center", flex: 1, fontFamily: "'Space Grotesk', sans-serif" }}>
+              {active.name}
+              <div style={{ fontSize: 10.5, color: T.inkDim, fontWeight: 400, marginTop: 1 }}>{activeIdx + 1} de {cars.length}</div>
+            </div>
+            <button
+              onClick={() => goTo(activeIdx + 1)}
+              disabled={activeIdx === cars.length - 1}
+              style={{ ...iconBtnStyle(T), opacity: activeIdx === cars.length - 1 ? 0.35 : 1, cursor: activeIdx === cars.length - 1 ? "default" : "pointer" }}
+            >
+              <ArrowRight size={15} />
+            </button>
+          </div>
+
+          {/* specs do carro ativo, empilhadas — arrasta (swipe) troca de carro */}
+          <div
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            style={{ border: `1px solid ${T.line}`, borderRadius: 8, padding: "2px 12px", touchAction: "pan-y" }}
+          >
+            {rows.map(([label, get, hint]) => (
+              <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 10, padding: "9px 0", borderBottom: `1px solid ${T.line}` }}>
+                <span style={{ fontSize: 12, color: T.inkDim, fontWeight: 600, flexShrink: 0 }} title={hint || undefined}>{label}</span>
+                <span style={{ fontSize: 12.5, fontFamily: "'IBM Plex Mono', monospace", textAlign: "right" }}>{get(active) ?? "—"}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* dots */}
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 12 }}>
+            {cars.map((c, i) => (
+              <button
+                key={c.id}
+                onClick={() => goTo(i)}
+                aria-label={`Ver ${c.name}`}
+                style={{
+                  width: i === activeIdx ? 18 : 6, height: 6, borderRadius: 3, border: "none", padding: 0,
+                  background: i === activeIdx ? T.accent : T.line, cursor: "pointer", transition: "width 0.15s",
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
