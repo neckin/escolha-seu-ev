@@ -4162,6 +4162,12 @@ const TUTORIAL_STEPS = [
     text: "Já tem carro? Cadastre aqui. Ainda não tem? Também dá — é só dizer quanto você gasta hoje com Uber/99/transporte público. Nos dois casos, cada elétrico passa a mostrar a economia mensal estimada.",
     refKey: "myCarBtn",
   },
+  {
+    icon: ShieldCheck,
+    title: "Cotação de seguro",
+    text: "Decidiu o carro? Toque em Contratar seguro no card pra pedir uma cotação na hora, em parceria com a D&B Corretora — sem sair do comparador.",
+    refKey: "insuranceBtn",
+  },
 ];
 
 export default function App() {
@@ -4195,6 +4201,7 @@ export default function App() {
     badgeRow: useRef(null),
     compareBtn: useRef(null),
     myCarBtn: useRef(null),
+    insuranceBtn: useRef(null),
   };
 
   const [activePersona, setActivePersona] = useState(null);
@@ -4735,6 +4742,7 @@ export default function App() {
                   </div>
 
                   <button
+                    ref={carIdx === 0 ? tourRefs.insuranceBtn : null}
                     onClick={() => setInsuranceCar(car)}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%",
