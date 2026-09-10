@@ -17,7 +17,7 @@ import { ArrowLeft, ShieldCheck, AlertTriangle } from "lucide-react";
 function Section({ title, children, T }) {
   return (
     <section style={{ marginBottom: 24 }}>
-      <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 8, color: T.ink }}>
+      <h2 style={{ fontFamily: "'Manrope', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 8, color: T.ink }}>
         {title}
       </h2>
       <div style={{ fontSize: 13, color: T.inkDim, lineHeight: 1.7 }}>{children}</div>
@@ -41,7 +41,7 @@ export default function PrivacyPage({ T, onBack }) {
             <ArrowLeft size={16} />
           </button>
           <div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 17, display: "flex", alignItems: "center", gap: 7 }}>
+            <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 17, display: "flex", alignItems: "center", gap: 7 }}>
               <ShieldCheck size={17} color={T.accent} /> Privacidade e proteção de dados (LGPD)
             </div>
             <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 2 }}>Escolha seu EV</div>
@@ -52,7 +52,7 @@ export default function PrivacyPage({ T, onBack }) {
       <main style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px 80px" }}>
         <div style={{
           display: "flex", gap: 9, alignItems: "flex-start", marginBottom: 28, padding: "10px 12px",
-          borderRadius: 8, background: "rgba(242,180,65,0.1)", border: `1px dashed ${T.accent2}`,
+          borderRadius: 8, background: hexA(T.accent2, 0.1), border: `1px dashed ${T.accent2}`,
         }}>
           <AlertTriangle size={15} color={T.accent2} style={{ marginTop: 1, flexShrink: 0 }} />
           <div style={{ fontSize: 11.5, color: T.ink, lineHeight: 1.6 }}>

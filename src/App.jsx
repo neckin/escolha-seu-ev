@@ -16,38 +16,58 @@ import PrivacyPage from "./PrivacyPage.jsx";
 // ---------------------------------------------------------------------------
 // THEME TOKENS
 // ---------------------------------------------------------------------------
+// Paleta e tipografia conforme o Manual de Identidade Visual 1.1 da D&B
+// Corretora (set/2026): Azul Profundo + Dourado, Manrope/Inter/Cormorant
+// Garamond. Hex exatos tirados do manual (seção "Sistema visual").
+const NAVY = "#0B1F33";   // Azul Profundo — cor de texto/ação sobre dourado
 const DARK_T = {
   mode: "dark",
-  bg: "#0B0F14",
-  panel: "#12181F",
-  panelAlt: "#171F28",
-  line: "#25303B",
-  ink: "#EAF1F6",
-  inkDim: "#8FA3B0",
-  accent: "#3DD6C7",
-  accent2: "#F2B441",
+  // Variação mais clara do Azul Profundo/Secundário (mesma família, luz
+  // misturada) — o navy oficial ficava pesado demais como fundo de tela cheia.
+  bg: "#374F68",
+  panel: "#4E6379",
+  panelAlt: "#40576F",
+  line: "#6A7C8E",
+  ink: "#FFFFFF",
+  inkDim: "#D3D9DE",
+  accent: "#C89B3C",    // Dourado Assinatura — ênfase (texto, ícone, borda)
+  accentSoft: "#E4C377",// Dourado Suave — preenchimentos leves/estado ativo
+  onGold: NAVY,         // texto sobre fundos dourados (fixo nos 2 temas)
+  accent2: "#E4C377",   // ação primária em fundo escuro (dourado sobre azul)
   good: "#5FD37B",
   warn: "#E8794A",
-  radar: "#3DD6C7",
+  radar: "#C89B3C",
 };
 
 const LIGHT_T = {
   mode: "light",
-  bg: "#F6F7F5",
-  panel: "#FFFFFF",
-  panelAlt: "#F0F2EF",
-  line: "#DEE2DD",
-  ink: "#15201C",
-  inkDim: "#5D6B64",
-  accent: "#0E8C7D",
-  accent2: "#B8720B",
+  bg: "#F7F7F5",       // Marfim
+  panel: "#FFFFFF",    // Branco
+  panelAlt: "#EEF0EF",
+  line: "#E1E4E3",
+  ink: "#0B1F33",       // Azul Profundo
+  inkDim: "#4C5A68",    // Grafite
+  accent: "#C89B3C",    // Dourado Assinatura — ênfase (texto, ícone, borda)
+  accentSoft: "#E4C377",// Dourado Suave — preenchimentos leves/estado ativo
+  onGold: NAVY,         // texto sobre fundos dourados (fixo nos 2 temas)
+  accent2: "#0B1F33",   // ação primária em fundo claro (azul profundo)
   good: "#1E7B34",
   warn: "#B23A14",
-  radar: "#0E8C7D",
+  radar: "#C89B3C",
 };
 
+// Mistura um hex do tema com alpha, pra tints translúcidos (badges, fundos
+// sutis) sempre acompanharem a cor do tema ativo em vez de ficar hardcoded.
+function hexA(hex, alpha) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 const FONT_IMPORT = `
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,600;1,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 `;
 
 // Ajustes que só dá pra fazer com media query de verdade (inline style não
@@ -4385,24 +4405,33 @@ export default function App() {
       <style>{FONT_IMPORT}{RESPONSIVE_CSS}</style>
 
       {/* ---------- HEADER ---------- */}
-      <header style={{ borderBottom: `1px solid ${T.line}`, padding: "20px 16px" }}>
+      {/* Logo D&B no canto superior esquerdo (Manual de Identidade Visual 1.1,
+          p.20: monograma + nome + selo, 60-72px no desktop). Fio dourado de
+          2px no rodapé do header = "linha dourada" da linguagem gráfica (p.17) —
+          usado aqui só como fio de separação, não como decoração. */}
+      <header style={{ borderBottom: `2px solid ${T.accent}`, padding: "16px 16px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", rowGap: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`,
-              display: "flex", alignItems: "center", justifyContent: "center"
-            }}>
-              <Zap size={18} color={T.accent} strokeWidth={2.5} />
-            </div>
-            <div>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>
+          <a
+            href="https://dbcorr.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="D&B Corretora — parceira de seguros deste comparador"
+            style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, textDecoration: "none", color: "inherit" }}
+          >
+            <img
+              src={theme === "dark" ? "/brand/db-corretora-logo.png" : "/brand/db-corretora-logo-navy.png"}
+              alt="D&B Corretora"
+              style={{ height: 52, width: "auto", flexShrink: 0 }}
+            />
+            <div style={{ borderLeft: `1px solid ${T.line}`, paddingLeft: 12 }}>
+              <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: -0.3, color: T.ink }}>
                 Escolha seu EV
               </div>
-              <div className="ev-header-subtitle" style={{ fontSize: 11, color: T.inkDim }}>
-                Compare elétricos e híbridos plug-in oficiais no Brasil — pra você decidir com confiança
+              <div className="ev-header-subtitle" style={{ fontSize: 11, color: T.inkDim, fontStyle: "italic", fontFamily: "'Cormorant Garamond', serif" }}>
+                Um comparador em parceria com a D&B Corretora
               </div>
             </div>
-          </div>
+          </a>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             <button
@@ -4448,7 +4477,7 @@ export default function App() {
 
       <main style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px 100px" }}>
         {error && (
-          <div style={{ background: "rgba(232,121,74,0.12)", border: `1px solid ${T.warn}`, color: T.warn, borderRadius: 8, padding: 10, fontSize: 13, marginBottom: 16 }}>
+          <div style={{ background: hexA(T.warn, 0.12), border: `1px solid ${T.warn}`, color: T.warn, borderRadius: 8, padding: 10, fontSize: 13, marginBottom: 16 }}>
             {error}
           </div>
         )}
@@ -4532,8 +4561,8 @@ export default function App() {
                   title={p.hint}
                   style={{
                     display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", borderRadius: 999,
-                    background: active ? T.accent : T.panel, color: active ? T.bg : T.ink,
-                    border: `1px solid ${active ? T.accent : T.line}`, fontSize: 13, fontWeight: 600, cursor: "pointer"
+                    background: active ? T.accentSoft : T.panel, color: active ? T.onGold : T.ink,
+                    border: `1px solid ${active ? T.accentSoft : T.line}`, fontSize: 13, fontWeight: 600, cursor: "pointer"
                   }}
                 >
                   <Icon size={14} /> {p.label}
@@ -4546,11 +4575,11 @@ export default function App() {
         {/* ---------- MY CAR CTA (só aparece antes de cadastrar) ---------- */}
         {!myCar && (
           <div style={{
-            marginBottom: 20, padding: 14, borderRadius: 12, background: "rgba(242,180,65,0.08)",
+            marginBottom: 20, padding: 14, borderRadius: 12, background: hexA(T.accent2, 0.08),
             border: `1px dashed ${T.accent2}`, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap"
           }}>
             <div style={{
-              width: 36, height: 36, borderRadius: 10, background: "rgba(242,180,65,0.15)",
+              width: 36, height: 36, borderRadius: 10, background: hexA(T.accent2, 0.15),
               display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
             }}>
               <Fuel size={17} color={T.accent2} />
@@ -4592,7 +4621,7 @@ export default function App() {
                 <div style={{ padding: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                     <div>
-                      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, lineHeight: 1.2 }}>{car.name}</div>
+                      <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, lineHeight: 1.2 }}>{car.name}</div>
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3, flexWrap: "wrap" }}>
                         <span style={{ fontSize: 12, color: T.inkDim }}>{car.category}</span>
                         {car.fuelType === "PHEV" && (
@@ -4618,7 +4647,7 @@ export default function App() {
                     {best && (
                       <div style={{
                         display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                        borderRadius: 999, background: "rgba(61,214,199,0.12)", border: `1px solid ${T.accent}`,
+                        borderRadius: 999, background: hexA(T.accent, 0.12), border: `1px solid ${T.accent}`,
                         fontSize: 11, fontWeight: 600, color: T.accent
                       }}>
                         <best.icon size={12} /> Melhor para: {best.label}
@@ -4628,8 +4657,8 @@ export default function App() {
                       const ws = wallboxStatus(car.wallbox);
                       if (!ws) return null;
                       const cfg = {
-                        yes: { color: T.good, bg: "rgba(95,211,123,0.12)", label: "Wallbox incluso" },
-                        maybe: { color: T.accent2, bg: "rgba(242,180,65,0.12)", label: "Wallbox: depende" },
+                        yes: { color: T.good, bg: hexA(T.good, 0.12), label: "Wallbox incluso" },
+                        maybe: { color: T.accent2, bg: hexA(T.accent2, 0.12), label: "Wallbox: depende" },
                         no: { color: T.inkDim, bg: "transparent", label: "Sem wallbox" },
                       }[ws];
                       return (
@@ -4651,7 +4680,7 @@ export default function App() {
                           title="Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária."
                           style={{
                             display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                            borderRadius: 999, background: "rgba(61,214,199,0.08)", border: `1px dashed ${T.accent}`,
+                            borderRadius: 999, background: hexA(T.accent, 0.08), border: `1px dashed ${T.accent}`,
                             fontSize: 11, fontWeight: 600, color: T.accent
                           }}
                         >
@@ -4683,8 +4712,8 @@ export default function App() {
                       onClick={() => toggleCompare(car.id)}
                       style={{
                         flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-                        background: inCompare ? T.accent : "transparent", color: inCompare ? T.bg : T.ink,
-                        border: `1px solid ${inCompare ? T.accent : T.line}`, borderRadius: 8,
+                        background: inCompare ? T.accentSoft : "transparent", color: inCompare ? T.onGold : T.ink,
+                        border: `1px solid ${inCompare ? T.accentSoft : T.line}`, borderRadius: 8,
                         padding: "9px", fontSize: 12, fontWeight: 600, cursor: "pointer"
                       }}
                     >
@@ -4740,7 +4769,7 @@ export default function App() {
                         )}
                       </div>
                     ) : (
-                      <div style={{ fontSize: 12, color: T.accent2, lineHeight: 1.5, marginBottom: 14, background: "rgba(242,180,65,0.1)", border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
+                      <div style={{ fontSize: 12, color: T.accent2, lineHeight: 1.5, marginBottom: 14, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
                         {car.priceVerifiedDate ? (
                           <>Preço checado em {car.priceVerifiedDate} contra fonte oficial/imprensa recente. As demais specs técnicas (vão livre, porta-malas, garantia etc.) ainda vêm de fonte agregada e não foram verificadas individualmente.</>
                         ) : (
@@ -4831,7 +4860,7 @@ export default function App() {
                               {d.monthlySavings != null && (
                                 <div style={{
                                   marginTop: 6, padding: 10, borderRadius: 8,
-                                  background: d.monthlySavings >= 0 ? "rgba(95,211,123,0.1)" : "rgba(232,121,74,0.1)",
+                                  background: d.monthlySavings >= 0 ? hexA(T.good, 0.1) : hexA(T.warn, 0.1),
                                   border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
                                 }}>
                                   {d.fuelMonthly != null && (
@@ -4919,7 +4948,7 @@ export default function App() {
         </div>
 
         <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12, color: T.inkDim, lineHeight: 1.6 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, color: T.ink, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif", fontSize: 13 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, color: T.ink, fontWeight: 700, fontFamily: "'Manrope', sans-serif", fontSize: 13 }}>
             <Accessibility size={14} color={T.accent} /> Incentivos PCD e compra via CNPJ
           </div>
           <div style={{ marginBottom: 8 }}>
@@ -4941,7 +4970,19 @@ export default function App() {
       </main>
 
       {/* ---------- FOOTER ---------- */}
-      <footer style={{ borderTop: `1px solid ${T.line}`, padding: "18px 16px 90px", textAlign: "center" }}>
+      <footer style={{ borderTop: `1px solid ${T.line}`, padding: "22px 16px 90px", textAlign: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginBottom: 14 }}>
+          <span style={{ fontSize: 11, color: T.inkDim }}>Cotação de seguro em parceria com</span>
+          <a
+            href="https://dbcorr.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "flex", alignItems: "center", gap: 7, textDecoration: "none", color: T.ink }}
+          >
+            <img src={theme === "dark" ? "/brand/db-corretora-logo.png" : "/brand/db-corretora-logo-navy.png"} alt="D&B Corretora" style={{ height: 26, width: "auto" }} />
+            <span style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 14 }}>D&B Corretora</span>
+          </a>
+        </div>
         <a
           href="#/privacidade"
           style={{ fontSize: 11.5, color: T.inkDim, textDecoration: "underline" }}
@@ -4961,7 +5002,7 @@ export default function App() {
             <button onClick={() => setCompareIds([])} style={{ background: "transparent", border: `1px solid ${T.line}`, color: T.inkDim, borderRadius: 8, padding: "9px 14px", fontSize: 13, cursor: "pointer" }}>
               Limpar
             </button>
-            <button onClick={() => setShowCompare(true)} style={{ background: T.accent, border: "none", color: T.bg, borderRadius: 8, padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            <button onClick={() => setShowCompare(true)} style={{ background: T.accent2, border: "none", color: T.bg, borderRadius: 8, padding: "9px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
               Comparar
             </button>
           </div>
@@ -5140,12 +5181,12 @@ function CompareModal({ cars, onClose, T }) {
           }
         `}</style>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Comparação</div>
+          <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16 }}>Comparação</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
         {distinctCategories.length > 1 && (
           <div style={{
-            fontSize: 12, color: T.accent2, background: "rgba(242,180,65,0.1)", border: `1px solid ${T.accent2}`,
+            fontSize: 12, color: T.accent2, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`,
             borderRadius: 8, padding: 10, marginBottom: 12
           }}>
             Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}) — pra uma comparação mais justa, prefira carros da mesma categoria.
@@ -5163,7 +5204,7 @@ function CompareModal({ cars, onClose, T }) {
                 <tr>
                   <th style={stickyCornerStyle(T)}></th>
                   {cars.map((c) => (
-                    <th key={c.id} style={{ ...stickyTopStyle(T), fontFamily: "'Space Grotesk', sans-serif" }}>{c.name}</th>
+                    <th key={c.id} style={{ ...stickyTopStyle(T), fontFamily: "'Manrope', sans-serif" }}>{c.name}</th>
                   ))}
                 </tr>
               </thead>
@@ -5197,7 +5238,7 @@ function CompareModal({ cars, onClose, T }) {
                 onClick={() => goTo(i)}
                 style={{
                   flex: "1 1 auto", minWidth: 96, textAlign: "left", cursor: "pointer",
-                  background: i === activeIdx ? "rgba(61,214,199,0.1)" : T.panelAlt,
+                  background: i === activeIdx ? hexA(T.accent, 0.1) : T.panelAlt,
                   border: `1px solid ${i === activeIdx ? T.accent : T.line}`,
                   borderRadius: 8, padding: "7px 9px",
                 }}
@@ -5218,7 +5259,7 @@ function CompareModal({ cars, onClose, T }) {
             >
               <ArrowLeft size={15} />
             </button>
-            <div style={{ fontSize: 12.5, fontWeight: 700, textAlign: "center", flex: 1, fontFamily: "'Space Grotesk', sans-serif" }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, textAlign: "center", flex: 1, fontFamily: "'Manrope', sans-serif" }}>
               {active.name}
               <div style={{ fontSize: 10.5, color: T.inkDim, fontWeight: 400, marginTop: 1 }}>{activeIdx + 1} de {cars.length}</div>
             </div>
@@ -5387,7 +5428,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
       <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "88vh", overflow: "auto", padding: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16 }}>Sua mobilidade</div>
+          <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16 }}>Sua mobilidade</div>
           <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
         <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14, lineHeight: 1.5 }}>
@@ -5405,8 +5446,8 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               onClick={() => set("hasCar", true)}
               style={{
                 flex: 1, padding: "9px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12.5, fontWeight: 700,
-                background: hasCar ? T.accent : T.panelAlt, color: hasCar ? T.bg : T.inkDim,
-                border: `1px solid ${hasCar ? T.accent : T.line}`,
+                background: hasCar ? T.accentSoft : T.panelAlt, color: hasCar ? T.onGold : T.inkDim,
+                border: `1px solid ${hasCar ? T.accentSoft : T.line}`,
               }}
             >
               Já tenho carro
@@ -5416,8 +5457,8 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               onClick={() => set("hasCar", false)}
               style={{
                 flex: 1, padding: "9px 10px", borderRadius: 8, cursor: "pointer", fontSize: 12.5, fontWeight: 700,
-                background: !hasCar ? T.accent : T.panelAlt, color: !hasCar ? T.bg : T.inkDim,
-                border: `1px solid ${!hasCar ? T.accent : T.line}`,
+                background: !hasCar ? T.accentSoft : T.panelAlt, color: !hasCar ? T.onGold : T.inkDim,
+                border: `1px solid ${!hasCar ? T.accentSoft : T.line}`,
               }}
             >
               Ainda não tenho carro
@@ -5448,7 +5489,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
             {autoFillNote && (
               <div style={{
                 display: "flex", alignItems: "center", gap: 6, marginBottom: 16, padding: "8px 10px",
-                borderRadius: 7, background: "rgba(61,214,199,0.1)", border: `1px solid ${T.accent}`,
+                borderRadius: 7, background: hexA(T.accent, 0.1), border: `1px solid ${T.accent}`,
                 fontSize: 11.5, color: T.accent, fontWeight: 600
               }}>
                 <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
@@ -5511,9 +5552,9 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
                     onClick={() => set("kmPerLiter", p.value)}
                     style={{
                       fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
-                      background: Number(form.kmPerLiter) === p.value ? T.accent : T.panelAlt,
-                      color: Number(form.kmPerLiter) === p.value ? T.bg : T.inkDim,
-                      border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accent : T.line}`, fontWeight: 600
+                      background: Number(form.kmPerLiter) === p.value ? T.accentSoft : T.panelAlt,
+                      color: Number(form.kmPerLiter) === p.value ? T.onGold : T.inkDim,
+                      border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accentSoft : T.line}`, fontWeight: 600
                     }}
                   >
                     {p.label} (~{p.value} km/L)
@@ -5617,7 +5658,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
             })
           }
           style={{
-            width: "100%", marginTop: 18, background: T.accent, color: T.bg,
+            width: "100%", marginTop: 18, background: T.accent2, color: T.bg,
             border: "none", borderRadius: 9, padding: "12px", fontWeight: 700, fontSize: 14, cursor: "pointer"
           }}
         >
@@ -5690,13 +5731,13 @@ function TutorialModal({ step, setStep, onClose, tourRefs, T }) {
         </button>
 
         <div style={{
-          width: 44, height: 44, borderRadius: 12, background: "rgba(61,214,199,0.12)",
+          width: 44, height: 44, borderRadius: 12, background: hexA(T.accent, 0.12),
           border: `1px solid ${T.accent}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12
         }}>
           <Icon size={20} color={T.accent} />
         </div>
 
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, marginBottom: 6, paddingRight: 20 }}>
+        <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, marginBottom: 6, paddingRight: 20 }}>
           {current.title}
         </div>
         <div style={{ fontSize: 13, color: T.inkDim, lineHeight: 1.55, marginBottom: 16 }}>
@@ -5742,7 +5783,7 @@ function TutorialModal({ step, setStep, onClose, tourRefs, T }) {
             onClick={() => (isLast ? onClose() : setStep((s) => s + 1))}
             style={{
               flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-              background: T.accent, color: T.bg, border: "none", borderRadius: 9,
+              background: T.accent2, color: T.bg, border: "none", borderRadius: 9,
               padding: "10px", fontWeight: 700, fontSize: 13.5, cursor: "pointer"
             }}
           >

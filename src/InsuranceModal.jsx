@@ -35,6 +35,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, ShieldCheck, Loader2, FlaskConical, Info } from "lucide-react";
 
+// Mistura um hex do tema com alpha — mantém tints translúcidos acompanhando
+// o tema ativo (claro/escuro) em vez de fixar uma cor hardcoded.
+function hexA(hex, alpha) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 const SEGFY_TOKEN = import.meta.env.VITE_SEGFY_TOKEN || "";
 const SEGFY_ENV = import.meta.env.VITE_SEGFY_ENV || "production";
 const SEGFY_SCRIPT_URL = "https://bundles.segfy.com/auto-bundle.js";
@@ -142,12 +152,19 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 70, display: "flex", alignItems: "flex-end" }}>
       <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "92vh", overflow: "auto", padding: 16, margin: "0 auto", maxWidth: 640 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-          <div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 7 }}>
-              <ShieldCheck size={17} color={T.accent} /> Cotar seguro — {car.name}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6, gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+            <img
+              src={T.mode === "dark" ? "/brand/db-corretora-logo.png" : "/brand/db-corretora-logo-navy.png"}
+              alt="D&B Corretora"
+              style={{ height: 34, width: "auto", flexShrink: 0 }}
+            />
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 7 }}>
+                <ShieldCheck size={17} color={T.accent} /> Cotar seguro — {car.name}
+              </div>
+              <div style={{ fontSize: 11, color: T.inkDim, marginTop: 2 }}>Cotação via Segfy, processada pela D&B Corretora</div>
             </div>
-            <div style={{ fontSize: 11, color: T.inkDim, marginTop: 2 }}>Cotação via Segfy, processada pela corretora parceira</div>
           </div>
           <button onClick={onClose} style={{ width: 36, height: 36, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}`, color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
             <X size={15} />
@@ -157,7 +174,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
         {!useRealWidget && (
           <div style={{
             display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 16, padding: "9px 10px",
-            borderRadius: 8, background: "rgba(242,180,65,0.1)", border: `1px dashed ${T.accent2}`,
+            borderRadius: 8, background: hexA(T.accent2, 0.1), border: `1px dashed ${T.accent2}`,
           }}>
             <FlaskConical size={14} color={T.accent2} style={{ marginTop: 1, flexShrink: 0 }} />
             <div style={{ fontSize: 11.5, color: T.ink, lineHeight: 1.5 }}>
@@ -172,7 +189,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
           <>
             <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 16, lineHeight: 1.5 }}>
               Preencha seus dados para cotar o seguro deste veículo. Suas informações são compartilhadas com a
-              Segfy e a corretora parceira apenas para gerar e processar a cotação — veja como tratamos seus
+              Segfy e a D&B Corretora apenas para gerar e processar a cotação — veja como tratamos seus
               dados na{" "}
               <button
                 type="button"
@@ -228,7 +245,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
             <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 18, cursor: "pointer" }}>
               <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} style={{ marginTop: 2 }} />
               <span style={{ fontSize: 11.5, color: T.inkDim, lineHeight: 1.5 }}>
-                Autorizo o compartilhamento dos dados acima com a Segfy e a corretora parceira, exclusivamente
+                Autorizo o compartilhamento dos dados acima com a Segfy e a D&B Corretora, exclusivamente
                 para calcular e, se eu escolher, contratar o seguro deste veículo.
               </span>
             </label>
@@ -237,7 +254,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
               onClick={handleSubmit}
               disabled={!canSubmit}
               style={{
-                width: "100%", background: canSubmit ? T.accent : T.panelAlt, color: canSubmit ? T.bg : T.inkDim,
+                width: "100%", background: canSubmit ? T.accent2 : T.panelAlt, color: canSubmit ? T.bg : T.inkDim,
                 border: "none", borderRadius: 8, padding: "12px", fontWeight: 700, fontSize: 13.5,
                 cursor: canSubmit ? "pointer" : "not-allowed",
               }}
@@ -265,7 +282,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
         {step === "results" && !useRealWidget && mockResults && (
           <div>
             {mockHired ? (
-              <div style={{ padding: 16, borderRadius: 10, background: "rgba(95,211,123,0.1)", border: `1px solid ${T.good}`, textAlign: "center" }}>
+              <div style={{ padding: 16, borderRadius: 10, background: hexA(T.good, 0.1), border: `1px solid ${T.good}`, textAlign: "center" }}>
                 <div style={{ fontWeight: 700, color: T.good, marginBottom: 4 }}>Contratação simulada com {mockHired} ✓</div>
                 <div style={{ fontSize: 11.5, color: T.inkDim, lineHeight: 1.5 }}>
                   Em produção, este passo abriria o checkout real da Segfy/corretora e a apólice cairia
@@ -290,7 +307,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
                       </div>
                       <button
                         onClick={() => setMockHired(r.name)}
-                        style={{ flexShrink: 0, background: T.accent, color: T.bg, border: "none", borderRadius: 8, padding: "9px 12px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}
+                        style={{ flexShrink: 0, background: T.accent2, color: T.bg, border: "none", borderRadius: 8, padding: "9px 12px", fontWeight: 700, fontSize: 12, cursor: "pointer" }}
                       >
                         Contratar
                       </button>
@@ -301,6 +318,22 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
             )}
           </div>
         )}
+
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 20,
+          paddingTop: 14, borderTop: `1px solid ${T.line}`,
+        }}>
+          <span style={{ fontSize: 10.5, color: T.inkDim }}>Cotação operada por</span>
+          <a
+            href="https://dbcorr.com.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "flex", alignItems: "center", gap: 5, textDecoration: "none", color: T.ink }}
+          >
+            <img src={T.mode === "dark" ? "/brand/db-corretora-logo.png" : "/brand/db-corretora-logo-navy.png"} alt="D&B Corretora" style={{ height: 15, width: "auto" }} />
+            <span style={{ fontSize: 11, fontWeight: 700 }}>D&B Corretora</span>
+          </a>
+        </div>
       </div>
     </div>
   );
