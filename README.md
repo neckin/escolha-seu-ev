@@ -75,11 +75,24 @@ Depois de testar localmente:
 
 ## Triagem semanal automática (robô de lançamentos)
 
-Toda segunda-feira, um GitHub Action varre 6 canais do YouTube atrás de vídeos
-que pareçam ser sobre lançamento de carro elétrico ou híbrido plug-in no
-Brasil, e abre um **Pull Request** com um relatório — ele **não atualiza o
-site sozinho**, só sinaliza candidatos pra você revisar e, se for o caso,
-atualizar os dados manualmente (ou pedir pro Claude Code atualizar).
+Toda segunda-feira, um único GitHub Action (`weekly-scan.yml`) roda dois
+robôs de triagem — nenhum dos dois **atualiza o site sozinho**, só sinalizam
+candidatos pra revisão humana:
+
+1. **Varredura de vídeos** (`scan-channels.mjs`) — varre os canais do YouTube
+   listados em `scripts/channels.json` atrás de vídeos que pareçam ser sobre
+   lançamento de elétrico, híbrido plug-in ou híbrido não-plugável (HEV) no
+   Brasil. Abre um **Pull Request** com um relatório em Markdown se achar
+   candidato.
+2. **Varredura de sites oficiais** (`scan-brand-sites.mjs`) — varre as marcas
+   listadas em `scripts/brand-sites-watchlist.json`, com foco em achar
+   híbrido não-plugável (HEV) que ainda não está no catálogo. Testado em
+   11/09/2026: `fetch()` simples acessa normalmente Toyota, Honda, Chevrolet,
+   Fiat, Jeep, BYD e GWM (sem bloqueio de bot) — mas se algum site passar a
+   bloquear especificamente o IP do GitHub Actions, o relatório sinaliza a
+   falha por marca em vez de quebrar a varredura inteira. Cada sinal
+   encontrado vira uma linha **pendente** em `car_review_queue` no Supabase —
+   nunca cai direto na tabela `cars`.
 
 ### Como ativar
 
@@ -91,16 +104,35 @@ atualizar os dados manualmente (ou pedir pro Claude Code atualizar).
      do tipo "Chave de API"
 3. No repositório do GitHub, vá em **Settings → Secrets and variables →
    Actions** e adicione:
-   - `YOUTUBE_API_KEY` (obrigatória)
-   - `ANTHROPIC_API_KEY` (opcional, mas recomendado — usa a IA da Claude pra
-     filtrar com mais precisão quais vídeos são de fato lançamentos, reduzindo
-     falso positivo dos filtros de palavra-chave)
+   - `YOUTUBE_API_KEY` (obrigatória pra varredura de vídeos)
+   - `ANTHROPIC_API_KEY` (obrigatória pra varredura de sites oficiais — sem
+     IA não dá pra extrair sinal útil do texto solto de uma home page.
+     Opcional pra varredura de vídeos, mas recomendada: reduz falso positivo
+     dos filtros de palavra-chave)
+   - `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` (já devem existir, usadas
+     também pelo `refresh-fallback-snapshot.yml`) — a varredura de sites
+     precisa delas pra escrever na fila de revisão
 4. Pronto — a partir da próxima segunda-feira (ou rodando manualmente em
    **Actions → Triagem semanal → Run workflow**), você vai ver um Pull
-   Request toda semana com os vídeos candidatos, se houver.
+   Request toda semana com os candidatos, se houver.
 
-Os canais monitorados estão em `scripts/channels.json` — edite esse arquivo
-pra adicionar ou remover canais.
+Os canais do YouTube monitorados estão em `scripts/channels.json`; os sites
+de marca em `scripts/brand-sites-watchlist.json` — edite esses arquivos pra
+adicionar ou remover fontes.
+
+### Revisando a fila (`car_review_queue`)
+
+Os itens que a varredura de sites oficiais encontra ficam com
+`status = 'pending'` na tabela `car_review_queue` do Supabase. Pra revisar:
+abra o **Table Editor** do projeto, olhe `proposed_data` (nome do modelo,
+preço se encontrado, marca) e `source_url`. Se for de fato um carro novo pra
+cadastrar, pesquise a ficha completa e cadastre manualmente na tabela `cars`
+(o padrão já usado pros carros existentes: preço, potência, autonomia etc.
+verificados em fonte oficial, com nota registrando a data da checagem) —
+depois marque a linha da fila como `status = 'approved'`. Se não for
+relevante (falso positivo, carro que já existe, etc.), marque
+`status = 'rejected'`. Ainda não existe uma tela no app pra isso — é direto
+no dashboard do Supabase por enquanto.
 
 ## Estrutura do projeto
 
@@ -118,10 +150,12 @@ scripts/
   generate-fallback-snapshot.mjs <- gera src/carsFallback.json a partir do Supabase
   channels.json                  <- lista de canais do YouTube monitorados
   scan-channels.mjs              <- robô de triagem semanal (lançamentos, YouTube)
-  pending-reviews/               <- relatórios gerados (um .md por semana)
+  brand-sites-watchlist.json     <- lista de sites oficiais de marca monitorados
+  scan-brand-sites.mjs           <- robô de triagem semanal (sites oficiais -> car_review_queue)
+  pending-reviews/               <- relatórios gerados (um .md por semana, por robô)
 .github/workflows/
   refresh-fallback-snapshot.yml  <- atualiza carsFallback.json a partir do Supabase (toda segunda)
-  weekly-scan.yml                <- agendamento do robô de triagem (toda segunda-feira)
+  weekly-scan.yml                <- roda os dois robôs de triagem (toda segunda-feira)
 index.html
 package.json
 vite.config.js
