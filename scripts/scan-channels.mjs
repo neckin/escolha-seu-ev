@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Varre os canais listados em channels.json atrás de vídeos recentes (últimos
- * 7 dias) que pareçam ser sobre lançamento de carro elétrico/híbrido plug-in.
+ * 7 dias) que pareçam ser sobre lançamento de carro elétrico, híbrido
+ * plug-in ou híbrido não-plugável (HEV).
  *
  * NÃO escreve direto no site. Gera um relatório em Markdown
  * (scripts/pending-reviews/AAAA-MM-DD.md) para revisão humana — pense nisso
@@ -31,7 +32,11 @@ const KEYWORDS = [
   "lançamento", "lançou", "chega ao brasil", "chegou ao brasil", "estreia",
   "novo elétrico", "novo híbrido", "review completo", "primeiras impressões",
   "test drive", "avaliação completa", "vale a pena", "ficha técnica",
-  "elétrico", "eletrico", "híbrido", "hibrido", "phev", "bev", "ev ",
+  "elétrico", "eletrico", "híbrido", "hibrido", "phev", "bev", "ev ", "hev",
+  // termos de híbrido não-plugável (HEV) — complementa scan-brand-sites.mjs,
+  // que varre a home page oficial das marcas mas pode não pegar lançamento
+  // muito recente antes do site atualizar o menu de modelos.
+  "e:hev", "e-power", "hsd", "autorrecarregável", "self-charging", "full hybrid",
 ];
 
 function looksRelevant(title, description) {
@@ -74,9 +79,13 @@ async function classifyWithClaude(candidates) {
 
   const prompt =
     "Você está triando títulos de vídeos do YouTube sobre carros, procurando especificamente " +
-    "por LANÇAMENTOS de carros elétricos (BEV) ou híbridos plug-in (PHEV) vendidos oficialmente no Brasil. " +
+    "por LANÇAMENTOS de carros elétricos (BEV), híbridos plug-in (PHEV) ou híbridos não-plugáveis " +
+    "(HEV — motor elétrico que move o carro sozinho por trechos, mas nunca pluga; ex.: sistema Toyota " +
+    "HSD, Honda e:HEV, Nissan e-Power) vendidos oficialmente no Brasil. Mild-hybrid (sistema 48V que só " +
+    "auxilia partida/torque, sem rodar no elétrico sozinho) NÃO conta. " +
     "Para cada vídeo abaixo, responda em JSON (array), um objeto por vídeo, com: " +
-    '{"videoId": "...", "isLikelyLaunch": true|false, "carGuess": "nome do carro ou null", "reason": "frase curta"}. ' +
+    '{"videoId": "...", "isLikelyLaunch": true|false, "carGuess": "nome do carro ou null", ' +
+    '"fuelTypeGuess": "BEV|PHEV|HEV|null", "reason": "frase curta"}. ' +
     "Seja cético: reviews de carros já conhecidos, comparativos, ou vídeos sem carro específico devem ser isLikelyLaunch:false.\n\n" +
     "Vídeos:\n" +
     candidates.map((c) => `- videoId: ${c.videoId}\n  título: ${c.title}\n  descrição: ${c.description.slice(0, 300)}`).join("\n\n");
@@ -146,7 +155,7 @@ async function main() {
   lines.push("");
   lines.push(
     strongCandidates.length === 0
-      ? "Nenhum vídeo com sinais de lançamento de EV/PHEV encontrado nesta semana."
+      ? "Nenhum vídeo com sinais de lançamento de BEV/PHEV/HEV encontrado nesta semana."
       : `${strongCandidates.length} vídeo(s) candidato(s) a lançamento — revise antes de atualizar o site.`
   );
   lines.push("");
@@ -158,6 +167,7 @@ async function main() {
     lines.push(`- Link: https://www.youtube.com/watch?v=${c.videoId}`);
     if (c.aiNote) {
       lines.push(`- Carro sugerido: ${c.aiNote.carGuess || "não identificado"}`);
+      lines.push(`- Tipo sugerido: ${c.aiNote.fuelTypeGuess || "não identificado"}`);
       lines.push(`- Motivo: ${c.aiNote.reason || ""}`);
     }
     lines.push("");

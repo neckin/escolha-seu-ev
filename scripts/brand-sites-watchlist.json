@@ -1,0 +1,9 @@
+[
+  { "brand": "Toyota", "url": "https://www.toyota.com.br/" },
+  { "brand": "Honda", "url": "https://www.honda.com.br/" },
+  { "brand": "Chevrolet", "url": "https://www.chevrolet.com.br/" },
+  { "brand": "Fiat", "url": "https://www.fiat.com.br/" },
+  { "brand": "Jeep", "url": "https://www.jeep.com.br/" },
+  { "brand": "BYD", "url": "https://www.byd.com/br" },
+  { "brand": "GWM", "url": "https://www.gwmmotors.com.br/" }
+]
