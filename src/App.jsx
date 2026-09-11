@@ -130,9 +130,16 @@ const PERSONAS = [
   { key: "custo", label: "Custo-Benefício", icon: DollarSign, hint: "Preço, manutenção, garantia" },
 ];
 
+// HEV = híbrido "pleno", com motor elétrico capaz de mover o carro sozinho
+// por trechos reais (Toyota HSD, Honda e:HEV, Nissan e-Power) — nunca pluga,
+// mas tem sistema elétrico relevante na experiência de dirigir. Mild-hybrid
+// (sistemas 48V que só auxiliam partida/torque, tipo Fiat/Jeep/Chevrolet)
+// fica de fora: não muda a experiência de dirigir o suficiente pra contar
+// como "veículo eletrificado" aqui. Decisão registrada em 11/09/2026.
 const FUEL_TYPES = [
   { key: "BEV", label: "100% Elétrico" },
   { key: "PHEV", label: "Híbrido Plug-in" },
+  { key: "HEV", label: "Híbrido" },
 ];
 
 const money = (v) =>
@@ -150,10 +157,13 @@ const videoLinkFor = (car) =>
 // ICMS de PCD varia por estado, mas historicamente fica entre ~R$120 mil e
 // ~R$200 mil. Usamos essa faixa só pra dar um sinal aproximado no card — o
 // usuário precisa confirmar as regras do próprio estado antes de decidir.
+// Só BEV e PHEV: os benefícios fiscais de elétrico (ICMS PCD, IPVA) que este
+// app referencia, na maioria dos estados, não valem pra híbrido não-plugável
+// (HEV) — mesmo critério que já usávamos no texto sobre IPVA.
 const PCD_ICMS_LIKELY_MAX = 120000;
 const PCD_ICMS_MAYBE_MAX = 200000;
-function pcdPriceHint(price) {
-  if (price == null) return null;
+function pcdPriceHint(price, fuelType) {
+  if (price == null || (fuelType !== "BEV" && fuelType !== "PHEV")) return null;
   if (price <= PCD_ICMS_LIKELY_MAX) return "provavel";
   if (price <= PCD_ICMS_MAYBE_MAX) return "possivel";
   return null; // acima da faixa usual — não exibimos selo pra não sugerir isenção improvável
@@ -178,7 +188,7 @@ const TUTORIAL_STEPS = [
   {
     icon: Sparkles,
     title: "Bem-vindo ao Escolha seu EV",
-    text: "Um jeito rápido de comparar carros elétricos e híbridos plug-in vendidos oficialmente no Brasil. Vamos te mostrar, destacando cada parte da tela, como usar.",
+    text: "Um jeito rápido de comparar carros elétricos, híbridos plug-in e híbridos vendidos oficialmente no Brasil. Vamos te mostrar, destacando cada parte da tela, como usar.",
     refKey: null,
   },
   {
@@ -196,7 +206,7 @@ const TUTORIAL_STEPS = [
   {
     icon: Plug,
     title: "Selos rápidos",
-    text: "Cada card mostra selos de wallbox incluso, melhor público, PHEV e se o preço já foi checado — sem precisar abrir os detalhes.",
+    text: "Cada card mostra selos de wallbox incluso, melhor público, tipo de eletrificação (PHEV/híbrido) e se o preço já foi checado — sem precisar abrir os detalhes.",
     refKey: "badgeRow",
   },
   {
@@ -684,6 +694,9 @@ export default function App() {
                         {car.fuelType === "PHEV" && (
                           <span style={{ fontSize: 10, fontWeight: 700, color: T.accent2, border: `1px solid ${T.accent2}`, borderRadius: 5, padding: "1px 5px" }}>PHEV</span>
                         )}
+                        {car.fuelType === "HEV" && (
+                          <span title="Híbrido não-plugável: motor elétrico ajuda a rodar, mas nunca precisa de tomada" style={{ fontSize: 10, fontWeight: 700, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>HÍBRIDO</span>
+                        )}
                         {car.verified === false && !car.priceVerifiedDate && (
                           <span style={{ fontSize: 10, fontWeight: 600, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>não verificado</span>
                         )}
@@ -711,6 +724,7 @@ export default function App() {
                       </div>
                     )}
                     {(() => {
+                      if (car.fuelType === "HEV") return null; // não pluga, wallbox não se aplica
                       const ws = wallboxStatus(car.wallbox);
                       if (!ws) return null;
                       const cfg = {
@@ -729,7 +743,7 @@ export default function App() {
                       );
                     })()}
                     {(() => {
-                      const hint = pcdPriceHint(car.price);
+                      const hint = pcdPriceHint(car.price, car.fuelType);
                       if (!hint) return null;
                       const label = hint === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD";
                       return (
@@ -745,6 +759,18 @@ export default function App() {
                         </div>
                       );
                     })()}
+                    {car.fuelType === "HEV" && (
+                      <div
+                        title="Os benefícios fiscais de elétrico (isenção de ICMS pra PCD, desconto de IPVA) valem, na maioria dos estados, só pra 100% elétrico e híbrido plug-in — não pra híbrido sem tomada. Confirme na Sefaz do seu estado."
+                        style={{
+                          display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
+                          borderRadius: 999, background: "transparent", border: `1px dashed ${T.line}`,
+                          fontSize: 11, fontWeight: 600, color: T.inkDim
+                        }}
+                      >
+                        <Accessibility size={12} /> Sem benefício fiscal de elétrico
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 14 }}>
@@ -1002,7 +1028,7 @@ export default function App() {
         )}
 
         <div style={{ marginTop: 10, fontSize: 11, color: T.inkDim, lineHeight: 1.5 }}>
-          Critério de inclusão: só carros eletrificados (100% elétricos ou híbridos plug-in) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
+          Critério de inclusão: só carros eletrificados (100% elétricos, híbridos plug-in ou híbridos com motor elétrico que move o carro sozinho — mild-hybrid 48V não entra) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
         </div>
 
         <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12, color: T.inkDim, lineHeight: 1.6 }}>

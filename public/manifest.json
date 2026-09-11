@@ -1,7 +1,7 @@
 {
   "name": "Escolha seu EV",
   "short_name": "Escolha seu EV",
-  "description": "Comparador de carros elétricos e híbridos plug-in no Brasil",
+  "description": "Comparador de carros elétricos, híbridos plug-in e híbridos no Brasil",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B1F33",
