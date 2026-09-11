@@ -17,22 +17,20 @@ Isso abre o site em `http://localhost:5173`.
 
 ## Estado atual dos dados
 
-O **catálogo de carros** vem de uma tabela `cars` num projeto Supabase
-(Postgres) — todo mundo que visita o site vê os mesmos carros, vindos do
-mesmo lugar. O código (`src/App.jsx`, constante `SEED_CARS`) continua sendo
-a fonte "oficial": é ali que cada carro é corrigido/adicionado, com a fonte
-da informação registrada no commit — igual sempre fizemos.
+O **Supabase é a fonte da verdade do catálogo** — a tabela `cars` num
+projeto Supabase (Postgres). Todo mundo que visita o site vê os mesmos
+carros, vindos do mesmo lugar, e carro novo ou correção de ficha técnica é
+editado **direto no banco** (SQL Editor do Supabase, ou — quando a Fase 3
+estiver pronta — aprovando itens da fila de revisão `car_review_queue`).
 
-A sincronização com o banco é **automática**: a GitHub Action
-`.github/workflows/sync-supabase.yml` roda sozinha a cada push na `main`
-que mexa em `src/App.jsx`, faz upsert dos carros no Supabase e remove de
-lá quem saiu do código. Não precisa copiar SQL à mão. Pra rodar manualmente
-(ex.: debug), tem o botão **Actions → Sincronizar carros com o Supabase →
-Run workflow** no GitHub.
-
-Se o Supabase não estiver configurado (falta `.env.local`) ou a consulta
-falhar por qualquer motivo, o site cai de volta pro catálogo embutido no
-código (`SEED_CARS`) — nunca quebra por causa disso.
+`src/carsFallback.json` é só o **fallback offline**: um snapshot gerado a
+partir do próprio Supabase (`scripts/generate-fallback-snapshot.mjs`), usado
+automaticamente se o Supabase não estiver configurado (falta `.env.local`)
+ou a consulta falhar — pra o site nunca quebrar por causa disso. Ele **não
+é editado à mão**: uma GitHub Action
+(`.github/workflows/refresh-fallback-snapshot.yml`) o atualiza sozinha toda
+segunda-feira, ou rodando manualmente **Actions → Atualizar snapshot de
+fallback do catálogo → Run workflow**.
 
 Coisas pessoais do visitante (tema claro/escuro, "meu carro atual", tutorial
 já visto) continuam no **localStorage do navegador** (`src/storageShim.js`)
@@ -41,23 +39,25 @@ já visto) continuam no **localStorage do navegador** (`src/storageShim.js`)
 ### Configurar o Supabase (uma vez)
 
 1. Crie um projeto grátis em [supabase.com](https://supabase.com)
-2. No **SQL Editor** do projeto, rode `supabase/schema.sql` (cria a tabela e
-   a política de leitura pública) e depois `supabase/seed-cars.sql` (popula
-   com os carros que já estão no código — só na primeira vez; depois disso
-   a Action cuida de manter tudo sincronizado)
+2. No **SQL Editor** do projeto, rode `supabase/schema.sql` (cria a tabela
+   `cars` e a política de leitura pública) e `supabase/schema-review-queue.sql`
+   (cria a fila de revisão usada pela Fase 3 — pode rodar mesmo antes dela
+   existir, não atrapalha nada)
 3. Em **Settings → API Keys**, copie a **Project URL** e as duas chaves:
    - **`anon`** (pública, usada pelo site pra ler os carros)
-   - **`service_role`** (secreta — usada só pela GitHub Action pra escrever;
-     nunca deve aparecer no front nem ser compartilhada)
+   - **`service_role`** (secreta — usada só pelas GitHub Actions; nunca deve
+     aparecer no front nem ser compartilhada)
 4. Crie um arquivo `.env.local` na raiz do projeto (não é versionado), só
    com a chave pública:
    ```
    VITE_SUPABASE_URL=https://SEU-PROJETO.supabase.co
    VITE_SUPABASE_ANON_KEY=sua-chave-anon
    ```
-5. Na Vercel, adicione as mesmas duas variáveis em **Settings → Environment
-   Variables** (Production, Preview e Development)
-6. No repositório do GitHub, em **Settings → Secrets and variables →
+5. Rode `node scripts/generate-fallback-snapshot.mjs` uma vez pra popular
+   `src/carsFallback.json` a partir do que já está no banco
+6. Na Vercel, adicione as mesmas duas variáveis do `.env.local` em
+   **Settings → Environment Variables** (Production, Preview e Development)
+7. No repositório do GitHub, em **Settings → Secrets and variables →
    Actions**, adicione:
    - `SUPABASE_URL` (mesmo valor do `.env.local`)
    - `SUPABASE_SERVICE_ROLE_KEY` (a chave secreta do passo 3 — só aqui,
@@ -106,23 +106,22 @@ pra adicionar ou remover canais.
 
 ```
 src/
-  App.jsx                    <- toda a lógica e interface do app
-  main.jsx                   <- ponto de entrada, instala o storageShim e renderiza o App
-  storageShim.js              <- substitui window.storage por localStorage (preferências pessoais)
-  supabaseClient.js           <- client do Supabase (client-side, usa a chave anon pública)
+  App.jsx                       <- toda a lógica e interface do app
+  carsFallback.json             <- fallback offline, GERADO — não editar à mão
+  main.jsx                      <- ponto de entrada, instala o storageShim e renderiza o App
+  storageShim.js                 <- substitui window.storage por localStorage (preferências pessoais)
+  supabaseClient.js              <- client do Supabase (client-side, usa a chave anon pública)
 supabase/
-  schema.sql                  <- cria a tabela `cars` + RLS de leitura pública (roda 1x)
-  seed-cars.sql                <- SQL gerado (histórico/debug) — não é o que sincroniza de verdade
+  schema.sql                     <- cria a tabela `cars` + RLS de leitura pública (roda 1x)
+  schema-review-queue.sql        <- cria a fila de revisão car_review_queue (roda 1x)
 scripts/
-  lib/extract-seed-cars.mjs   <- extrai o SEED_CARS de App.jsx (usado pelos 2 scripts abaixo)
-  sync-supabase.mjs           <- sincroniza o Supabase de verdade, roda pela GitHub Action
-  generate-supabase-seed.mjs  <- gera SQL manualmente, só pra debug/revisão
-  channels.json               <- lista de canais do YouTube monitorados
-  scan-channels.mjs           <- robô de triagem semanal
-  pending-reviews/            <- relatórios gerados (um .md por semana)
+  generate-fallback-snapshot.mjs <- gera src/carsFallback.json a partir do Supabase
+  channels.json                  <- lista de canais do YouTube monitorados
+  scan-channels.mjs              <- robô de triagem semanal (lançamentos, YouTube)
+  pending-reviews/               <- relatórios gerados (um .md por semana)
 .github/workflows/
-  sync-supabase.yml            <- sincroniza a tabela cars a cada push que mexe em App.jsx
-  weekly-scan.yml              <- agendamento do robô (toda segunda-feira)
+  refresh-fallback-snapshot.yml  <- atualiza carsFallback.json a partir do Supabase (toda segunda)
+  weekly-scan.yml                <- agendamento do robô de triagem (toda segunda-feira)
 index.html
 package.json
 vite.config.js

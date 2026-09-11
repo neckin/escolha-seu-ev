@@ -1,0 +1,47 @@
+name: Atualizar snapshot de fallback do catálogo
+
+# O Supabase é a fonte da verdade do catálogo (tabela `cars`). Este workflow
+# só espelha o que já está aprovado lá pra src/carsFallback.json — o
+# fallback offline que o app usa se o Supabase não estiver configurado ou a
+# consulta falhar. Como só reflete dado já público e aprovado, comita direto
+# na main sem PR (diferente da triagem semanal de lançamentos, que sempre
+# passa por revisão humana antes de qualquer coisa ir pro catálogo).
+
+on:
+  schedule:
+    # 08:00 UTC toda segunda-feira = 05:00 no horário de Brasília
+    - cron: "0 8 * * 1"
+  workflow_dispatch: {} # permite rodar manualmente também, pelo botão no GitHub
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Gerar snapshot a partir do Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          # Reaproveita o secret que já existe (era usado pelo sync antigo,
+          # código -> banco). Leitura só, mas a service_role também lê —
+          # não precisa cadastrar a anon key como secret separado pra isso.
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/generate-fallback-snapshot.mjs
+
+      - name: Commitar se algo mudou
+        run: |
+          if git diff --quiet -- src/carsFallback.json; then
+            echo "Sem mudanças no catálogo desde a última vez — nada a commitar."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/carsFallback.json
+          git commit -m "Atualiza snapshot de fallback do catálogo (automático)"
+          git push
