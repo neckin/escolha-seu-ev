@@ -7,7 +7,7 @@ import {
   Zap, Battery, Users, Mountain, TrendingUp, DollarSign, Plus, X,
   ChevronDown, ChevronUp, Car, Gauge, Check,
   Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
-  Accessibility, Briefcase, ShieldCheck
+  Accessibility, Briefcase, ShieldCheck, Building2, PiggyBank
 } from "lucide-react";
 import { supabase } from "./supabaseClient";
 import InsuranceModal from "./InsuranceModal.jsx";
@@ -33,9 +33,18 @@ const DARK_T = {
   panelAlt: "#40576F",
   line: "#6A7C8E",
   ink: "#FFFFFF",
-  inkDim: "#D3D9DE",
+  // Clareado de #D3D9DE: o valor antigo rendia 4,36:1 sobre o painel dos
+  // cards (#4E6379), logo abaixo dos 4,5:1 de AA. A referência de contraste
+  // aqui é o painel, não o fundo da tela — é sobre ele que quase todo texto
+  // secundário do app se apoia.
+  inkDim: "#E2E7EB",
   accent: "#C89B3C",    // Dourado Assinatura — ênfase (texto, ícone, borda)
   accentSoft: "#E4C377",// Dourado Suave — preenchimentos leves/estado ativo
+  // Dourado para TEXTO pequeno: o Dourado Assinatura puro rende 3,3:1 aqui e
+  // o Dourado Suave, 3,6:1 sobre o painel — os dois abaixo de AA. Este é um
+  // tom mais claro da mesma família, o suficiente para 4,6:1 sobre o painel.
+  // O dourado do manual segue valendo para ícone, borda e preenchimento.
+  accentText: "#F0DCA8",
   onGold: NAVY,         // texto sobre fundos dourados (fixo nos 2 temas)
   accent2: "#E4C377",   // ação primária em fundo escuro (dourado sobre azul)
   good: "#5FD37B",
@@ -53,6 +62,11 @@ const LIGHT_T = {
   inkDim: "#4C5A68",    // Grafite
   accent: "#C89B3C",    // Dourado Assinatura — ênfase (texto, ícone, borda)
   accentSoft: "#E4C377",// Dourado Suave — preenchimentos leves/estado ativo
+  // Dourado para TEXTO pequeno sobre marfim/branco: o Dourado Assinatura puro
+  // rende 2,6:1 aqui, muito abaixo dos 4,5:1 de AA. Esta é a mesma matiz do
+  // manual escurecida até 5,0:1 — o dourado puro segue valendo para ícone,
+  // borda e preenchimento, onde a regra de contraste de texto não se aplica.
+  accentText: "#7F621B",
   onGold: NAVY,         // texto sobre fundos dourados (fixo nos 2 temas)
   accent2: "#0B1F33",   // ação primária em fundo claro (azul profundo)
   good: "#1E7B34",
@@ -80,6 +94,35 @@ const FONT_IMPORT = `
 const RESPONSIVE_CSS = `
 @media (max-width: 860px) {
   .ev-header-subtitle { display: none; }
+}
+
+/* Diálogos: caixa centrada e com largura de leitura no desktop; a folha que
+   sobe de baixo (bottom sheet) é tratamento de celular, não um padrão único
+   esticado para qualquer largura. */
+.ev-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 31, 51, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+}
+.ev-dialog-panel {
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: auto;
+  max-height: min(86vh, 900px);
+  padding: 22px;
+}
+@media (max-width: 680px) {
+  .ev-dialog-overlay { align-items: flex-end; padding: 0; }
+  .ev-dialog-panel {
+    border-radius: 16px 16px 0 0;
+    max-height: 92vh;
+    padding: 16px;
+  }
 }
 `;
 
@@ -122,13 +165,28 @@ const BRAND_GROUPS = {
   "Jeep": "Stellantis",
 };
 
+// Ícones escolhidos pelo que cada perfil significa na vida de quem dirige
+// (cidade, família, terreno, velocímetro, economia) em vez do jogo de ícones
+// que qualquer dashboard genérico usa (raio//seta de alta/cifrão).
 const PERSONAS = [
-  { key: "urbano", label: "Urbano", icon: Zap, hint: "Cidade, trajetos curtos, agilidade" },
+  { key: "urbano", label: "Urbano", icon: Building2, hint: "Cidade, trajetos curtos, agilidade" },
   { key: "familia", label: "Família", icon: Users, hint: "Espaço, porta-malas, segurança" },
   { key: "aventura", label: "Aventura", icon: Mountain, hint: "Vão livre, terreno irregular" },
-  { key: "performance", label: "Performance", icon: TrendingUp, hint: "Potência, aceleração" },
-  { key: "custo", label: "Custo-Benefício", icon: DollarSign, hint: "Preço, manutenção, garantia" },
+  { key: "performance", label: "Performance", icon: Gauge, hint: "Potência, aceleração" },
+  { key: "custo", label: "Custo-Benefício", icon: PiggyBank, hint: "Preço, manutenção, garantia" },
 ];
+
+// Esc fecha o diálogo aberto. Vale para qualquer modal que receba um onClose —
+// sem isso, sair da caixa depende de acertar o X com o mouse.
+function useEscapeToClose(onClose) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+}
 
 // HEV = híbrido "pleno", com motor elétrico capaz de mover o carro sozinho
 // por trechos reais (Toyota HSD, Honda e:HEV, Nissan e-Power) — nunca pluga,
@@ -176,6 +234,111 @@ const wallboxStatus = (wallbox) => {
   if (w.includes("depende") || w.includes("campanha")) return "maybe";
   return "no";
 };
+
+// Selos do card, em ordem de peso na decisão: para quem o carro serve, se vem
+// com carregador, e só então as ressalvas fiscais. A ordem importa porque o
+// card só mostra o primeiro — os demais ficam atrás do "+N" (ver BadgeRow).
+function badgesFor(car, best, T) {
+  const badges = [];
+
+  if (best) {
+    badges.push({
+      key: "persona",
+      icon: best.icon,
+      label: `Melhor para: ${best.label}`,
+      color: T.accentText,
+      border: T.accent,
+      bg: hexA(T.accent, 0.12),
+    });
+  }
+
+  if (car.fuelType !== "HEV") { // não pluga, wallbox não se aplica
+    const ws = wallboxStatus(car.wallbox);
+    if (ws) {
+      const cfg = {
+        yes: { color: T.good, bg: hexA(T.good, 0.12), label: "Wallbox incluso" },
+        maybe: { color: T.accentText, bg: hexA(T.accent2, 0.12), label: "Wallbox: depende" },
+        no: { color: T.inkDim, bg: "transparent", label: "Sem wallbox" },
+      }[ws];
+      badges.push({ key: "wallbox", icon: Plug, label: cfg.label, color: cfg.color, border: cfg.color, bg: cfg.bg });
+    }
+  }
+
+  const pcd = pcdPriceHint(car.price, car.fuelType);
+  if (pcd) {
+    badges.push({
+      key: "pcd",
+      icon: Accessibility,
+      label: pcd === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD",
+      title: "Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária.",
+      color: T.accentText,
+      border: T.accent,
+      bg: hexA(T.accent, 0.08),
+      dashed: true,
+    });
+  }
+
+  if (car.fuelType === "HEV") {
+    badges.push({
+      key: "hev-sem-beneficio",
+      icon: Accessibility,
+      label: "Sem benefício fiscal de elétrico",
+      title: "Os benefícios fiscais de elétrico (isenção de ICMS pra PCD, desconto de IPVA) valem, na maioria dos estados, só pra 100% elétrico e híbrido plug-in — não pra híbrido sem tomada. Confirme na Sefaz do seu estado.",
+      color: T.inkDim,
+      border: T.line,
+      bg: "transparent",
+      dashed: true,
+    });
+  }
+
+  return badges;
+}
+
+// Quatro selos do mesmo tamanho e peso não dizem qual importa. O card mostra o
+// primeiro e guarda o resto atrás de um "+N" que a pessoa abre se quiser.
+function BadgeRow({ badges, T }) {
+  const [open, setOpen] = useState(false);
+  if (badges.length === 0) return null;
+
+  const visible = open ? badges : badges.slice(0, 1);
+  const hidden = badges.length - 1;
+
+  const pill = (b) => (
+    <div
+      key={b.key}
+      title={b.title}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
+        borderRadius: 999, background: b.bg,
+        border: `1px ${b.dashed ? "dashed" : "solid"} ${b.border}`,
+        fontSize: 11.5, fontWeight: 600, color: b.color,
+      }}
+    >
+      <b.icon size={12} /> {b.label}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+      {visible.map(pill)}
+      {hidden > 0 && (
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={open ? "Mostrar menos selos" : `Mostrar mais ${hidden} selo${hidden > 1 ? "s" : ""}`}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 3, padding: "4px 9px",
+            borderRadius: 999, background: "transparent", border: `1px solid ${T.line}`,
+            fontSize: 11.5, fontWeight: 600, color: T.inkDim, cursor: "pointer",
+          }}
+        >
+          {open ? "menos" : `+${hidden}`}
+        </button>
+      )}
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // STORAGE HELPERS
@@ -462,7 +625,7 @@ export default function App() {
     return (
       <div style={{ background: T.bg, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <style>{FONT_IMPORT}</style>
-        <div style={{ color: T.accent, fontFamily: "'IBM Plex Mono', monospace" }}>carregando…</div>
+        <div style={{ color: T.accentText, fontFamily: "'IBM Plex Mono', monospace" }}>carregando…</div>
       </div>
     );
   }
@@ -494,7 +657,7 @@ export default function App() {
               <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: -0.3, color: T.ink }}>
                 Escolha seu EV
               </div>
-              <div className="ev-header-subtitle" style={{ fontSize: 11, color: T.inkDim, fontStyle: "italic", fontFamily: "'Cormorant Garamond', serif" }}>
+              <div className="ev-header-subtitle" style={{ fontSize: 12, color: T.inkDim, fontStyle: "italic", fontFamily: "'Cormorant Garamond', serif" }}>
                 Um comparador em parceria com a D&B Corretora
               </div>
             </div>
@@ -595,12 +758,12 @@ export default function App() {
             </select>
           </div>
 
-          <div style={{ fontSize: 11, color: T.inkDim, marginBottom: 10, display: "flex", alignItems: "center", gap: 5 }}>
+          <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 10, display: "flex", alignItems: "center", gap: 5 }}>
             Dica: comparar carros da <strong style={{ color: T.ink }}>mesma categoria</strong> (ex.: só hatches, ou só SUVs) deixa a comparação mais justa. Use o filtro de categoria acima.
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ fontSize: 11, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 12, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "nowrap" }}>
               {maxPrice >= priceCeiling ? "sem limite de preço" : `até ${money(maxPrice)}`}
             </span>
             <input
@@ -614,7 +777,7 @@ export default function App() {
 
         {/* ---------- PERSONA FILTER ---------- */}
         <div ref={tourRefs.personaRow} style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1, color: T.inkDim, marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>
+          <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 1, color: T.inkDim, marginBottom: 8, fontFamily: "'IBM Plex Mono', monospace" }}>
             Qual carro para qual público?
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -672,7 +835,7 @@ export default function App() {
         )}
 
         {/* ---------- CAR GRID ---------- */}
-        <div style={{ fontSize: 11, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", marginBottom: 10 }}>
+        <div style={{ fontSize: 12, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace", marginBottom: 10 }}>
           {cars.length} modelos no total · {sortedCars.length} exibidos com os filtros atuais
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 14 }}>
@@ -692,16 +855,16 @@ export default function App() {
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3, flexWrap: "wrap" }}>
                         <span style={{ fontSize: 12, color: T.inkDim }}>{car.category}</span>
                         {car.fuelType === "PHEV" && (
-                          <span style={{ fontSize: 10, fontWeight: 700, color: T.accent2, border: `1px solid ${T.accent2}`, borderRadius: 5, padding: "1px 5px" }}>PHEV</span>
+                          <span style={{ fontSize: 11.5, fontWeight: 700, color: T.accentText, border: `1px solid ${T.accent2}`, borderRadius: 5, padding: "1px 5px" }}>PHEV</span>
                         )}
                         {car.fuelType === "HEV" && (
-                          <span title="Híbrido não-plugável: motor elétrico ajuda a rodar, mas nunca precisa de tomada" style={{ fontSize: 10, fontWeight: 700, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>HÍBRIDO</span>
+                          <span title="Híbrido não-plugável: motor elétrico ajuda a rodar, mas nunca precisa de tomada" style={{ fontSize: 11.5, fontWeight: 700, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>HÍBRIDO</span>
                         )}
                         {car.verified === false && !car.priceVerifiedDate && (
-                          <span style={{ fontSize: 10, fontWeight: 600, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>não verificado</span>
+                          <span style={{ fontSize: 11.5, fontWeight: 600, color: T.inkDim, border: `1px solid ${T.line}`, borderRadius: 5, padding: "1px 5px" }}>não verificado</span>
                         )}
                         {car.verified === false && car.priceVerifiedDate && (
-                          <span title={`Preço checado em ${car.priceVerifiedDate}`} style={{ fontSize: 10, fontWeight: 600, color: T.accent, border: `1px solid ${T.accent}`, borderRadius: 5, padding: "1px 5px" }}>
+                          <span title={`Preço checado em ${car.priceVerifiedDate}`} style={{ fontSize: 11.5, fontWeight: 600, color: T.accentText, border: `1px solid ${T.accent}`, borderRadius: 5, padding: "1px 5px" }}>
                             preço checado {car.priceVerifiedDate}
                           </span>
                         )}
@@ -713,64 +876,8 @@ export default function App() {
                     {money(car.price)}
                   </div>
 
-                  <div ref={carIdx === 0 ? tourRefs.badgeRow : null} style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
-                    {best && (
-                      <div style={{
-                        display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                        borderRadius: 999, background: hexA(T.accent, 0.12), border: `1px solid ${T.accent}`,
-                        fontSize: 11, fontWeight: 600, color: T.accent
-                      }}>
-                        <best.icon size={12} /> Melhor para: {best.label}
-                      </div>
-                    )}
-                    {(() => {
-                      if (car.fuelType === "HEV") return null; // não pluga, wallbox não se aplica
-                      const ws = wallboxStatus(car.wallbox);
-                      if (!ws) return null;
-                      const cfg = {
-                        yes: { color: T.good, bg: hexA(T.good, 0.12), label: "Wallbox incluso" },
-                        maybe: { color: T.accent2, bg: hexA(T.accent2, 0.12), label: "Wallbox: depende" },
-                        no: { color: T.inkDim, bg: "transparent", label: "Sem wallbox" },
-                      }[ws];
-                      return (
-                        <div style={{
-                          display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                          borderRadius: 999, background: cfg.bg, border: `1px solid ${cfg.color}`,
-                          fontSize: 11, fontWeight: 600, color: cfg.color
-                        }}>
-                          <Plug size={12} /> {cfg.label}
-                        </div>
-                      );
-                    })()}
-                    {(() => {
-                      const hint = pcdPriceHint(car.price, car.fuelType);
-                      if (!hint) return null;
-                      const label = hint === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD";
-                      return (
-                        <div
-                          title="Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária."
-                          style={{
-                            display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                            borderRadius: 999, background: hexA(T.accent, 0.08), border: `1px dashed ${T.accent}`,
-                            fontSize: 11, fontWeight: 600, color: T.accent
-                          }}
-                        >
-                          <Accessibility size={12} /> {label}
-                        </div>
-                      );
-                    })()}
-                    {car.fuelType === "HEV" && (
-                      <div
-                        title="Os benefícios fiscais de elétrico (isenção de ICMS pra PCD, desconto de IPVA) valem, na maioria dos estados, só pra 100% elétrico e híbrido plug-in — não pra híbrido sem tomada. Confirme na Sefaz do seu estado."
-                        style={{
-                          display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 9px",
-                          borderRadius: 999, background: "transparent", border: `1px dashed ${T.line}`,
-                          fontSize: 11, fontWeight: 600, color: T.inkDim
-                        }}
-                      >
-                        <Accessibility size={12} /> Sem benefício fiscal de elétrico
-                      </div>
-                    )}
+                  <div ref={carIdx === 0 ? tourRefs.badgeRow : null} style={{ marginTop: 8 }}>
+                    <BadgeRow badges={badgesFor(car, best, T)} T={T} />
                   </div>
 
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginTop: 14 }}>
@@ -807,13 +914,16 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       title={car.videoUrl ? "Assistir review em vídeo" : "Buscar vídeos no YouTube"}
+                      aria-label={car.videoUrl ? `Assistir review em vídeo do ${car.name}` : `Buscar vídeos do ${car.name} no YouTube`}
                       style={{
                         width: 40, display: "flex", alignItems: "center", justifyContent: "center",
                         background: "transparent", border: `1px solid ${T.line}`, borderRadius: 8,
-                        color: T.warn, cursor: "pointer", textDecoration: "none", flexShrink: 0
+                        // neutro: abrir um vídeo não é alerta. T.warn aqui pintava
+                        // de laranja/vermelho de aviso um link inofensivo.
+                        color: T.inkDim, cursor: "pointer", textDecoration: "none", flexShrink: 0
                       }}
                     >
-                      <Play size={15} fill={T.warn} />
+                      <Play size={15} fill={T.inkDim} />
                     </a>
                   </div>
 
@@ -822,7 +932,7 @@ export default function App() {
                     onClick={() => setInsuranceCar(car)}
                     style={{
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%",
-                      marginTop: 8, background: "transparent", border: `1px solid ${T.accent2}`, color: T.accent2,
+                      marginTop: 8, background: "transparent", border: `1px solid ${T.accent2}`, color: T.accentText,
                       borderRadius: 8, padding: "9px", fontSize: 12, fontWeight: 700, cursor: "pointer"
                     }}
                   >
@@ -836,7 +946,7 @@ export default function App() {
                       <ResponsiveContainer width="100%" height="100%">
                         <RadarChart data={radarData} outerRadius="70%">
                           <PolarGrid stroke={T.line} />
-                          <PolarAngleAxis dataKey="label" tick={{ fill: T.inkDim, fontSize: 10 }} />
+                          <PolarAngleAxis dataKey="label" tick={{ fill: T.inkDim, fontSize: 11.5 }} />
                           <PolarRadiusAxis domain={[0, 5]} tick={false} axisLine={false} />
                           <Radar dataKey="value" stroke={T.radar} fill={T.radar} fillOpacity={0.35} />
                           <Tooltip contentStyle={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 8, fontSize: 12 }} />
@@ -846,14 +956,14 @@ export default function App() {
 
                     {car.techNotes ? (
                       <div style={{ fontSize: 12.5, color: T.inkDim, lineHeight: 1.5, marginBottom: 14 }}>
-                        <span style={{ color: T.accent, fontWeight: 600 }}>Motor & bateria — </span>
+                        <span style={{ color: T.accentText, fontWeight: 600 }}>Motor & bateria — </span>
                         {car.techNotes}
                         {car.priceVerifiedDate && (
-                          <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 6 }}>Ficha completa verificada em {car.priceVerifiedDate}.</div>
+                          <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 6 }}>Ficha completa verificada em {car.priceVerifiedDate}.</div>
                         )}
                       </div>
                     ) : (
-                      <div style={{ fontSize: 12, color: T.accent2, lineHeight: 1.5, marginBottom: 14, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
+                      <div style={{ fontSize: 12, color: T.accentText, lineHeight: 1.5, marginBottom: 14, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
                         {car.priceVerifiedDate ? (
                           <>Preço checado em {car.priceVerifiedDate} contra fonte oficial/imprensa recente. As demais specs técnicas (vão livre, porta-malas, garantia etc.) ainda vêm de fonte agregada e não foram verificadas individualmente.</>
                         ) : (
@@ -916,13 +1026,13 @@ export default function App() {
 
                     {/* ---- vs. meu carro atual ---- */}
                     <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
-                      <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                      <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.6, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
                         <Fuel size={12} /> {myCar && myCar.hasCar === false ? "Vs. sua mobilidade hoje" : "Vs. seu carro atual"}
                       </div>
                       {!myCar ? (
                         <button
                           onClick={() => setShowMyCarForm(true)}
-                          style={{ fontSize: 12.5, color: T.accent, background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", width: "100%", textAlign: "left" }}
+                          style={{ fontSize: 12.5, color: T.accentText, background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", width: "100%", textAlign: "left" }}
                         >
                           Diga como você se locomove hoje (com ou sem carro) pra ver a economia deste modelo →
                         </button>
@@ -948,7 +1058,7 @@ export default function App() {
                                   border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
                                 }}>
                                   {d.fuelMonthly != null && (
-                                    <div style={{ fontSize: 11, color: T.inkDim }}>
+                                    <div style={{ fontSize: 12, color: T.inkDim }}>
                                       {myCar.hasCar === false
                                         ? `Sua mobilidade hoje: ${money(d.fuelMonthly)}/mês`
                                         : `Combustível (${myCar.name || "seu carro"}): ${money(d.fuelMonthly)}/mês`}
@@ -957,22 +1067,22 @@ export default function App() {
                                   )}
                                   {myCar.hasCar === false
                                     ? d.evMaintMonthly != null && (
-                                        <div style={{ fontSize: 11, color: T.inkDim, marginTop: 2 }}>
+                                        <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>
                                           Manutenção estimada (este EV): {money(d.evMaintMonthly)}/mês
                                         </div>
                                       )
                                     : d.myMaintMonthly != null && (
-                                        <div style={{ fontSize: 11, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
+                                        <div style={{ fontSize: 12, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
                                           Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
                                         </div>
                                       )}
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
                                     {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
                                     {money(Math.abs(d.monthlySavings))}/mês
-                                    {d.myMaintMonthly == null && myCar.hasCar !== false && <span style={{ fontWeight: 400, fontSize: 10.5, color: T.inkDim }}> (só combustível/energia)</span>}
+                                    {d.myMaintMonthly == null && myCar.hasCar !== false && <span style={{ fontWeight: 400, fontSize: 11.5, color: T.inkDim }}> (só combustível/energia)</span>}
                                   </div>
                                   {d.maintUnavailable && (
-                                    <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
+                                    <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
                                       Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
                                     </div>
                                   )}
@@ -982,14 +1092,14 @@ export default function App() {
                                   ter preenchido o gasto atual — não depende de nenhuma comparação. */}
                               {myCar.hasCar === false && d.monthlySavings == null && d.ownershipMonthly != null && (
                                 <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}` }}>
-                                  <div style={{ fontSize: 11, color: T.inkDim }}>
+                                  <div style={{ fontSize: 12, color: T.inkDim }}>
                                     Energia: {money(d.energyMonthly)}/mês
                                     {d.evMaintMonthly != null && <> · Manutenção estimada: {money(d.evMaintMonthly)}/mês</>}
                                   </div>
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.ink, marginTop: 3 }}>
                                     ~{money(d.ownershipMonthly)}/mês pra rodar este elétrico
                                   </div>
-                                  <div style={{ fontSize: 10.5, color: T.inkDim, marginTop: 4 }}>
+                                  <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
                                     Não inclui parcela de financiamento nem seguro — só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
                                   </div>
                                 </div>
@@ -1021,13 +1131,13 @@ export default function App() {
                 {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
               </>
             )}
-            <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accent, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
+            <button onClick={() => setShowMyCarForm(true)} style={{ background: "none", border: "none", color: T.accentText, cursor: "pointer", fontSize: 12.5, textDecoration: "underline", padding: 0 }}>
               editar
             </button>
           </div>
         )}
 
-        <div style={{ marginTop: 10, fontSize: 11, color: T.inkDim, lineHeight: 1.5 }}>
+        <div style={{ marginTop: 10, fontSize: 12, color: T.inkDim, lineHeight: 1.5 }}>
           Critério de inclusão: só carros eletrificados (100% elétricos, híbridos plug-in ou híbridos com motor elétrico que move o carro sozinho — mild-hybrid 48V não entra) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
         </div>
 
@@ -1056,7 +1166,7 @@ export default function App() {
       {/* ---------- FOOTER ---------- */}
       <footer style={{ borderTop: `1px solid ${T.line}`, padding: "22px 16px 90px", textAlign: "center" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, marginBottom: 14 }}>
-          <span style={{ fontSize: 11, color: T.inkDim }}>Cotação de seguro em parceria com</span>
+          <span style={{ fontSize: 12, color: T.inkDim }}>Cotação de seguro em parceria com</span>
           <a
             href="https://dbcorr.com.br/"
             target="_blank"
@@ -1155,13 +1265,35 @@ function CarImage({ src, alt, T }) {
   const [broken, setBroken] = useState(false);
   if (!src || broken) return null;
   return (
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      onError={() => setBroken(true)}
-      style={{ width: "100%", height: 150, objectFit: "contain", display: "block", background: T.panelAlt }}
-    />
+    // Palco fixo e claro nos dois temas: as fotos das marcas chegam em dois
+    // registros incompatíveis (recorte em fundo branco vs. foto editorial na
+    // estrada). Num painel escuro, o recorte branco vira um retângulo aceso ao
+    // lado de uma foto sangrada — o palco constante junta os dois num sistema
+    // só. O filtro tira o excesso de saturação da arte de fundo de cada marca.
+    <div
+      style={{
+        background: "#EDEAE1",
+        borderBottom: `1px solid ${T.line}`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "10px 12px",
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onError={() => setBroken(true)}
+        style={{
+          width: "100%",
+          height: 132,
+          objectFit: "contain",
+          display: "block",
+          filter: "saturate(0.88) contrast(1.02)",
+        }}
+      />
+    </div>
   );
 }
 
@@ -1169,21 +1301,45 @@ function MiniStat({ label, value, T }) {
   return (
     <div style={{ background: T.bg, borderRadius: 8, padding: "8px 6px", textAlign: "center" }}>
       <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 13, fontWeight: 600 }}>{value}</div>
-      <div style={{ fontSize: 9.5, color: T.inkDim, marginTop: 2, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
+      <div style={{ fontSize: 12, color: T.inkDim, marginTop: 3, textTransform: "uppercase", letterSpacing: 0.4 }}>{label}</div>
     </div>
   );
 }
 
 function Spec({ label, value, T, hint }) {
+  // Valor comprido (ex.: "PHEV combinado (motor a combustão + elétrico)") não
+  // cabe na mesma linha do rótulo: em vez de encostar um no outro, a linha
+  // vira duas — rótulo em cima, valor embaixo.
+  const stacked = typeof value === "string" && value.length > 28;
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", borderBottom: `1px solid ${T.line}`, padding: "5px 0" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: stacked ? "column" : "row",
+        justifyContent: "space-between",
+        alignItems: stacked ? "flex-start" : "baseline",
+        gap: stacked ? 3 : 12,
+        borderBottom: `1px solid ${T.line}`,
+        padding: "6px 0",
+      }}
+    >
       <span
         title={hint}
-        style={{ color: T.inkDim, ...(hint ? { borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" } : {}) }}
+        aria-label={hint ? `${label}: ${hint}` : undefined}
+        style={{ color: T.inkDim, flexShrink: 0, ...(hint ? { borderBottom: `1px dotted ${T.inkDim}`, cursor: "help" } : {}) }}
       >
         {label}
       </span>
-      <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 600 }}>{value ?? "—"}</span>
+      <span
+        style={{
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontWeight: 600,
+          textAlign: stacked ? "left" : "right",
+          lineHeight: 1.35,
+        }}
+      >
+        {value ?? "—"}
+      </span>
     </div>
   );
 }
@@ -1252,9 +1408,14 @@ function CompareModal({ cars, onClose, T }) {
   };
   const active = cars[activeIdx];
 
+  useEscapeToClose(onClose);
+
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
-      <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "85vh", overflow: "auto", padding: 16 }}>
+    <div className="ev-dialog-overlay" style={{ zIndex: 60 }}>
+      {/* tabela de até 4 carros: largura maior que a de um formulário, mas
+          ainda contida — no desktop é um diálogo, não uma folha colada na
+          borda inferior da tela */}
+      <div className="ev-dialog-panel" role="dialog" aria-modal="true" aria-label="Comparação de carros" style={{ background: T.panel, maxWidth: 1100 }}>
         {/* breakpoint só de exibição — as duas versões ficam no DOM, o CSS decide qual mostrar */}
         <style>{`
           .ev-compare-table { display: block; }
@@ -1266,11 +1427,11 @@ function CompareModal({ cars, onClose, T }) {
         `}</style>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
           <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16 }}>Comparação</div>
-          <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
+          <button onClick={onClose} aria-label="Fechar comparação" title="Fechar (Esc)" style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
         {distinctCategories.length > 1 && (
           <div style={{
-            fontSize: 12, color: T.accent2, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`,
+            fontSize: 12, color: T.accentText, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`,
             borderRadius: 8, padding: 10, marginBottom: 12
           }}>
             Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}) — pra uma comparação mais justa, prefira carros da mesma categoria.
@@ -1279,7 +1440,7 @@ function CompareModal({ cars, onClose, T }) {
 
         {/* ---------- TABELA (telas largas) ---------- */}
         <div className="ev-compare-table">
-          <div style={{ fontSize: 10.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
+          <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
             <ArrowRight size={11} /> Arraste pros lados pra ver mais carros — o nome do carro e o nome do atributo ficam fixos na tela.
           </div>
           <div style={{ overflowX: "auto", maxHeight: "60vh", overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: 8 }}>
@@ -1327,9 +1488,9 @@ function CompareModal({ cars, onClose, T }) {
                   borderRadius: 8, padding: "7px 9px",
                 }}
               >
-                <div style={{ fontSize: 10.5, fontWeight: 700, color: T.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
-                <div style={{ fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", color: T.accent2, marginTop: 2 }}>{money(c.price)}</div>
-                <div style={{ fontSize: 10, color: T.inkDim }}>{c.rangeKm != null ? `${c.rangeKm} km` : "—"}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: T.ink, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.name}</div>
+                <div style={{ fontSize: 12, fontFamily: "'IBM Plex Mono', monospace", color: T.accentText, marginTop: 2 }}>{money(c.price)}</div>
+                <div style={{ fontSize: 11.5, color: T.inkDim }}>{c.rangeKm != null ? `${c.rangeKm} km` : "—"}</div>
               </button>
             ))}
           </div>
@@ -1339,17 +1500,19 @@ function CompareModal({ cars, onClose, T }) {
             <button
               onClick={() => goTo(activeIdx - 1)}
               disabled={activeIdx === 0}
+              aria-label="Carro anterior"
               style={{ ...iconBtnStyle(T), opacity: activeIdx === 0 ? 0.35 : 1, cursor: activeIdx === 0 ? "default" : "pointer" }}
             >
               <ArrowLeft size={15} />
             </button>
             <div style={{ fontSize: 12.5, fontWeight: 700, textAlign: "center", flex: 1, fontFamily: "'Manrope', sans-serif" }}>
               {active.name}
-              <div style={{ fontSize: 10.5, color: T.inkDim, fontWeight: 400, marginTop: 1 }}>{activeIdx + 1} de {cars.length}</div>
+              <div style={{ fontSize: 11.5, color: T.inkDim, fontWeight: 400, marginTop: 1 }}>{activeIdx + 1} de {cars.length}</div>
             </div>
             <button
               onClick={() => goTo(activeIdx + 1)}
               disabled={activeIdx === cars.length - 1}
+              aria-label="Próximo carro"
               style={{ ...iconBtnStyle(T), opacity: activeIdx === cars.length - 1 ? 0.35 : 1, cursor: activeIdx === cars.length - 1 ? "default" : "pointer" }}
             >
               <ArrowRight size={15} />
@@ -1506,14 +1669,17 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
     color: T.ink, fontSize: 13, boxSizing: "border-box", width: "100%"
   };
   const labelStyle = { fontSize: 12.5, color: T.ink, fontWeight: 600, display: "flex", flexDirection: "column", gap: 5 };
-  const hintStyle = { fontSize: 10.5, color: T.inkDim, fontWeight: 400, lineHeight: 1.4 };
+  const hintStyle = { fontSize: 11.5, color: T.inkDim, fontWeight: 400, lineHeight: 1.45 };
+
+  useEscapeToClose(onClose);
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 60, display: "flex", alignItems: "flex-end" }}>
-      <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "88vh", overflow: "auto", padding: 16 }}>
+    <div className="ev-dialog-overlay" style={{ zIndex: 60 }}>
+      {/* formulário: largura de leitura (~620px), não a tela inteira */}
+      <div className="ev-dialog-panel" role="dialog" aria-modal="true" aria-label="Sua mobilidade" style={{ background: T.panel, maxWidth: 620 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
           <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16 }}>Sua mobilidade</div>
-          <button onClick={onClose} style={iconBtnStyle(T)}><X size={15} /></button>
+          <button onClick={onClose} aria-label="Fechar" title="Fechar (Esc)" style={iconBtnStyle(T)}><X size={15} /></button>
         </div>
         <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14, lineHeight: 1.5 }}>
           {hasCar
@@ -1574,7 +1740,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               <div style={{
                 display: "flex", alignItems: "center", gap: 6, marginBottom: 16, padding: "8px 10px",
                 borderRadius: 7, background: hexA(T.accent, 0.1), border: `1px solid ${T.accent}`,
-                fontSize: 11.5, color: T.accent, fontWeight: 600
+                fontSize: 11.5, color: T.accentText, fontWeight: 600
               }}>
                 <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
               </div>
@@ -1595,7 +1761,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
           </label>
         )}
 
-        <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, color: T.accent, marginBottom: 10, fontWeight: 700 }}>
+        <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.6, color: T.accentText, marginBottom: 10, fontWeight: 700 }}>
           Pra calcular sua economia mensal
         </div>
 
@@ -1635,7 +1801,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
                     type="button"
                     onClick={() => set("kmPerLiter", p.value)}
                     style={{
-                      fontSize: 10.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
+                      fontSize: 11.5, padding: "5px 9px", borderRadius: 999, cursor: "pointer",
                       background: Number(form.kmPerLiter) === p.value ? T.accentSoft : T.panelAlt,
                       color: Number(form.kmPerLiter) === p.value ? T.onGold : T.inkDim,
                       border: `1px solid ${Number(form.kmPerLiter) === p.value ? T.accentSoft : T.line}`, fontWeight: 600
