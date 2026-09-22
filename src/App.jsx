@@ -129,39 +129,39 @@ const RESPONSIVE_CSS = `
 // Corporate group / partnership per brand — helps compare who's really behind
 // each nameplate (shared platforms, ownership, joint ventures).
 const BRAND_GROUPS = {
-  "Geely": "Geely Holding Group — controla Volvo, Polestar, Zeekr, Lotus e a Smart (joint venture com a Mercedes-Benz)",
+  "Geely": "Geely Holding Group, controla Volvo, Polestar, Zeekr, Lotus e a Smart (joint venture com a Mercedes-Benz)",
   "Volvo": "Geely Holding Group (controladora desde 2010)",
   "Zeekr": "Geely Holding Group (marca premium do grupo)",
   "Smart": "Joint venture entre Geely Holding e Mercedes-Benz",
   "MG": "SAIC Motor (estatal chinesa)",
-  "GAC": "GAC Group (Guangzhou Automobile) — também tem joint ventures com Toyota e Honda na China",
-  "GWM": "Great Wall Motors — grupo independente, dono das marcas Haval, Tank e Wey",
-  "BYD": "BYD Company — grupo independente, dono também da Denza (joint venture com Mercedes-Benz) e Yangwang",
+  "GAC": "GAC Group (Guangzhou Automobile), também tem joint ventures com Toyota e Honda na China",
+  "GWM": "Great Wall Motors, grupo independente, dono das marcas Haval, Tank e Wey",
+  "BYD": "BYD Company, grupo independente, dono também da Denza (joint venture com Mercedes-Benz) e Yangwang",
   "Leapmotor": "Stellantis detém ~21% e é sócia via joint venture 'Leapmotor International' para distribuição fora da China",
-  "JAC": "JAC Motors — estatal de Anhui (China), com joint venture com a Volkswagen no mercado chinês",
-  "Renault": "Renault Group — parte da Aliança Renault-Nissan-Mitsubishi",
+  "JAC": "JAC Motors, estatal de Anhui (China), com joint venture com a Volkswagen no mercado chinês",
+  "Renault": "Renault Group, parte da Aliança Renault-Nissan-Mitsubishi",
   "Nissan": "Aliança Renault-Nissan-Mitsubishi",
   "Caoa Chery": "Joint venture entre o Grupo CAOA (Brasil) e a Chery Group (China)",
-  "Neta": "Hozon New Energy Automobile — startup chinesa independente",
-  "Honda": "Honda Motor Co. — independente",
+  "Neta": "Hozon New Energy Automobile, startup chinesa independente",
+  "Honda": "Honda Motor Co., independente",
   "Omoda": "Chery Group (submarca global Omoda/Jaecoo)",
   "Jetour": "Chery Group (submarca)",
   "JAECOO": "Chery Group (submarca, junto com Omoda)",
   "Fiat": "Stellantis",
   "Peugeot": "Stellantis",
   "Mini": "BMW Group",
-  "BMW": "BMW Group — independente",
+  "BMW": "BMW Group, independente",
   "Chevrolet": "General Motors",
   "Hyundai": "Hyundai Motor Group (inclui Kia e Genesis)",
   "Kia": "Hyundai Motor Group",
-  "Ford": "Ford Motor Company — independente (Mustang Mach-E vendido no Brasil via CAOA Ford)",
+  "Ford": "Ford Motor Company, independente (Mustang Mach-E vendido no Brasil via CAOA Ford)",
   "Audi": "Volkswagen Group",
-  "Land Rover": "Jaguar Land Rover (JLR) — controlada pela Tata Motors (Índia)",
+  "Land Rover": "Jaguar Land Rover (JLR), controlada pela Tata Motors (Índia)",
   "Porsche": "Volkswagen Group",
   "Lexus": "Toyota Motor Corporation (marca de luxo)",
   "Mitsubishi": "Aliança Renault-Nissan-Mitsubishi",
   "Denza": "BYD Company (marca premium, joint venture original com a Mercedes-Benz, hoje majoritariamente BYD)",
-  "Avatr": "Changan — joint venture com Huawei e CATL",
+  "Avatr": "Changan, joint venture com Huawei e CATL",
   "Jeep": "Stellantis",
 };
 
@@ -270,7 +270,7 @@ function badgesFor(car, best, T) {
       key: "pcd",
       icon: Accessibility,
       label: pcd === "provavel" ? "Preço dentro do teto usual de isenção PCD" : "Preço pode entrar no teto de isenção PCD",
-      title: "Referência aproximada — o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária.",
+      title: "Referência aproximada: o teto de isenção de ICMS pra PCD varia por estado. Confirme na Sefaz do seu estado e na concessionária.",
       color: T.accentText,
       border: T.accent,
       bg: hexA(T.accent, 0.08),
@@ -283,7 +283,7 @@ function badgesFor(car, best, T) {
       key: "hev-sem-beneficio",
       icon: Accessibility,
       label: "Sem benefício fiscal de elétrico",
-      title: "Os benefícios fiscais de elétrico (isenção de ICMS pra PCD, desconto de IPVA) valem, na maioria dos estados, só pra 100% elétrico e híbrido plug-in — não pra híbrido sem tomada. Confirme na Sefaz do seu estado.",
+      title: "Os benefícios fiscais de elétrico (isenção de ICMS pra PCD, desconto de IPVA) valem, na maioria dos estados, só pra 100% elétrico e híbrido plug-in, não pra híbrido sem tomada. Confirme na Sefaz do seu estado.",
       color: T.inkDim,
       border: T.line,
       bg: "transparent",
@@ -357,7 +357,7 @@ const TUTORIAL_STEPS = [
   {
     icon: Zap,
     title: "Filtro por público",
-    text: "Toque em Urbano, Família, Aventura, Performance ou Custo-Benefício — os carros reordenam mostrando primeiro os que mais combinam com esse perfil.",
+    text: "Toque em Urbano, Família, Aventura, Performance ou Custo-Benefício: os carros reordenam mostrando primeiro os que mais combinam com esse perfil.",
     refKey: "personaRow",
   },
   {
@@ -369,25 +369,25 @@ const TUTORIAL_STEPS = [
   {
     icon: Plug,
     title: "Selos rápidos",
-    text: "Cada card mostra selos de wallbox incluso, melhor público, tipo de eletrificação (PHEV/híbrido) e se o preço já foi checado — sem precisar abrir os detalhes.",
+    text: "Cada card mostra selos de wallbox incluso, melhor público, tipo de eletrificação (PHEV/híbrido) e se o preço já foi checado, sem precisar abrir os detalhes.",
     refKey: "badgeRow",
   },
   {
     icon: Check,
     title: "Comparar lado a lado",
-    text: "Marque até 4 carros que você está em dúvida tocando aqui. Uma barra aparece embaixo da tela — toque nela pra ver tudo lado a lado.",
+    text: "Marque até 4 carros que você está em dúvida tocando aqui. Uma barra aparece embaixo da tela: toque nela pra ver tudo lado a lado.",
     refKey: "compareBtn",
   },
   {
     icon: Fuel,
     title: "Sua mobilidade",
-    text: "Já tem carro? Cadastre aqui. Ainda não tem? Também dá — é só dizer quanto você gasta hoje com Uber/99/transporte público. Nos dois casos, cada elétrico passa a mostrar a economia mensal estimada.",
+    text: "Já tem carro? Cadastre aqui. Ainda não tem? Também dá: é só dizer quanto você gasta hoje com Uber/99/transporte público. Nos dois casos, cada elétrico passa a mostrar a economia mensal estimada.",
     refKey: "myCarBtn",
   },
   {
     icon: ShieldCheck,
     title: "Cotação de seguro",
-    text: "Decidiu o carro? Toque em Contratar seguro no card pra pedir uma cotação na hora, em parceria com a D&B Corretora — sem sair do comparador.",
+    text: "Decidiu o carro? Toque em Contratar seguro no card pra pedir uma cotação na hora, em parceria com a D&B Corretora, sem sair do comparador.",
     refKey: "insuranceBtn",
   },
 ];
@@ -645,7 +645,7 @@ export default function App() {
             href="https://dbcorr.com.br/"
             target="_blank"
             rel="noopener noreferrer"
-            title="D&B Corretora — parceira de seguros deste comparador"
+            title="D&B Corretora, parceira de seguros deste comparador"
             style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, textDecoration: "none", color: "inherit" }}
           >
             <img
@@ -816,7 +816,7 @@ export default function App() {
             </div>
             <div style={{ flex: 1, minWidth: 200 }}>
               <div style={{ fontWeight: 700, fontSize: 13, color: T.ink, marginBottom: 2 }}>
-                Quanto custaria um elétrico pra você — com ou sem carro hoje?
+                Quanto custaria um elétrico pra você, com ou sem carro hoje?
               </div>
               <div style={{ fontSize: 12, color: T.inkDim, lineHeight: 1.4 }}>
                 Leva menos de 1 minuto e não precisa saber todos os dados. Já tem carro? Comparamos com o combustível. Ainda não tem? Comparamos com o que você já gasta em Uber/99/transporte público.
@@ -956,7 +956,7 @@ export default function App() {
 
                     {car.techNotes ? (
                       <div style={{ fontSize: 12.5, color: T.inkDim, lineHeight: 1.5, marginBottom: 14 }}>
-                        <span style={{ color: T.accentText, fontWeight: 600 }}>Motor & bateria — </span>
+                        <span style={{ color: T.accentText, fontWeight: 600 }}>Motor e bateria: </span>
                         {car.techNotes}
                         {car.priceVerifiedDate && (
                           <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 6 }}>Ficha completa verificada em {car.priceVerifiedDate}.</div>
@@ -967,14 +967,14 @@ export default function App() {
                         {car.priceVerifiedDate ? (
                           <>Preço checado em {car.priceVerifiedDate} contra fonte oficial/imprensa recente. As demais specs técnicas (vão livre, porta-malas, garantia etc.) ainda vêm de fonte agregada e não foram verificadas individualmente.</>
                         ) : (
-                          <>Dados desse modelo vêm de fonte agregada de mercado (preço, autonomia, potência) e ainda não foram verificados individualmente — specs técnicas detalhadas faltando. Confirme na concessionária antes de decidir, ou complete no modo edição.</>
+                          <>Dados desse modelo vêm de fonte agregada de mercado (preço, autonomia, potência) e ainda não foram verificados individualmente. Faltam specs técnicas detalhadas: confirme na concessionária antes de decidir, ou complete no modo edição.</>
                         )}
                       </div>
                     )}
 
                     {BRAND_GROUPS[car.brand] && (
                       <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 10, padding: "8px 10px", background: T.panelAlt, borderRadius: 8, border: `1px solid ${T.line}` }}>
-                        <strong style={{ color: T.ink }}>{car.brand}</strong> — {BRAND_GROUPS[car.brand]}
+                        <strong style={{ color: T.ink }}>{car.brand}</strong>: {BRAND_GROUPS[car.brand]}
                       </div>
                     )}
 
@@ -997,8 +997,8 @@ export default function App() {
                         value={maintCostPer10k(car) ? money(maintCostPer10k(car)) : null}
                         hint={
                           car.maintenanceKmBase
-                            ? `Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas até ${car.maintenanceKmBase.toLocaleString("pt-BR")} km, normalizada numa taxa comparável a cada 10.000 km rodados.`
-                            : "Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes."
+                            ? `Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas até ${car.maintenanceKmBase.toLocaleString("pt-BR")} km, normalizada numa taxa comparável a cada 10.000 km rodados.`
+                            : "Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes."
                         }
                         T={T}
                       />
@@ -1100,7 +1100,7 @@ export default function App() {
                                     ~{money(d.ownershipMonthly)}/mês pra rodar este elétrico
                                   </div>
                                   <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
-                                    Não inclui parcela de financiamento nem seguro — só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
+                                    Não inclui parcela de financiamento nem seguro, só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
                                   </div>
                                 </div>
                               )}
@@ -1127,7 +1127,7 @@ export default function App() {
             ) : (
               <>
                 Seu carro atual: <strong style={{ color: T.ink }}>{myCar.name || "sem nome"}</strong>
-                {myCar.groundClearance != null && ` — vão livre ${myCar.groundClearance}mm`}
+                {myCar.groundClearance != null && `, vão livre ${myCar.groundClearance}mm`}
                 {myCar.trunkL != null && `, porta-malas ${myCar.trunkL}L`}.{" "}
               </>
             )}
@@ -1138,7 +1138,7 @@ export default function App() {
         )}
 
         <div style={{ marginTop: 10, fontSize: 12, color: T.inkDim, lineHeight: 1.5 }}>
-          Critério de inclusão: só carros eletrificados (100% elétricos, híbridos plug-in ou híbridos com motor elétrico que move o carro sozinho — mild-hybrid 48V não entra) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
+          Critério de inclusão: só carros eletrificados (100% elétricos, híbridos plug-in ou híbridos com motor elétrico que move o carro sozinho; mild-hybrid 48V não entra) com venda oficial confirmada por montadora/distribuidor no Brasil (rede de concessionárias própria). Marcas só disponíveis por importação independente (ex.: Tesla) não entram na lista.
         </div>
 
         <div style={{ marginTop: 14, padding: 14, borderRadius: 10, background: T.panel, border: `1px solid ${T.line}`, fontSize: 12, color: T.inkDim, lineHeight: 1.6 }}>
@@ -1146,18 +1146,18 @@ export default function App() {
             <Accessibility size={14} color={T.accent} /> Incentivos PCD e compra via CNPJ
           </div>
           <div style={{ marginBottom: 8 }}>
-            <strong style={{ color: T.ink }}>Isso não é orientação tributária</strong> — são regras gerais do governo, não um benefício oferecido pela marca do carro. Confirme sempre com a concessionária, a Receita Federal e a Sefaz do seu estado antes de decidir.
+            <strong style={{ color: T.ink }}>Isso não é orientação tributária</strong>: são regras gerais do governo, não um benefício oferecido pela marca do carro. Confirme sempre com a concessionária, a Receita Federal e a Sefaz do seu estado antes de decidir.
           </div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
             <Accessibility size={13} style={{ marginTop: 2, flexShrink: 0 }} />
             <div>
-              <strong style={{ color: T.ink }}>PCD (pessoa com deficiência):</strong> por lei federal costuma haver isenção de IPI, e muitos estados também isentam ou reduzem o ICMS — mas cada estado define seu próprio teto de preço e regras (geralmente entre R$ 120 mil e R$ 200 mil, variando e mudando com frequência). Exige laudo médico e processo prévio na Receita Federal (IPI) e na Sefaz do seu estado (ICMS). O selo "teto de isenção PCD" nos cards acima é só uma referência aproximada com base nessa faixa — não confirma elegibilidade.
+              <strong style={{ color: T.ink }}>PCD (pessoa com deficiência):</strong> por lei federal costuma haver isenção de IPI, e muitos estados também isentam ou reduzem o ICMS, mas cada estado define seu próprio teto de preço e regras (geralmente entre R$ 120 mil e R$ 200 mil, variando e mudando com frequência). Exige laudo médico e processo prévio na Receita Federal (IPI) e na Sefaz do seu estado (ICMS). O selo "teto de isenção PCD" nos cards acima é só uma referência aproximada com base nessa faixa, não confirma elegibilidade.
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
             <Briefcase size={13} style={{ marginTop: 2, flexShrink: 0 }} />
             <div>
-              <strong style={{ color: T.ink }}>CNPJ / frota:</strong> não existe desconto automático só por comprar em nome de empresa. Os benefícios reais são pontuais: locadoras e táxis têm regime especial de redução de IPI; empresas no Lucro Real podem aproveitar crédito de PIS/COFINS/ICMS sobre o veículo como ativo; e vários estados dão desconto ou isenção de IPVA pra elétricos e híbridos plug-in — isso vale tanto pra pessoa física quanto jurídica, não é exclusivo de CNPJ.
+              <strong style={{ color: T.ink }}>CNPJ / frota:</strong> não existe desconto automático só por comprar em nome de empresa. Os benefícios reais são pontuais: locadoras e táxis têm regime especial de redução de IPI; empresas no Lucro Real podem aproveitar crédito de PIS/COFINS/ICMS sobre o veículo como ativo; e vários estados dão desconto ou isenção de IPVA pra elétricos e híbridos plug-in. Isso vale tanto pra pessoa física quanto jurídica, não é exclusivo de CNPJ.
             </div>
           </div>
         </div>
@@ -1383,7 +1383,7 @@ function CompareModal({ cars, onClose, T }) {
     [
       "Manutenção (média/10k km)",
       (c) => (maintCostPer10k(c) ? money(maintCostPer10k(c)) : null),
-      "Não é o preço de uma revisão isolada — é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes.",
+      "Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes.",
     ],
   ];
   const distinctCategories = [...new Set(cars.map((c) => c.category))];
@@ -1434,14 +1434,14 @@ function CompareModal({ cars, onClose, T }) {
             fontSize: 12, color: T.accentText, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`,
             borderRadius: 8, padding: 10, marginBottom: 12
           }}>
-            Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}) — pra uma comparação mais justa, prefira carros da mesma categoria.
+            Você está comparando categorias diferentes ({distinctCategories.join(" vs ")}). Pra uma comparação mais justa, prefira carros da mesma categoria.
           </div>
         )}
 
         {/* ---------- TABELA (telas largas) ---------- */}
         <div className="ev-compare-table">
           <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 4 }}>
-            <ArrowRight size={11} /> Arraste pros lados pra ver mais carros — o nome do carro e o nome do atributo ficam fixos na tela.
+            <ArrowRight size={11} /> Arraste pros lados pra ver mais carros. O nome do carro e o nome do atributo ficam fixos na tela.
           </div>
           <div style={{ overflowX: "auto", maxHeight: "60vh", overflowY: "auto", border: `1px solid ${T.line}`, borderRadius: 8 }}>
             <table style={{ borderCollapse: "collapse", width: "100%", minWidth: cars.length * 150 }}>
@@ -1683,7 +1683,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
         </div>
         <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 14, lineHeight: 1.5 }}>
           {hasCar
-            ? "Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional — dá pra deixar em branco e completar depois."
+            ? "Preenchendo só o nome, a quilometragem mensal, o consumo e o preço do combustível, cada elétrico já mostra a economia mensal estimada. O resto é opcional, dá pra deixar em branco e completar depois."
             : "Preenchendo quanto você gasta hoje se locomovendo e quanto rodaria por mês, cada elétrico já mostra se compensaria trocar isso por um carro."}{" "}
           Fica salvo só no seu navegador; outras pessoas que abrirem este app não veem.
         </div>
@@ -1734,7 +1734,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               </datalist>
             </label>
             <div style={{ ...hintStyle, marginBottom: autoFillNote ? 8 : 16 }}>
-              Se reconhecermos a marca/modelo (ex.: os {COMMON_CARS.length} carros mais vendidos no Brasil), preenchemos vão livre, porta-malas, potência e consumo aproximados — dá pra ajustar qualquer valor depois.
+              Se reconhecermos a marca/modelo (ex.: os {COMMON_CARS.length} carros mais vendidos no Brasil), preenchemos vão livre, porta-malas, potência e consumo aproximados. Dá pra ajustar qualquer valor depois.
             </div>
             {autoFillNote && (
               <div style={{
@@ -1742,7 +1742,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
                 borderRadius: 7, background: hexA(T.accent, 0.1), border: `1px solid ${T.accent}`,
                 fontSize: 11.5, color: T.accentText, fontWeight: 600
               }}>
-                <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote} — confira abaixo e ajuste se souber o valor exato do seu carro.
+                <Check size={13} /> Preenchemos specs aproximadas do {autoFillNote}. Confira abaixo e ajuste se souber o valor exato do seu carro.
               </div>
             )}
           </>
@@ -1757,7 +1757,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
               placeholder="Ex.: 450"
               style={fieldStyle}
             />
-            <span style={hintStyle}>Some Uber/99, ônibus, metrô, aluguel de carro por app — o que você já gasta hoje pra se locomover.</span>
+            <span style={hintStyle}>Some Uber/99, ônibus, metrô, aluguel de carro por app: o que você já gasta hoje pra se locomover.</span>
           </label>
         )}
 
@@ -1774,7 +1774,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
             placeholder="Ex.: 1000"
             style={fieldStyle}
           />
-          <span style={hintStyle}>Não sabe o número exato? Uma estimativa de cabeça já ajuda — dá pra ajustar depois.</span>
+          <span style={hintStyle}>Não sabe o número exato? Uma estimativa de cabeça já ajuda. Dá pra ajustar depois.</span>
         </label>
 
         {hasCar && (
@@ -1842,7 +1842,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
         {hasCar && (
           <>
             <label style={{ ...labelStyle, marginBottom: 18 }}>
-              Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>— opcional</span>
+              Manutenção do seu carro (R$/ano) <span style={{ fontWeight: 400, color: T.inkDim }}>(opcional)</span>
               <input
                 type="number"
                 step="0.01"
@@ -1851,7 +1851,7 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
                 placeholder="Ex.: 1200"
                 style={fieldStyle}
               />
-              <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco — a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
+              <span style={hintStyle}>Some, por alto, o que você gastou em revisões, troca de óleo etc. no último ano. Não sabe? Deixe em branco: a economia de combustível/energia continua aparecendo normalmente, só sem a parte de manutenção.</span>
             </label>
 
             <button
@@ -1863,14 +1863,14 @@ function MyCarFormModal({ myCar, onSave, onClose, T }) {
                 color: T.inkDim, fontSize: 12, fontWeight: 600, cursor: "pointer"
               }}
             >
-              <span>Specs do carro (opcional — pra comparar espaço e potência)</span>
+              <span>Specs do carro (opcional, pra comparar espaço e potência)</span>
               {showSpecs ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </button>
 
             {showSpecs && (
               <div style={{ marginTop: 12 }}>
                 <div style={{ ...hintStyle, marginBottom: 10 }}>
-                  Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber — não afeta a economia mensal.
+                  Você encontra esses números na ficha técnica do manual do carro, ou pesquisando "[marca e modelo] ficha técnica". Pode deixar em branco o que não souber, não afeta a economia mensal.
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
                   <label style={labelStyle}>
