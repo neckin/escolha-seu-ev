@@ -60,13 +60,17 @@ const SEGFY_API_MODE = String(import.meta.env.VITE_SEGFY_API_MODE || "").toLower
 const SEGFY_SOCKET_URL = "https://socket-io.segfy.com";
 const SEGFY_VEHICLE_TYPE = "car"; // catálogo é só de carros elétricos/híbridos
 
-// TODO (bloqueante — falar com a D&B antes de ativar em produção):
-// quais seguradoras cotar e a comissão de cada uma (config.insurers da Segfy).
-// Isso é um dado comercial (comissão negociada por seguradora), não dá pra
-// adivinhar — a tela fica bloqueada com um aviso enquanto isto estiver vazio.
-// Formato: { name: "porto", commission: 0.2 } — nomes conforme o enum de
-// seguradoras da própria Segfy (ex.: porto, hdi, allianz, azul, mapfre...).
-const QUOTED_INSURERS = [];
+// Seguradoras cotadas e comissão de cada uma, definidas com a D&B (10% em
+// todas). Nomes conforme o enum de seguradoras da própria Segfy.
+const QUOTED_INSURERS = [
+  { name: "porto", commission: 0.1 },
+  { name: "azul", commission: 0.1 },
+  { name: "itau", commission: 0.1 },
+  { name: "allianz", commission: 0.1 },
+  { name: "liberty", commission: 0.1 },
+  { name: "bradesco", commission: 0.1 },
+  { name: "suhai", commission: 0.1 },
+];
 
 // TODO (revisar com a D&B): pacote de cobertura padrão desta cotação "rápida".
 // A API exige esses 7 campos em toda chamada; valores abaixo são um chute
