@@ -1,18 +1,24 @@
 // Proxy autenticado para as APIs de cotação de veículo da Segfy.
 // Só repassa para os endpoints explicitamente listados abaixo (nunca um proxy
-// genérico) — assim o front nunca precisa conhecer nem manipular client_id/secret.
+// genérico) — assim o front nunca precisa conhecer client_id/secret nem o
+// token da corretora (config.token), injetado aqui em toda chamada.
+//
+// Todos os endpoints do ramo Veículo são POST com corpo JSON contendo
+// { config: {...}, data: {...} }. O campo config.token identifica a
+// corretora perante a Segfy e é obrigatório em toda chamada — por segurança
+// o valor enviado pelo cliente nesse campo é sempre ignorado/sobrescrito.
 
 import { segfyRequest } from "../../_lib/segfyClient.js";
 
 const ACTIONS = {
-  "brand-list": { method: "GET", path: "/api/vehicle/version/1.0/brand-list" },
-  "model-list": { method: "GET", path: "/api/vehicle/version/1.0/model-list" },
-  "profession-list": { method: "GET", path: "/api/vehicle/version/1.0/profession-list" },
-  "renewal-list": { method: "GET", path: "/api/vehicle/version/1.0/renewal-list" },
-  calculate: { method: "POST", path: "/api/vehicle/version/1.0/calculate" },
-  "save-customer": { method: "POST", path: "/api/vehicle/version/1.0/save-customer" },
-  "show-quotation": { method: "GET", path: "/api/vehicle/version/1.0/show-quotation" },
-  "show-results": { method: "GET", path: "/api/vehicle/version/1.0/show-results" },
+  "brand-list": "/api/vehicle/version/1.0/brand-list",
+  "model-list": "/api/vehicle/version/1.0/model-list",
+  "profession-list": "/api/vehicle/version/1.0/profession-list",
+  "renewal-list": "/api/vehicle/version/1.0/renewal-list",
+  calculate: "/api/vehicle/version/1.0/calculate",
+  "save-customer": "/api/vehicle/version/1.0/save-customer",
+  "show-quotation": "/api/vehicle/version/1.0/show-quotation",
+  "show-results": "/api/vehicle/version/1.0/show-results",
 };
 
 function isAllowedOrigin(req) {
@@ -27,17 +33,34 @@ function isAllowedOrigin(req) {
     .some((entry) => origin.startsWith(entry));
 }
 
-export default async function handler(req, res) {
-  const { action, ...query } = req.query;
-  const route = ACTIONS[action];
+function withBrokerToken(body) {
+  const base = body && typeof body === "object" ? body : {};
+  const brokerToken = process.env.SEGFY_BROKER_TOKEN;
 
-  if (!route) {
+  if (!brokerToken) {
+    throw new Error("SEGFY_BROKER_TOKEN não configurado nas variáveis de ambiente.");
+  }
+
+  return {
+    ...base,
+    config: {
+      ...(base.config && typeof base.config === "object" ? base.config : {}),
+      token: brokerToken,
+    },
+  };
+}
+
+export default async function handler(req, res) {
+  const { action } = req.query;
+  const path = ACTIONS[action];
+
+  if (!path) {
     res.status(404).json({ error: "Ação inválida." });
     return;
   }
 
-  if (req.method !== route.method) {
-    res.status(405).json({ error: `Use ${route.method} para esta ação.` });
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "Use POST para esta ação." });
     return;
   }
 
@@ -47,12 +70,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { status, data } = await segfyRequest(route.path, {
-      method: route.method,
-      query: route.method === "GET" ? query : undefined,
-      body: route.method === "POST" ? req.body : undefined,
-    });
-
+    const body = withBrokerToken(req.body);
+    const { status, data } = await segfyRequest(path, { method: "POST", body });
     res.status(status).json(data);
   } catch (error) {
     console.error(`[segfy:${action}]`, error.message);
