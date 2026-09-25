@@ -6,3 +6,6 @@ dist
 
 # Documentos de marca (manual de identidade visual etc.) — não versionar
 brand-docs/
+.vercel
+.env*
+!.env.example
