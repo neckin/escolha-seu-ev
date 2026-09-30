@@ -220,7 +220,7 @@ const MOCK_INSURERS = [
 ];
 
 function mockQuote(car, factor) {
-  const base = (car.price || 150000) * factor;
+  const base = (car?.price || 150000) * factor;
   return { annual: Math.round(base / 10) * 10, monthly: Math.round(base / 12) };
 }
 
@@ -265,7 +265,10 @@ function isValidCpf(raw) {
 
 const YEARS = Array.from({ length: 15 }, (_, i) => new Date().getFullYear() + 1 - i);
 
-export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
+// `car` é opcional: sem ele (página /cotacao, embutível no site da D&B) a
+// pessoa escolhe marca e modelo do zero. `embedded` troca o modal por uma
+// página inline, sem overlay nem botão de fechar.
+export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, embedded = false }) {
   const useRealWidget = Boolean(SEGFY_TOKEN) && !SEGFY_API_MODE;
   const useApiMode = SEGFY_API_MODE;
 
@@ -402,10 +405,10 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
   // uma vez — depois disso o usuário tem total liberdade pra trocar).
   useEffect(() => {
     if (!useApiMode || brandAutoPickedRef.current || brands.length === 0) return;
-    const match = brands.find((b) => b.value.toLowerCase() === (car.brand || "").toLowerCase());
+    const match = brands.find((b) => b.value.toLowerCase() === (car?.brand || "").toLowerCase());
     if (match) setSelectedBrandId(match.id);
     brandAutoPickedRef.current = true;
-  }, [useApiMode, brands, car.brand]);
+  }, [useApiMode, brands, car?.brand]);
 
   // ---- modo API própria: carrega modelos reais quando marca + ano estão definidos ----
   useEffect(() => {
@@ -462,6 +465,19 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
       clearTimeout(timer);
     };
   }, [useApiMode, professionQuery, profession]);
+
+  // Embutido via iframe: avisa a página-mãe da altura do conteúdo, para o
+  // site da D&B ajustar o iframe sem barra de rolagem interna. A altura não é
+  // dado sensível, por isso o targetOrigin "*".
+  useEffect(() => {
+    if (!embedded || window.parent === window) return;
+    const post = () =>
+      window.parent.postMessage({ type: "dbcorr-cotacao:height", height: document.documentElement.scrollHeight }, "*");
+    const ro = new ResizeObserver(post);
+    ro.observe(document.body);
+    post();
+    return () => ro.disconnect();
+  }, [embedded]);
 
   // Encerra a conexão do socket (e o timer de resultados) ao fechar o modal.
   useEffect(() => () => {
@@ -743,8 +759,12 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
   const twoCols = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 70, display: "flex", alignItems: "flex-end" }}>
-      <div style={{ background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "92vh", overflow: "auto", padding: 16, margin: "0 auto", maxWidth: 640 }}>
+    <div style={embedded
+      ? { background: T.panel, color: T.ink, fontFamily: "'Inter', sans-serif" }
+      : { position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 70, display: "flex", alignItems: "flex-end" }}>
+      <div style={embedded
+        ? { width: "100%", padding: 16, margin: "0 auto", maxWidth: 640, boxSizing: "border-box" }
+        : { background: T.panel, borderRadius: "16px 16px 0 0", width: "100%", maxHeight: "92vh", overflow: "auto", padding: 16, margin: "0 auto", maxWidth: 640 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6, gap: 10 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
             <img
@@ -754,14 +774,14 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
             />
             <div style={{ minWidth: 0 }}>
               <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, display: "flex", alignItems: "center", gap: 7 }}>
-                <ShieldCheck size={17} color={T.accent} /> Cotar seguro: {car.name}
+                <ShieldCheck size={17} color={T.accent} /> {car ? `Cotar seguro: ${car.name}` : "Cotar seguro auto"}
               </div>
               <div style={{ fontSize: 11, color: T.inkDim, marginTop: 2 }}>Cotação via Segfy, processada pela D&B Corretora</div>
             </div>
           </div>
-          <button onClick={onClose} style={{ width: 36, height: 36, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}`, color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+          {!embedded && <button onClick={onClose} style={{ width: 36, height: 36, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}`, color: T.inkDim, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
             <X size={15} />
-          </button>
+          </button>}
         </div>
 
         {!useRealWidget && !useApiMode && (
@@ -788,7 +808,7 @@ export default function InsuranceModal({ car, onClose, T, onOpenPrivacy }) {
             {showStep1 && (
             <>
             <div style={{ fontSize: 12, color: T.inkDim, marginBottom: 16, lineHeight: 1.5 }}>
-              Preencha seus dados para cotar o seguro deste veículo. Suas informações são compartilhadas com a
+              Preencha seus dados para cotar o seguro {car ? "deste veículo" : "do seu veículo"}. Suas informações são compartilhadas com a
               Segfy e a D&B Corretora apenas para gerar e processar a cotação; veja como tratamos seus
               dados na{" "}
               <button

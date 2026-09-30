@@ -395,6 +395,9 @@ const TUTORIAL_STEPS = [
 export default function App() {
   // rota simples via hash (#/privacidade) — sem dependência de router nem
   // de configuração de servidor para fallback de SPA
+  // Exceção: /cotacao é um caminho real (não hash) porque é a URL que o site
+  // da D&B embute via iframe; o vercel.json reescreve para o index.html.
+  const isQuotePage = window.location.pathname.replace(/\/+$/, "") === "/cotacao";
   const [route, setRoute] = useState(() => window.location.hash.replace(/^#\/?/, ""));
   useEffect(() => {
     const onHashChange = () => setRoute(window.location.hash.replace(/^#\/?/, ""));
@@ -439,7 +442,7 @@ export default function App() {
   useEffect(() => {
     // página estática, não precisa do catálogo; e se o usuário só passou por
     // aqui e já tinha carregado antes, não recarrega ao voltar
-    if (route === "privacidade" || cars !== null) { setLoading(false); return; }
+    if (isQuotePage || route === "privacidade" || cars !== null) { setLoading(false); return; }
     (async () => {
       try {
         // O Supabase é a fonte da verdade do catálogo (visto por todo mundo,
@@ -616,6 +619,21 @@ export default function App() {
       prev.includes(id) ? prev.filter((x) => x !== id) : prev.length >= 4 ? prev : [...prev, id]
     );
   };
+
+  if (isQuotePage) {
+    return (
+      <>
+        {/* sem min-height: 100vh no conteúdo, senão o auto-ajuste de altura
+            do iframe nunca encolhe; o fundo vai no body */}
+        <style>{`${FONT_IMPORT} body { background: ${T.panel}; }`}</style>
+        <InsuranceModal
+          embedded
+          T={T}
+          onOpenPrivacy={() => window.open("/#/privacidade", "_blank", "noopener")}
+        />
+      </>
+    );
+  }
 
   if (route === "privacidade") {
     return <PrivacyPage T={T} onBack={() => { window.location.hash = ""; }} />;
