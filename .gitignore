@@ -9,3 +9,18 @@ brand-docs/
 .vercel
 .env*
 !.env.example
+
+# Ferramentas locais de IA/design e artefatos de teste — não versionar
+impeccable/
+.impeccable/
+.playwright-mcp/
+.agents/
+.claude-flow/
+.codex/
+.github/hooks/
+.claude/settings.local.json
+.claude/proven-config.json
+.claude/.proven-config-version
+.claude/skills/
+skills-lock.json
+mockup-direcao-3-cinematico.html
