@@ -25,7 +25,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://bundles.segfy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://bundles.segfy.com https://*.segfy.com; frame-src https://bundles.segfy.com https://*.segfy.com; worker-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://bundles.segfy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://bundles.segfy.com https://*.segfy.com wss://*.segfy.com; frame-src https://bundles.segfy.com https://*.segfy.com; worker-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
         }
       ]
     },
@@ -50,7 +50,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://bundles.segfy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://bundles.segfy.com https://*.segfy.com; frame-src https://bundles.segfy.com https://*.segfy.com; worker-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' https://dbcorr.com.br https://*.dbcorr.com.br;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://bundles.segfy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://bundles.segfy.com https://*.segfy.com wss://*.segfy.com; frame-src https://bundles.segfy.com https://*.segfy.com; worker-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'self' https://dbcorr.com.br https://*.dbcorr.com.br;"
         }
       ]
     }
