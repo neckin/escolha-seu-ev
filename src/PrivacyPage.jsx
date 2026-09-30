@@ -12,7 +12,7 @@
 // ---------------------------------------------------------------------------
 
 import React from "react";
-import { ArrowLeft, ShieldCheck, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 function Section({ title, children, T }) {
   return (
@@ -50,22 +50,11 @@ export default function PrivacyPage({ T, onBack }) {
       </header>
 
       <main style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px 80px" }}>
-        <div style={{
-          display: "flex", gap: 9, alignItems: "flex-start", marginBottom: 28, padding: "10px 12px",
-          borderRadius: 8, background: hexA(T.accent2, 0.1), border: `1px dashed ${T.accent2}`,
-        }}>
-          <AlertTriangle size={15} color={T.accent2} style={{ marginTop: 1, flexShrink: 0 }} />
-          <div style={{ fontSize: 11.5, color: T.ink, lineHeight: 1.6 }}>
-            Rascunho inicial gerado para revisão. Os campos marcados como <strong>[PREENCHER]</strong> exigem a
-            identificação real do responsável pelo site e um contato válido para o encarregado de dados (DPO)
-            antes de publicar — isso é exigência legal da LGPD, não pode ficar genérico.
-          </div>
-        </div>
 
         <Section title="1. Introdução" T={T}>
           Esta página explica como o <strong style={{ color: T.ink }}>Escolha seu EV</strong> coleta, usa e
           protege dados ao longo do site, em conformidade com a Lei Geral de Proteção de Dados (Lei nº
-          13.709/2018 — LGPD). Ela se aplica a todo o site, incluindo o comparador de carros e o fluxo de
+          13.709/2018, LGPD). Ela se aplica a todo o site, incluindo o comparador de carros e o fluxo de
           cotação de seguro.
         </Section>
 
@@ -77,47 +66,79 @@ export default function PrivacyPage({ T, onBack }) {
         </Section>
 
         <Section title="3. Quais dados coletamos" T={T}>
-          <strong style={{ color: T.ink }}>Uso normal do comparador</strong> — tema (claro/escuro), o carro que
+          <strong style={{ color: T.ink }}>Uso normal do comparador</strong>: tema (claro/escuro), o carro que
           você cadastrar como "meu carro atual" e se você já viu o tutorial. Esses dados ficam salvos apenas no{" "}
           <em>localStorage</em> do seu navegador, nunca são enviados a nós nem a terceiros, e não identificam
           você pessoalmente.
           <br /><br />
-          <strong style={{ color: T.ink }}>Catálogo de carros</strong> — carregado de um banco de dados
+          <strong style={{ color: T.ink }}>Catálogo de carros</strong>: carregado de um banco de dados
           (Supabase) igual para todos os visitantes; não envolve dado pessoal seu.
           <br /><br />
-          <strong style={{ color: T.ink }}>Cotação de seguro</strong> — se você usar o recurso "Contratar
-          seguro" em algum carro, coletamos os dados que você digitar no formulário: nome completo, CPF,
-          telefone, e-mail, CEP (opcional), ano do veículo e tipo de uso. Esses dados só são coletados se você
-          iniciar essa ação voluntariamente.
+          <strong style={{ color: T.ink }}>Cotação de seguro</strong>: se você usar o recurso "Contratar
+          seguro" em algum carro, coletamos os dados que você digitar no formulário:
+          <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 20 }}>
+            <li>Nome completo</li>
+            <li>CPF</li>
+            <li>Telefone</li>
+            <li>E-mail</li>
+            <li>CEP</li>
+            <li>Data de nascimento, sexo, estado civil e profissão</li>
+            <li>Ano, marca e modelo do veículo e tipo de uso (particular ou app)</li>
+            <li>
+              Respostas do questionário de risco exigido pelas seguradoras: tipo de moradia, garagem em casa,
+              no trabalho e no estudo, uso do carro, km rodados por mês, distância até o trabalho, outros
+              condutores e faixa de idade, se o carro é 0 km, financiado, blindado, com kit gás, rastreador ou
+              chassi remarcado, isenção de impostos, e dados do seguro atual (seguradora, fim da vigência,
+              classe de bônus e sinistros), quando houver
+            </li>
+          </ul>
+          <br />
+          Esses dados são enviados diretamente à plataforma da Segfy no momento em que você clica em
+          "Calcular cotação"; <strong style={{ color: T.ink }}>eles nunca são armazenados no banco de dados
+          deste site</strong>. A coleta só ocorre se você iniciar essa ação voluntariamente e concordar
+          com o termo de consentimento exibido no formulário.
+          <br /><br />
+          Se, depois da cotação, você clicar em "Quero este plano", a D&B Corretora recebe por e-mail seu nome,
+          telefone, e-mail, o veículo e o plano escolhido, para entrar em contato com você, e você recebe no seu
+          e-mail um resumo da cotação.
         </Section>
 
         <Section title="4. Para que usamos seus dados" T={T}>
           Os dados de navegação (tema, meu carro, tutorial) servem só para personalizar sua experiência no seu
           próprio navegador. Os dados do formulário de seguro são usados exclusivamente para calcular e, caso
           você opte por prosseguir, viabilizar a contratação da apólice de seguro do veículo escolhido.
+          Não utilizamos esses dados para fins de marketing, criação de perfis ou qualquer outra finalidade
+          além da cotação/contratação solicitada.
         </Section>
 
         <Section title="5. Com quem compartilhamos" T={T}>
           Não vendemos dados pessoais. Ao solicitar uma cotação de seguro, os dados informados no formulário são
-          compartilhados com a <strong style={{ color: T.ink }}>Segfy</strong> (plataforma de cotação) e com a{" "}
-          <strong style={{ color: T.ink }}>corretora parceira responsável pela apólice</strong>, unicamente para
-          processar a cotação/contratação solicitada por você. Nenhum outro dado de navegação do site é
+          compartilhados com a <strong style={{ color: T.ink }}>Segfy</strong> (plataforma de multicálculo de
+          seguros) e com a{" "}
+          <strong style={{ color: T.ink }}>D&B Corretora</strong> (corretora responsável pela apólice), unicamente para
+          processar a cotação e, se você optar, a contratação solicitada. Nenhum outro dado de navegação do site é
           compartilhado com essas empresas.
+          <br /><br />
+          Os e-mails de confirmação são enviados a partir de uma caixa de e-mail da própria D&B Corretora.
+          <br /><br />
+          Tanto a Segfy quanto a D&B Corretora possuem suas próprias políticas de privacidade e são responsáveis
+          pelo tratamento dos dados no âmbito de suas plataformas após o recebimento.
         </Section>
 
         <Section title="6. Base legal" T={T}>
           O tratamento dos dados do formulário de seguro se baseia no seu{" "}
           <strong style={{ color: T.ink }}>consentimento</strong> (art. 7º, I, LGPD), dado explicitamente ao
           marcar a caixa de autorização antes de calcular a cotação, e na{" "}
-          <strong style={{ color: T.ink }}>execução de procedimentos preliminares/contrato</strong> (art. 7º, V)
-          quando você opta por contratar. Os dados de navegação salvos no seu próprio navegador não envolvem
-          tratamento de dados pessoais por nós.
+          <strong style={{ color: T.ink }}>execução de procedimentos preliminares relacionados a contrato</strong>{" "}
+          (art. 7º, V) quando você opta por contratar. Os dados de navegação salvos no seu próprio navegador não
+          envolvem tratamento de dados pessoais por nós.
         </Section>
 
         <Section title="7. Por quanto tempo guardamos" T={T}>
-          Dados de navegação ficam no seu navegador até você limpá-los ou até o site os sobrescrever. Dados do
-          formulário de seguro são retidos pelo tempo necessário para a cotação/contratação e conforme as
-          obrigações legais da corretora e da Segfy (ex.: prazos regulatórios do setor de seguros).
+          Dados de navegação ficam no seu navegador até você limpá-los ou até o site os sobrescrever.{" "}
+          <strong style={{ color: T.ink }}>Os dados do formulário de seguro não são armazenados neste site</strong>:
+          eles vão diretamente para a Segfy e a D&B Corretora, que os retêm pelo tempo necessário para a
+          cotação/contratação e conforme suas obrigações legais (ex.: prazos regulatórios do setor de seguros).
         </Section>
 
         <Section title="8. Seus direitos" T={T}>
@@ -125,6 +146,9 @@ export default function PrivacyPage({ T, onBack }) {
           tratamento, acesso aos dados, correção de dados incompletos ou desatualizados, anonimização/bloqueio/
           eliminação de dados desnecessários, portabilidade, eliminação dos dados tratados com base em
           consentimento, informação sobre com quem compartilhamos seus dados, e revogação do consentimento.
+          <br /><br />
+          Para dados encaminhados à Segfy ou à D&B Corretora, você pode exercer seus direitos diretamente
+          junto a essas empresas por meio dos canais de atendimento delas.
         </Section>
 
         <Section title="9. Como exercer seus direitos" T={T}>
@@ -138,13 +162,20 @@ export default function PrivacyPage({ T, onBack }) {
           momento nas configurações do seu navegador.
         </Section>
 
-        <Section title="11. Alterações desta política" T={T}>
+        <Section title="11. Segurança" T={T}>
+          O site é servido exclusivamente via HTTPS (conexão criptografada). Os headers de segurança HTTP
+          estão configurados para proteger contra ataques comuns (clickjacking, MIME sniffing, injeção de
+          scripts). Os dados do formulário de cotação trafegam diretamente para os servidores da Segfy, sem
+          passar por servidores deste site.
+        </Section>
+
+        <Section title="12. Alterações desta política" T={T}>
           Podemos atualizar esta página conforme o site evoluir. A data da última atualização está sempre
           indicada abaixo.
         </Section>
 
         <div style={{ fontSize: 11, color: T.inkDim, marginTop: 32, paddingTop: 16, borderTop: `1px solid ${T.line}` }}>
-          Última atualização: [PREENCHER na publicação]
+          Última atualização: setembro de 2026
         </div>
       </main>
     </div>

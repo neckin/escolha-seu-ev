@@ -50,6 +50,22 @@ function withBrokerToken(body) {
   };
 }
 
+// A Segfy ecoa o token da corretora em várias respostas (config.token no
+// calculate; token no topo e em data.config no show-results). Remove qualquer
+// campo com esse valor, em qualquer nível, antes de repassar ao navegador.
+function withoutBrokerToken(value) {
+  const brokerToken = process.env.SEGFY_BROKER_TOKEN;
+  if (Array.isArray(value)) return value.map(withoutBrokerToken);
+  if (!value || typeof value !== "object") return value;
+
+  const clean = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (brokerToken && entry === brokerToken) continue;
+    clean[key] = withoutBrokerToken(entry);
+  }
+  return clean;
+}
+
 export default async function handler(req, res) {
   const { action } = req.query;
   const path = ACTIONS[action];
@@ -72,7 +88,7 @@ export default async function handler(req, res) {
   try {
     const body = withBrokerToken(req.body);
     const { status, data } = await segfyRequest(path, { method: "POST", body });
-    res.status(status).json(data);
+    res.status(status).json(withoutBrokerToken(data));
   } catch (error) {
     console.error(`[segfy:${action}]`, error.message);
     res.status(502).json({ error: "Falha ao comunicar com a Segfy." });
