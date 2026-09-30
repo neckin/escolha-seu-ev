@@ -10,7 +10,7 @@
 //
 // E-mail via SMTP da caixa de automações da D&B. Variáveis (só no servidor):
 //   SMTP_HOST, SMTP_PORT (465 = SSL/TLS), SMTP_USER, SMTP_PASS
-//   EMAIL_FROM      — remetente, ex.: "D&B Corretora <automacoes@dbcorretora.net.br>"
+//   EMAIL_FROM      — remetente, ex.: "D&B Corretora <automacoes@dbcorr.com.br>"
 //   DB_NOTIFY_EMAIL — quem recebe o aviso na D&B
 
 import nodemailer from "nodemailer";
