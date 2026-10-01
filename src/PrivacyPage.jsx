@@ -4,11 +4,9 @@
 // Acessível em #/privacidade (rota client-side simples, via hash — sem
 // dependência de router nem de configuração de servidor).
 //
-// IMPORTANTE: os trechos marcados com [PREENCHER: ...] precisam da
-// identificação real do responsável pelo tratamento de dados (empresa/CNPJ
-// ou pessoa física, conforme como o site for operado) e de um contato válido
-// do encarregado (DPO) antes de publicar isto em produção — são exigências
-// legais da LGPD (arts. 41 e 48), não algo que dá para inventar.
+// Controladora e contato do encarregado informados pela D&B em 01/10/2026
+// (exigências da LGPD, arts. 41 e 48). Ao mudar o fluxo de dados do site
+// (novo serviço, novo destino de e-mail, armazenamento), revisar esta página.
 // ---------------------------------------------------------------------------
 
 import React from "react";
@@ -59,10 +57,11 @@ export default function PrivacyPage({ T, onBack }) {
         </Section>
 
         <Section title="2. Quem é o responsável pelo tratamento" T={T}>
-          <strong style={{ color: T.ink }}>[PREENCHER: razão social/nome e CNPJ ou CPF do responsável pelo site]</strong>,
-          doravante "nós", é quem decide como e por que os dados descritos aqui são tratados.
+          <strong style={{ color: T.ink }}>D'Agostino e Barreto Corretora de Seguros Ltda</strong> (D&B
+          Corretora), CNPJ 29.079.868/0001-00, doravante "nós", é a controladora dos dados: quem decide como e
+          por que os dados descritos aqui são tratados.
           <br /><br />
-          Contato do encarregado de dados (DPO): <strong style={{ color: T.ink }}>[PREENCHER: e-mail de contato]</strong>.
+          Contato do encarregado de dados (DPO): <strong style={{ color: T.ink }}>adm@dbcorr.com.br</strong>.
         </Section>
 
         <Section title="3. Quais dados coletamos" T={T}>
@@ -74,8 +73,9 @@ export default function PrivacyPage({ T, onBack }) {
           <strong style={{ color: T.ink }}>Catálogo de carros</strong>: carregado de um banco de dados
           (Supabase) igual para todos os visitantes; não envolve dado pessoal seu.
           <br /><br />
-          <strong style={{ color: T.ink }}>Cotação de seguro</strong>: se você usar o recurso "Contratar
-          seguro" em algum carro, coletamos os dados que você digitar no formulário:
+          <strong style={{ color: T.ink }}>Cotação de seguro</strong>: se você pedir uma cotação, pelo botão
+          "Contratar seguro" de um carro ou pela página de cotação (inclusive quando ela aparece dentro do site
+          da D&B Corretora), coletamos os dados que você digitar no formulário:
           <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 20 }}>
             <li>Nome completo</li>
             <li>CPF</li>
@@ -93,14 +93,14 @@ export default function PrivacyPage({ T, onBack }) {
             </li>
           </ul>
           <br />
-          Esses dados são enviados diretamente à plataforma da Segfy no momento em que você clica em
-          "Calcular cotação"; <strong style={{ color: T.ink }}>eles nunca são armazenados no banco de dados
-          deste site</strong>. A coleta só ocorre se você iniciar essa ação voluntariamente e concordar
+          Esses dados são enviados à plataforma da Segfy no momento em que você clica em "Calcular cotação",
+          passando pelo servidor do site apenas para serem encaminhados;{" "}
+          <strong style={{ color: T.ink }}>eles nunca são armazenados no banco de dados deste site</strong>. A coleta só ocorre se você iniciar essa ação voluntariamente e concordar
           com o termo de consentimento exibido no formulário.
           <br /><br />
-          Se, depois da cotação, você clicar em "Quero este plano", a D&B Corretora recebe por e-mail seu nome,
-          telefone, e-mail, o veículo e o plano escolhido, para entrar em contato com você, e você recebe no seu
-          e-mail um resumo da cotação.
+          Se, depois da cotação, você clicar em "Quero este plano", nós recebemos por e-mail seu nome, telefone,
+          e-mail, o veículo, o plano e a forma de pagamento escolhidos, para entrar em contato com você, e você
+          recebe no seu e-mail um resumo da cotação.
         </Section>
 
         <Section title="4. Para que usamos seus dados" T={T}>
@@ -112,17 +112,27 @@ export default function PrivacyPage({ T, onBack }) {
         </Section>
 
         <Section title="5. Com quem compartilhamos" T={T}>
-          Não vendemos dados pessoais. Ao solicitar uma cotação de seguro, os dados informados no formulário são
-          compartilhados com a <strong style={{ color: T.ink }}>Segfy</strong> (plataforma de multicálculo de
-          seguros) e com a{" "}
-          <strong style={{ color: T.ink }}>D&B Corretora</strong> (corretora responsável pela apólice), unicamente para
-          processar a cotação e, se você optar, a contratação solicitada. Nenhum outro dado de navegação do site é
-          compartilhado com essas empresas.
-          <br /><br />
-          Os e-mails de confirmação são enviados a partir de uma caixa de e-mail da própria D&B Corretora.
-          <br /><br />
-          Tanto a Segfy quanto a D&B Corretora possuem suas próprias políticas de privacidade e são responsáveis
-          pelo tratamento dos dados no âmbito de suas plataformas após o recebimento.
+          Não vendemos dados pessoais. Para calcular a cotação e, se você optar, viabilizar a contratação,
+          compartilhamos os dados do formulário apenas com:
+          <ul style={{ marginTop: 8, marginBottom: 0, paddingLeft: 20 }}>
+            <li>
+              <strong style={{ color: T.ink }}>Segfy</strong>, plataforma de multicálculo que usamos para calcular
+              a cotação;
+            </li>
+            <li>
+              <strong style={{ color: T.ink }}>as seguradoras consultadas</strong> por meio da Segfy (Porto Seguro,
+              Azul, Itaú, Allianz, Liberty, Bradesco, Suhai e Mitsui Sumitomo), que precisam dos dados para
+              calcular o preço e, na contratação, emitir a apólice;
+            </li>
+            <li>
+              <strong style={{ color: T.ink }}>prestadores de infraestrutura</strong>: a Vercel, que hospeda o site
+              e o servidor que encaminha a cotação, e a HostGator, que hospeda a caixa de e-mail da qual enviamos
+              os e-mails de confirmação.
+            </li>
+          </ul>
+          <br />
+          Nenhum dado de navegação do site é compartilhado com essas empresas. As seguradoras e a Segfy também
+          seguem suas próprias políticas de privacidade.
         </Section>
 
         <Section title="6. Base legal" T={T}>
@@ -137,8 +147,9 @@ export default function PrivacyPage({ T, onBack }) {
         <Section title="7. Por quanto tempo guardamos" T={T}>
           Dados de navegação ficam no seu navegador até você limpá-los ou até o site os sobrescrever.{" "}
           <strong style={{ color: T.ink }}>Os dados do formulário de seguro não são armazenados neste site</strong>:
-          eles vão diretamente para a Segfy e a D&B Corretora, que os retêm pelo tempo necessário para a
-          cotação/contratação e conforme suas obrigações legais (ex.: prazos regulatórios do setor de seguros).
+          eles ficam registrados na plataforma da Segfy e, se você escolher um plano, no e-mail que recebemos.
+          Guardamos esses dados pelo tempo necessário para a cotação e a contratação e pelos prazos exigidos pela
+          regulação do setor de seguros.
         </Section>
 
         <Section title="8. Seus direitos" T={T}>
@@ -147,12 +158,12 @@ export default function PrivacyPage({ T, onBack }) {
           eliminação de dados desnecessários, portabilidade, eliminação dos dados tratados com base em
           consentimento, informação sobre com quem compartilhamos seus dados, e revogação do consentimento.
           <br /><br />
-          Para dados encaminhados à Segfy ou à D&B Corretora, você pode exercer seus direitos diretamente
-          junto a essas empresas por meio dos canais de atendimento delas.
+          Como controladora, a D&B Corretora atende esses pedidos, inclusive em relação aos dados registrados
+          na Segfy para a sua cotação.
         </Section>
 
         <Section title="9. Como exercer seus direitos" T={T}>
-          Envie sua solicitação para <strong style={{ color: T.ink }}>[PREENCHER: e-mail de contato]</strong>.
+          Envie sua solicitação para <strong style={{ color: T.ink }}>adm@dbcorr.com.br</strong>.
           Responderemos dentro do prazo previsto em lei.
         </Section>
 
@@ -165,8 +176,12 @@ export default function PrivacyPage({ T, onBack }) {
         <Section title="11. Segurança" T={T}>
           O site é servido exclusivamente via HTTPS (conexão criptografada). Os headers de segurança HTTP
           estão configurados para proteger contra ataques comuns (clickjacking, MIME sniffing, injeção de
-          scripts). Os dados do formulário de cotação trafegam diretamente para os servidores da Segfy, sem
-          passar por servidores deste site.
+          scripts). Os dados do formulário de cotação passam por um servidor do próprio site apenas para serem
+          encaminhados à Segfy, sem serem gravados. As credenciais de acesso à Segfy e ao e-mail ficam só nesse
+          servidor e nunca chegam ao navegador.
+          <br /><br />
+          A Vercel pode processar esses dados em servidores fora do Brasil. Essa transferência ocorre apenas para
+          prestar o serviço que você solicitou, com as garantias de segurança descritas acima.
         </Section>
 
         <Section title="12. Alterações desta política" T={T}>
@@ -175,7 +190,7 @@ export default function PrivacyPage({ T, onBack }) {
         </Section>
 
         <div style={{ fontSize: 11, color: T.inkDim, marginTop: 32, paddingTop: 16, borderTop: `1px solid ${T.line}` }}>
-          Última atualização: setembro de 2026
+          Última atualização: outubro de 2026
         </div>
       </main>
     </div>
