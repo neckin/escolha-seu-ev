@@ -16,6 +16,7 @@
 
 import nodemailer from "nodemailer";
 import { segfyRequest } from "../_lib/segfyClient.js";
+import { isAllowedOrigin } from "../_lib/origin.js";
 import { paymentOptions, formatPlan } from "../../src/installments.js";
 
 const RETURN_DEADLINE = "até 1 dia útil";
@@ -204,6 +205,11 @@ function customerEmailHtml({ customer, vehicle, chosen, offers, validity, paymen
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Use POST." });
+    return;
+  }
+
+  if (!isAllowedOrigin(req)) {
+    res.status(403).json({ error: "Origem não autorizada." });
     return;
   }
 

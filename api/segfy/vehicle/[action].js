@@ -9,29 +9,17 @@
 // o valor enviado pelo cliente nesse campo é sempre ignorado/sobrescrito.
 
 import { segfyRequest } from "../../_lib/segfyClient.js";
+import { isAllowedOrigin } from "../../_lib/origin.js";
 
+// Só o que o front usa. show-results/show-quotation devolvem os dados pessoais
+// do cliente (nome, CPF, telefone) a partir do guid, então não ficam expostos;
+// o choose.js consulta o show-results direto no servidor.
 const ACTIONS = {
   "brand-list": "/api/vehicle/version/1.0/brand-list",
   "model-list": "/api/vehicle/version/1.0/model-list",
   "profession-list": "/api/vehicle/version/1.0/profession-list",
-  "renewal-list": "/api/vehicle/version/1.0/renewal-list",
   calculate: "/api/vehicle/version/1.0/calculate",
-  "save-customer": "/api/vehicle/version/1.0/save-customer",
-  "show-quotation": "/api/vehicle/version/1.0/show-quotation",
-  "show-results": "/api/vehicle/version/1.0/show-results",
 };
-
-function isAllowedOrigin(req) {
-  const allowed = process.env.ALLOWED_ORIGIN;
-  if (!allowed) return true;
-
-  const origin = req.headers.origin || req.headers.referer || "";
-  return allowed
-    .split(",")
-    .map((entry) => entry.trim())
-    .filter(Boolean)
-    .some((entry) => origin.startsWith(entry));
-}
 
 function withBrokerToken(body) {
   const base = body && typeof body === "object" ? body : {};
