@@ -21,8 +21,8 @@
 --     (a GAC não separa por versão).
 --   - Dolphin SE e Aion UT Elite já tinham valores de tabelas anteriores;
 --     são substituídos pelos oficiais vigentes.
---   - FORA deste arquivo: BYD Tan (o PDF cobre só Tan 2024 e 2025; falta
---     confirmar o ano-modelo vendido hoje). Sem carro no catálogo para as
+--   - BYD Tan: entrou depois, em 2026-10-02-revisoes-chevrolet-jetour-denza-tan.sql
+--     (o PDF cobre Tan 2024 e 2025, única tabela oficial da BYD para ele). Sem carro no catálogo para as
 --     tabelas "SONG Pro DM-i" (não Flex), "SONG Plus 51 km", "SONG Plus 105 km
 --     (2024)" e "SONG Plus DM-i (2025/2026)", nem para GAC GS3/GS9.
 
