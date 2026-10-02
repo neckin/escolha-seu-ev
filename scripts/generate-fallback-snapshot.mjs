@@ -33,7 +33,8 @@ function loadDotEnvLocal() {
   if (!fs.existsSync(envPath)) return;
   for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
     const m = line.match(/^\s*([\w.]+)\s*=\s*(.*)\s*$/);
-    if (m && !(m[1] in process.env)) process.env[m[1]] = m[2].trim();
+    // `vercel env pull` grava os valores entre aspas; o Vite tira, aqui também.
+    if (m && !(m[1] in process.env)) process.env[m[1]] = m[2].trim().replace(/^(["'])(.*)\1$/, "$2");
   }
 }
 loadDotEnvLocal();
