@@ -70,7 +70,7 @@
     "consumptionKwh100": 23.2,
     "techNotes": "Versão de teto em coupé (Sportback) do Q6 e-tron (cadastrado separadamente, id audi-q6-e-tron), mesma mecânica (428cv/640Nm, bateria 100kWh) — a diferença é a carroceria mais baixa e o porta-malas ligeiramente menor (511L vs 526L, mas autonomia um pouco maior: 431km vs 424km, por aerodinâmica). Lançado junto com o Q6 e-tron na linha 2026 da Audi do Brasil, disponível em mais de 40 concessionárias.",
     "imageUrl": "https://audi-media-center-strapi.s3.us-east-1.amazonaws.com/medium_Q6_Sportback_e_tron_1_3_66f4790eda.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=HCU4k2S2FFk",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -110,7 +110,7 @@
     "consumptionKwh100": 23.4,
     "techNotes": "Versão esportiva de alta performance do Q6 Sportback e-tron, com dois motores (194cv/28kgfm dianteiro + 320cv/59,1kgfm traseiro, 517cv/795Nm combinados em modo Launch Control). 0-100 em 4,3s, velocidade máxima 230km/h eletronicamente limitada. Mesma bateria de 100kWh e arquitetura 800V do Q6 e-tron (recarga DC 10-80% em ~20min). Lançada pela Audi do Brasil em 2026.",
     "imageUrl": "https://audi-media-center-strapi.s3.us-east-1.amazonaws.com/SQ_6_Sportback_e_tron_1_f4f4995d01.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=HB2U_6jmhKk",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -190,7 +190,7 @@
     "consumptionKwh100": null,
     "techNotes": "Marca já tinha o 530e (Série 5) e o X5 xDrive50e cadastrados — o 330e M Sport (Série 3) é uma versão de entrada da linha PHEV da BMW no Brasil que ainda não tinha card próprio. 292cv/420Nm combinados, bateria 19,5kWh, autonomia elétrica de 61km, 0-100 em 5,8s. Recarga AC de até 11kW. Confirmado à venda via press release oficial BMW Group Brasil (press.bmwgroup.com).",
     "imageUrl": "https://bmw.scene7.com/is/image/BMW/g20_phev_stage-50-years:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=g5jxERlpBro",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -270,7 +270,7 @@
     "consumptionKwh100": 19.3,
     "techNotes": "Gran Coupé elétrico (liftback 4 portas), motor traseiro único de 340cv/430Nm. Preço de tabela oficial de agosto/2026 é R$582.950. Autonomia tem alguma divergência entre fontes (399 a 422km PBEV/Inmetro conforme a fonte) — usamos aqui a mais recorrente. Porta-malas de 470L (1.290L com bancos rebatidos).",
     "imageUrl": "https://bmw.scene7.com/is/image/BMW/g26_bev_stage_dsk_fb?qlt=80&wid=2000&fmt=webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=KvN1GSiXwr4",
     "personas": {
       "custo": 1,
       "urbano": 4,
@@ -390,7 +390,7 @@
     "consumptionKwh100": null,
     "techNotes": "Trim eDrive20 (FWD, R$359.950, 204cv) catalogado anteriormente saiu de linha — só resta este xDrive30 M Sport (AWD) na página oficial da BMW (bmw.com.br/pt/all-models/bmw-i/ix1/bmw-ix1.html, verificado 21/09/2026). Potência (306cv), aceleração (5,6s 0-100km/h) e autonomia (324km, valor da tabela \"Dados Técnicos\" — a mesma página também menciona \"até 303km\" num parágrafo de marketing separado, inconsistência da própria BMW) confirmados direto na página oficial. Torque e capacidade de bateria não são publicados nessa página — deixados em branco em vez de reaproveitar uma estimativa antiga (494Nm/66,5kWh) de uma nota técnica anterior, já que até a potência divergiu entre as duas fontes (313cv vs 306cv agora) — vale reconfirmar com ficha técnica mais completa (PDF oficial, se existir) antes de preencher. Vão livre e porta-malas mantidos do registro anterior (mesma plataforma/corpo), não reconfirmados especificamente para este trim AWD. Consumo (kWh/100km) zerado por depender de uma capacidade de bateria não confirmada.",
     "imageUrl": "https://bmw.scene7.com/is/image/BMW/u11-bev_stage:16to7?fmt=webp&wid=2560&fit=wrap%2C+1",
-    "videoUrl": "https://www.youtube.com/watch?v=80HhsqwRMwE",
+    "videoUrl": "https://www.youtube.com/watch?v=l-kmkpotea0",
     "personas": {
       "custo": 1,
       "urbano": 3,
@@ -590,7 +590,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão topo de linha do Atto 2 DM-i Flex, com bateria maior (18kWh vs 7,3kWh da GL) que mais que dobra a autonomia elétrica pura (110km vs 45km) e carregamento AC mais rápido (6,6kW vs 3,3kW). Inclui pacote ADAS 2, que a GL não tem. Autonomia combinada de 1.045km (gasolina, NEDC) ou 770km (etanol). Fabricada em Camaçari (BA), lançada em 9/jun/2026.",
     "imageUrl": "https://www.byd.com/material/byd-site/br/product/atto-2-dmi/atto2-header.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=A0zCrcVpyxE",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -670,7 +670,7 @@
     "consumptionKwh100": 14,
     "techNotes": "Autonomia WLTP divulgada é de até 340km; usamos aqui uma estimativa mais realista de uso urbano (290-320km). Bateria Blade LFP, mesma tecnologia usada em toda a linha BYD, com estrutura que dispensa módulos intermediários. 5 estrelas no Latin NCAP.",
     "imageUrl": "https://www.byd.com/material/byd-site/america-public/header-product-image/dolphin-header-update.png",
-    "videoUrl": "https://www.youtube.com/watch?v=XJ_UY2FFoWk",
+    "videoUrl": "https://www.youtube.com/watch?v=sYZfZyNPPxc",
     "personas": {
       "custo": 4,
       "urbano": 5,
@@ -750,7 +750,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão mais completa do Dolphin Mini (o elétrico mais vendido do Brasil), só R$1.000 mais cara que a GL (cadastrada separadamente), mas com bateria maior (38,9kWh vs 30,1kWh), mais autonomia (280 vs 224km) e mais 2 airbags (laterais dianteiros — a GL só tem frontais + cortina). Ficha conferida na ficha técnica oficial BYD (rev. 09/07/2026).",
     "imageUrl": "https://www.webmotors.com.br/imagens/prod/380184/BYD_DOLPHIN_MINI_38_KW_ELETRICO_GS_38018411071538784.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=NUD28fMIqto",
     "personas": {
       "custo": 4,
       "urbano": 5,
@@ -910,7 +910,7 @@
     "consumptionKwh100": null,
     "techNotes": "Preço real de tabela é R$175.990 (versão GS) — bem abaixo dos R$279.800 que circulavam antes; a versão de entrada GL custa R$147.990 com 209cv e só 32km de autonomia elétrica. Bateria pequena (6,6kWh) é perfil híbrido leve, não plugável de longa autonomia elétrica: até 78km NEDC na GS. Consumo no modo combustão: até 16,8 km/l na cidade.",
     "imageUrl": "https://www.byd.com/material/byd-site/br/product/king/king-Header1.png",
-    "videoUrl": "https://www.youtube.com/watch?v=jxmcxD9X7qc",
+    "videoUrl": "https://www.youtube.com/watch?v=tG7X9i1yi0g",
     "personas": {
       "custo": 3,
       "urbano": 4,
@@ -990,7 +990,7 @@
     "consumptionKwh100": 22.9,
     "techNotes": "SUV cupê elétrico irmão do Seal, com tração integral AWD (531cv/690Nm) e 0-100km/h em 4,5s — um dos mais potentes e rápidos do comparativo inteiro. Bateria Blade LFP de 82,5kWh garante 360km de autonomia Inmetro. Porta-malas de 500L + frunk dianteiro de 58L. Recarga DC até 150kW (30-80% em ~30min).",
     "imageUrl": "https://www.byd.com/material/byd-site/br/product/sealion/imagens/header/Sealion7-header.webp",
-    "videoUrl": "https://www.youtube.com/watch?v=7wM2Y5EsIKQ",
+    "videoUrl": "https://www.youtube.com/watch?v=jZvyDngmkhU",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -1110,7 +1110,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão topo de linha do Song Plus (a versão FWD de entrada está cadastrada separadamente, id byd-song-plus-phev), lançada em mar/2026 como o SUV híbrido plug-in mais potente da BYD no Brasil até então. Tração integral com um motor elétrico em cada eixo (204cv dianteiro + 163cv traseiro) somados ao 1.5 turbo, 324cv/550Nm combinados. Autonomia elétrica de 87km PBEV e autonomia total de até 1.100km. Atualização em 19/08/2026: a versão FWD também ganhou motor 1.5 turbo e bateria de 26,6kWh na linha 2027 (antes 1.5 aspirado com 18,3kWh) — as duas versões (FWD e Premium AWD) agora compartilham a mesma capacidade de bateria, diferindo em potência e tração (239cv FWD vs 324cv AWD). Trunk reutilizado do valor da versão FWD (552L) — não confirmado se muda com o pacote AWD.",
     "imageUrl": "https://www.byd.com/material/byd-site/br/home/home-2025/2025-seo/thumbs/byd-song-plus-premium.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=UTq32Kwh1Y4",
+    "videoUrl": "https://www.youtube.com/watch?v=JOBs-n7-0uE",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -1550,7 +1550,7 @@
     "consumptionKwh100": null,
     "techNotes": "Ficha oficial Ford (catálogo técnico PDF, baixado do site em 11/09/2026): potência combinada 194cv@5600rpm, torque 210Nm@4000rpm (esse número vem com um \"*\" na tabela oficial, sem nota explicativa localizada — mantido por ser o único publicado). Transmissão eCVT (as outras versões da picape, a combustão, usam automática de 8 velocidades). Caçamba com 943 litros de capacidade (não é \"porta-malas\" — é picape; capacidade de carga total 584kg). Dimensões: 5.096mm de comprimento, 3.077mm de entre-eixos, 1.733mm de altura, 1.979mm de largura sem espelho. Tanque de combustível menor que as versões a combustão: 52,2L (vs 62,4L). 7 airbags (dianteiros, laterais, cortina e joelho do motorista) — item de série em toda a linha Maverick. ATENÇÃO: garantia da bateria é de apenas 12 MESES sem limite de km — muito abaixo do padrão de 8 anos que Toyota, Honda, Hyundai e Kia praticam pros próprios sistemas híbridos no Brasil; vale destacar isso pro usuário antes de qualquer recomendação. Preço confirmado no site oficial em 11/09/2026 (mesmo valor da versão Tremor, a combustão).",
     "imageUrl": "https://www.ford.com.br/content/dam/Ford/website-assets/latam/br/nameplate/2025/maverick/overview/billboards/fbr-billboard-maverick-black.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=lZq70kZMeWI",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -1630,7 +1630,7 @@
     "consumptionKwh100": 17.6,
     "techNotes": "Versão única (Plus) no Brasil, confirmada em múltiplas fontes — nome atualizado (antes só 'GAC Aion ES', na verdade é a versão Plus). Recarga DC de 75kW leva a bateria de 30% a 80% em ~37min. Uma fonte lista airbags só frontais (sem laterais/cortina) — se confirmar, é o único Aion vendido no Brasil sem airbag lateral/cortina; vale checar na concessionária antes de decidir. Química da bateria, peso, vão livre e garantia ainda sem fonte confiável.",
     "imageUrl": "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202505/63deb344-57d5-449f-bcf7-1333ea1150f9.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=kYXvAtRurkc",
     "personas": {
       "custo": 4,
       "urbano": 4,
@@ -1790,7 +1790,7 @@
     "consumptionKwh100": 20,
     "techNotes": "Mesma motorização e bateria da Premium (cadastrada separadamente), mas custa R$ 12.000 a mais — contraintuitivo pro nome 'Elite'. Diferença real: rodas de 18\" (vs. 17\" da Premium) e ADAS bem mais simples (só alerta de colisão frontal, sem os assistentes de condução da Premium). Vale comparar as duas com calma antes de escolher.",
     "imageUrl": "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202503/c9cae70c-c9ca-4488-b909-541e01608a37.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=3cmBNHeIg6c",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -1870,7 +1870,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de entrada (Premium, R$191.990) — existe também a Elite, mais equipada, R$209.990 (peso 1.673kg, rodas 19\" vs 18\" da Premium). Preços de tabela/lançamento — há relatos de imprensa de desconto na Premium (chegou a R$169.990 em promoções pontuais), não usado aqui por não ser o preço permanente. Ficha técnica oficial completa (tabela HTML do próprio configurador GAC, capturada em 14/09/2026): \"Tipo: HEV (gasolina)\" explícito nos dois trims — não é plug-in. Motor a combustão 2.0 ATK 103kW/140cv + 180Nm, motor elétrico 134kW/182cv + 300Nm (torque combinado de sistema NÃO é publicado — o valor usado aqui é só do motor elétrico, mesmo critério aplicado a outros HEV do catálogo como o Honda Civic). Potência combinada 173kW = 235cv, essa sim publicada explicitamente. Bateria pequena (2,1kWh, típica de HEV, não pluga) de lítio ternário. Consumo INMETRO: 14,1km/l cidade / 11,8km/l estrada. Dimensões: 4.680mm de comprimento, 1.901mm de largura, 1.660mm de altura, 2.750mm de entre-eixos. Porta-malas: 638 litros. Tração dianteira. Tanque: 50 litros. 6 airbags (frontais + laterais + cortina, confirmados individualmente na tabela oficial).",
     "imageUrl": "https://br-www-resouce-cdn.gacgroup.com/static/BR/tenant/cms/common/202505/cfbbc55a-fa89-4d55-a80f-dd7b6e23968e.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=1UqnZhrGypY",
     "personas": {
       "custo": 4,
       "urbano": 4,
@@ -2030,7 +2030,7 @@
     "consumptionKwh100": null,
     "techNotes": "Primeiro veículo da Geely com produção nacional (Complexo Industrial Ayrton Senna, São José dos Pinhais/PR), ainda em 2026. Três versões: Pro (R$189.990, bateria 18,4kWh, ~65km elétricos — ficha usada aqui), Max (R$209.990, mesma bateria) e Ultra (R$234.990, bateria maior de 29,8kWh, ~112km elétricos Inmetro, com carregamento DC de até 60kW — cadastrada separadamente, id geely-ex5-em-i-ultra). Autonomia combinada de até 1.300km. Porta-malas de 428L (até 2.000L com bancos rebatidos).",
     "imageUrl": "https://static.autodromo.com.br/uploads/51bca4b0-a28b-455b-9ed2-7647ccc8deec_4.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=slYBEzAlYAs",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -2430,7 +2430,7 @@
     "consumptionKwh100": null,
     "techNotes": "Único trim de Accord vendido no Brasil (Advanced Hybrid), versão única de cor (Preto Cristal Perolizado) na linha 2026. Mesmo motor elétrico (184cv/34,1kgf.m — 334Nm) do CR-V e do Civic híbridos; combustão 146cv/19,2kgf.m gasolina. Ficha técnica de especificações (dimensões, motor, porta-malas 574L) vem de um catálogo PDF datado de agosto/2023 — mais antigo que o dos outros modelos —, mas os números batem exatamente com o que a imprensa reporta pra linha 2026 (checado em 11/09/2026), incluindo os 574L de porta-malas, o que dá confiança de que a ficha técnica em si não mudou, só o ano/preço. Preço R$332.400 (linha 2026, checado via imprensa em 11/09/2026 — o site oficial não expõe o valor no HTML estático). Consumo Inmetro: 17,8 km/l cidade.",
     "imageUrl": "https://www.honda.com.br/automoveis/sites/hab/files/2025-10/accord.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=mCXlTm456LA",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -2470,7 +2470,7 @@
     "consumptionKwh100": null,
     "techNotes": "Único trim de Civic vendido no Brasil (Advanced Hybrid) — sem versão a combustão pura na linha atual. Mesmo motor elétrico (184cv/32,1kgf.m — 315Nm) do CR-V e do Accord híbridos, motor a combustão ligeiramente diferente por modelo (aqui 143cv/19,1kgf.m gasolina). Ficha oficial (catálogo PDF Honda, baixado em 11/09/2026) e imprensa especializada concordam: 184cv é tratado como a potência combinada/de sistema pra esta configuração FWD (sem motor traseiro adicional como no CR-V AWD, cujo combinado de 207cv inclui o eixo traseiro). Preço R$266.500 (checado em 11/09/2026) — vendas baixas reportadas no mercado brasileiro (imprensa cita ~34 unidades em 2026), mas o modelo segue oficialmente à venda. Consumo Inmetro: 18,4 km/l cidade / 15,9 km/l estrada gasolina.",
     "imageUrl": "https://www.honda.com.br/automoveis/sites/hab/files/2026-05/civic.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=fhCIuXcY2ek",
     "personas": {
       "custo": 3,
       "urbano": 4,
@@ -2510,7 +2510,7 @@
     "consumptionKwh100": null,
     "techNotes": "Único trim de CR-V híbrido vendido no Brasil (Advanced Hybrid) — não existe versão CR-V a combustão pura na linha atual. Sistema e:HEV: na maior parte do tempo o motor elétrico traciona sozinho as rodas (184cv/34,2kgf.m — 335Nm), enquanto o motor 2.0L a combustão (147cv/19,4kgf.m gasolina) funciona majoritariamente como gerador, só tracionando diretamente em velocidade constante de estrada. Ficha oficial (catálogo PDF Honda, baixado do site em 11/09/2026) lista as duas potências separadamente, sem somar; a potência combinada de 207cv usada aqui é a comumente reportada pela imprensa especializada pra este powertrain — vale reconfirmar na concessionária. Tração integral AWD. Preço de tabela oficial R$353.500 (checado no site oficial), mas há descontos de concessionária amplamente reportados levando o preço efetivo a R$309.990-315.900 em alguns casos — preço de tabela é o usado aqui, consistente com o critério do resto do catálogo. Bateria Li-ion pequena (1,06kWh, típica de HEV — não é uma bateria de tração tipo BEV/PHEV, não pluga).",
     "imageUrl": "https://www.honda.com.br/automoveis/sites/hab/files/2026-05/crv.webp",
-    "videoUrl": "https://www.youtube.com/watch?v=Rn8bHisCy6U",
+    "videoUrl": "https://www.youtube.com/watch?v=DBkF8xQZGZY",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -2550,7 +2550,7 @@
     "consumptionKwh100": null,
     "techNotes": "EM PRÉ-VENDA até o final de setembro/2026 (anunciado no Festival Interlagos, 27/08/2026) — ainda não é venda geral pela rede de concessionárias, incluído a pedido do usuário mesmo assim por já ter preço oficial firme (R$380.000) e ser híbrido confirmado. Retorno do cupê esportivo da Honda ao Brasil, agora eletrificado, compartilhando chassi/suspensão/freios Brembo com o Civic Type R. Catálogo digital oficial da Honda (baixado em 11/09/2026) lista os componentes separados — motor 2.0L Atkinson 143cv/19,1kgf.m gasolina + motor elétrico 184cv/32,1kgf.m — exatamente os MESMOS números do Civic Advanced Hybrid, sem publicar uma \"potência combinada\" nessa ficha específica. Os 203cv usados aqui como potência combinada vêm de multiplas fontes de imprensa (incluindo a AutoData, publicação do setor automotivo) reportando esse valor de forma consistente — provavelmente de um press release da Honda que essa ficha de consumidor não repete. Vale reconfirmar quando a Honda publicar uma ficha técnica mais completa. Versão única, 3 cores (Crystal Black Pearl, Rallye Red, Moonlit White Pearl). Dimensões/porta-malas/peso não encontrados em nenhuma fonte oficial até 11/09/2026.",
     "imageUrl": "https://www.honda.com.br/automoveis/sites/hab/files/2026-08/Menu_Home_Prelude_v2_1.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=xrJ7sIv3WqA",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -2630,7 +2630,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de entrada (Ultimate, R$219.990) — existe também a Signature, mais completa e mais cara, R$239.990 (confirmado ao trocar a versão no seletor oficial do site em 11/09/2026). Ficha oficial (site + catálogo PDF Hyundai, baixados em 11/09/2026): motor Kappa 1.6 GDI + motor elétrico PMSM, bateria 1,32kWh, potência combinada 141cv, torque combinado 27kgf.m (264,8Nm, arredondado pra 265). Transmissão automatizada de dupla embreagem de 6 marchas (DCT). Velocidade máxima 165km/h, 0-100km/h em 11,2s. Consumo: 18,4km/l cidade / 16km/l estrada. Dimensões: 4.350mm de comprimento, 1.825mm de largura, 1.680mm de altura (antena excluída), 2.660mm de entre-eixos. Porta-malas: 407 litros. 6 airbags (frontal duplo + laterais de tórax + cortina — contados na lista de equipamentos do catálogo oficial, sem um número \"6\" publicado explicitamente em texto corrido). Garantia: 5 anos geral sem limite de km + 8 anos/160.000km específico pra bateria/componentes híbridos (texto legal do catálogo oficial).",
     "imageUrl": "https://www.hyundai.com.br/content/dam/hmb/cars/kona/2025-2026/new_assets/360_v2/KONA_HEV-Atlas_White_01.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=TUcgy7rVW4U",
     "personas": {
       "custo": 3,
       "urbano": 4,
@@ -2870,7 +2870,7 @@
     "consumptionKwh100": null,
     "techNotes": "Variante off-road mais cara e mais potente do T2 (que já estava no catálogo como \"Jetour T2 PHEV\", R$289.900/Advance) — essa ficha já apontava a existência do XWD 4x4 mas sem número confiável (\"fontes divergem entre 375cv, 597cv e 620cv\"). RESOLVIDO: ficha técnica oficial em PDF (baixada do site Jetour em 14/09/2026) confirma 597cv e ~900Nm (91,7kgfm somado) — mas com uma ressalva publicada pela PRÓPRIA Jetour junto do número: \"*Simples soma das potências e torques individuais. Não disponível simultaneamente durante o uso.\" Ou seja, os 4 motores (1 combustão 135cv/20,4kgfm + 3 elétricos: 102cv/17,3kgfm, 122cv/22,4kgfm, 238cv/31,6kgfm) nunca entregam a soma total ao mesmo tempo — é uma cifra de marketing, não uma potência de sistema real medida. Mantive mesmo assim por ser o único número oficial e por ser exatamente o mesmo critério que o resto do catálogo já usa pra \"potência combinada\" quando a montadora só soma componentes. Bateria 43,2kWh LFP, alcance total até 1.300km, 0-100km/h em 5,5s, velocidade máxima 197km/h. Consumo: 10,0km/l gasolina (ciclo PBEV 55%-45%). Carregamento CCS2, AC 7kW / DC 40kW (30-80% em 37min). Dimensões: 4.785mm de comprimento, 2.006mm de largura, 1.875mm de altura, 2.800mm de entre-eixos. Porta-malas: 580L normal / 1.494L máximo. Vão livre: 205mm. Peso: 2.362kg. Garantia (do próprio PDF oficial): veículo 7 anos/150.000km + bateria/motor elétrico 8 anos/160.000km. Airbags: a ficha oficial só itemiza explicitamente \"airbags laterais (dianteiro, motorista e passageiro)\" e \"airbags de cabeça (dianteiro e traseiro)\" — sem citar frontais por nome (provavelmente por serem item de série básico assumido). Usei 6 (mesmo total do T2 PHEV normal, mesma plataforma/marca) por analogia, não por contagem literal desta ficha específica — vale reconfirmar na concessionária antes de qualquer decisão que dependa desse número.",
     "imageUrl": "https://jetourbr.com/wp-content/uploads/2026/07/t2-4x4-cover-1.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=y5rfXgWhTWU",
     "personas": {
       "custo": 1,
       "urbano": 1,
@@ -2910,7 +2910,7 @@
     "consumptionKwh100": null,
     "techNotes": "Minivan híbrida, categoria nova pro catálogo. Versão única (código V.851.2627, R$684.990). Ficha técnica oficial completa (tabela HTML do próprio site Kia, capturada em 11/09/2026): bateria 1,485kWh (Polímero de Lítio-Ion, 270V nominal — o único dos 5 carros desta leva com kWh publicado oficialmente), motor elétrico 54kW/2.600rpm + 30,4kgf.m/1.600rpm, motor a gasolina Gamma II 1.6 Turbo GDI 180cv/5.500rpm + 26,2kgf.m/4.500rpm, potência COMBINADA 245cv@5.500rpm, torque combinado 37,4kgf.m@4.500rpm (366,8Nm, arredondado pra 367). Transmissão automática de 6 marchas, tração dianteira 4x2. Dimensões: 5.155mm de comprimento, 1.995mm de largura, 1.750mm de altura, 3.090mm de entre-eixos — a maior das 5 desta leva. Porta-malas: 627L normal / 2.827L com 2ª e 3ª fileiras rebatidas. 8 lugares. Peso em ordem de marcha: 2.220kg. 8 airbags (frontais duplos + laterais e central dianteiros + cortina nas 3 fileiras + joelho do motorista — \"8 Airbags\" anunciado explicitamente na página do modelo). Garantia de bateria de 8 anos/160.000km é o padrão que a Kia anuncia pro Niro HEV (mesma marca, mesma tecnologia de bateria) — não foi encontrado um texto específico repetindo essa garantia na página da Carnival, por isso a ressalva.",
     "imageUrl": "https://dynamics365kiasiteblob.kia.com.br/cdn-cgi/image/fit=scale-down,format=auto,width=1280/images/kia-carnival-hibrida-banner-frontal-1_1x.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=WZiwUUlc4a8",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -2950,7 +2950,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de entrada (código N.855.2627, R$194.990) — existe também a N.861.2627, mais equipada, R$219.990; mesma mecânica nas duas (ficha técnica idêntica), só mudam itens de série. Preços de tabela — o site também mostra um bônus promocional temporário de R$20.000 (válido até 30/09/2026 ou fim de estoque), não usado aqui por não ser o preço permanente. Ficha técnica oficial completa (tabela HTML do próprio site Kia, capturada em 11/09/2026): potência combinada 141cv@5.700rpm, torque combinado 27kgf.m@4.000rpm (264,8Nm, arredondado pra 265) — mesmo motor Kappa 1.6 do Hyundai KONA Híbrido (plataforma-irmã Hyundai/Kia). Transmissão DCT de 6 marchas, tração dianteira 4x2. Dimensões: 4.420mm de comprimento, 1.825mm de largura, 1.545mm de altura, 2.720mm de entre-eixos. Porta-malas: 425L normal / 1.419L com banco rebatido (medida VDA). Peso em ordem de marcha: 1.394kg. 7 airbags (frontais duplos + laterais dianteiros + cortina + joelho do motorista, listados individualmente na ficha oficial). Bateria: química Polímero de Lítio-Ion confirmada na ficha oficial, mas capacidade em kWh não publicada.",
     "imageUrl": "https://dynamics365kiasiteblob.kia.com.br/cdn-cgi/image/fit=scale-down,format=auto,width=1280/images/kia-niro-fotos-lancamento-externo-pista-frente-perto_1x.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=ywlMCcfTnLI",
     "personas": {
       "custo": 4,
       "urbano": 5,
@@ -2990,7 +2990,7 @@
     "consumptionKwh100": null,
     "techNotes": "Preço e disponibilidade confirmados em estoque real de concessionárias oficiais Land Rover (rede JLR Brasil) em ago/2026 — preço varia por concessionária, R$1.709.650 a R$1.716.150 encontrados. Autonomia 100% elétrica declarada de até 71km (mesmo conjunto P550e do Range Rover Sport, cadastrado separadamente, id land-rover-range-rover-sport-p550e). Recarga AC de 7kW (~5h) ou DC de até 50kW (0-80% em ~40min). Vale notar que a Land Rover Brasil passou por forte disrupção de produção após um ciberataque à JLR em 2025 — o Defender P400e (mesmo motor do Velar) não aparece no estoque oficial atual, por isso não foi incluído nesta base.",
     "imageUrl": "https://ci2.cdn-jaguarlandrover.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6Njg5MjQwMiwicHVyIjoiYmxvYl9pZCJ9fQ==--b4c34409aa5e8131bf18b9689514a90c0a62805f/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJqcGVnIiwicmVzaXplX2FuZF9wYWQiOls0MjAsMjM2LHsiYmFja2dyb3VuZCI6WzIzOCwyMzgsMjM4LDIzOF0sImFscGhhIjp0cnVlfV0sInNhdmVyIjp7InF1YWxpdHkiOjg1fX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--b5b0ad9cbad032e81179066a84b86cdd6b2f0240/redirect_eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBOU9vQmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--15f0bd2672d32648dfa17936c92a5bfd1f9f5d13_exterior-0.jpeg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=YwJn6tsjA7I",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -3030,7 +3030,7 @@
     "consumptionKwh100": null,
     "techNotes": "Preço confirmado em estoque real de concessionária oficial Land Rover (JLR Brazil, Itatiaia/RJ) em ago/2026, ano-modelo 2025. Autonomia elétrica declarada de até 71km, recarga AC 7kW (~5h) ou DC até 50kW (0-80% em ~40min). Existe também uma versão 'Dynamic' mais recente (pré-venda aberta em ago/2026, R$1.063.950, ainda sem confirmação de entrega) que não foi incluída por não ter venda efetiva confirmada ainda. Porta-malas de 522L é o valor do ano-modelo 2025 (algumas fontes citam 835L para o ano-modelo 2026, não confirmado).",
     "imageUrl": "https://ci2.cdn-jaguarlandrover.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6Njg5MjIyNywicHVyIjoiYmxvYl9pZCJ9fQ==--842ba91851ccd4dd50d7225996921578f23569a0/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJqcGVnIiwicmVzaXplX2FuZF9wYWQiOls0MjAsMjM2LHsiYmFja2dyb3VuZCI6WzIzOCwyMzgsMjM4LDIzOF0sImFscGhhIjp0cnVlfV0sInNhdmVyIjp7InF1YWxpdHkiOjg1fX0sInB1ciI6InZhcmlhdGlvbiJ9fQ==--b5b0ad9cbad032e81179066a84b86cdd6b2f0240/redirect_eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBeitvQmc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--01a39354163587f3b7f347cb251022520434b174_exterior-0.jpeg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=FkZgGq04obc",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -3390,7 +3390,7 @@
     "consumptionKwh100": 17.7,
     "techNotes": "Duas versões: Comfort (R$195.800, reajustada pra R$218.800 a partir de 5/jan/2026 — ficha usada aqui, com 6 airbags) e Luxury (R$219.800, R$238.800 após 5/jan/2026, ganha 7º airbag central, teto solar e mais equipamento). Construído sobre a Plataforma Modular Escalável (MSP) da MG, 5 estrelas no Euro NCAP 2025.",
     "imageUrl": "https://mgmotoroficial.com.br/imagens/mgs5/mgs5-comfort.webp",
-    "videoUrl": "https://www.youtube.com/watch?v=mwChnno-pWo",
+    "videoUrl": "https://www.youtube.com/watch?v=neSFaXhQ1xM",
     "personas": {
       "custo": 3,
       "urbano": 3,
@@ -3430,7 +3430,7 @@
     "consumptionKwh100": 17,
     "techNotes": "Versão de entrada da linha MG4 (distinta da 'MG4 Urban Luxury 54 kWh' já cadastrada separadamente, um modelo menor e mais barato). Existem também Luxury RWD 64kWh (mesma potência/bateria, mais equipamento) e XPower AWD 64kWh (320kW/435cv, 0-100 em 3,8s, R$249.000). Autonomia 364km é a homologada Inmetro/PBEV (a WLTP divulgada pela MG é 467km, mas superestima o uso real no Brasil). Ficha conferida na ficha técnica oficial MG (ago/2026).",
     "imageUrl": "https://mgmotoroficial.com.br/imagens/mg4/img-kv-mg4-cortada-3.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=q4hPxZQDjHg",
     "personas": {
       "custo": 3,
       "urbano": 4,
@@ -3510,7 +3510,7 @@
     "consumptionKwh100": 16.8,
     "techNotes": "Primeiro modelo da MINI projetado desde o início pra ser 100% elétrico, posicionado entre o hatch Cooper e o SUV Countryman. Versão de entrada (E), com bateria de 42,5kWh e 253km de autonomia (Inmetro) — dados confirmados via press release oficial do BMW Group Brasil. Porta-malas de 300L (1.005L com bancos rebatidos). A versão SE (mais potente) está cadastrada separadamente (id mini-aceman-se). Recarga DC 10-80% em ~28min.",
     "imageUrl": "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=4jQWPRN1QMc",
     "personas": {
       "custo": 2,
       "urbano": 5,
@@ -3550,7 +3550,7 @@
     "consumptionKwh100": 20.1,
     "techNotes": "Versão topo de linha do Aceman, com bateria maior (54,2kWh vs 42,5kWh da E) e mais potência (218cv vs 184cv), resultando em mais autonomia (270km vs 253km, Inmetro) e aceleração mais rápida (7,1s vs 7,6s). Porta-malas de 300L (1.005L com bancos rebatidos). Recarga DC 10-80% em ~31min.",
     "imageUrl": "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=4jQWPRN1QMc",
     "personas": {
       "custo": 1,
       "urbano": 5,
@@ -3590,7 +3590,7 @@
     "consumptionKwh100": 17.9,
     "techNotes": "Um dos modelos mais consistentes entre as fontes pesquisadas — poucas divergências. Porta-malas de 210L (800L com bancos rebatidos). O pacote MINI Service Inclusive (4 anos, km ilimitado) inclui um MINI Wallbox Essential 11kW de cortesia. Carga AC completa em ~5h15. Checagem em 19/08/2026: existe também um MINI Cooper E de entrada (184cv/290Nm, sem o 'S', menos potente que este SE), confirmado pelo BMW Group Brasil como parte da linha, mas não cadastrado aqui por falta de preço confiável e consistente entre fontes (achamos valores de R$264.990 a R$314.990 pra ele, sem confirmação clara de qual é o atual). O preço deste card (Cooper SE, R$259.990) tem fontes recentes conflitantes também (algumas citam R$264.990 ou até R$310.990+), mas nenhuma o suficientemente clara/recorrente pra justificar mudar o valor já verificado — vale reconferir na concessionária antes de decidir.",
     "imageUrl": "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/cooper/all-electric/bodytype-hub/mini-J01-BEV-gallery-front-wide.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=SMVCHxk63KU",
     "personas": {
       "custo": 2,
       "urbano": 5,
@@ -3630,7 +3630,7 @@
     "consumptionKwh100": 20.8,
     "techNotes": "SUV elétrico da MINI, compartilha plataforma com o BMW iX1/iX2. Versões Exclusive (R$294.990) e Top (R$339.990) têm a mesma mecânica (306cv/494Nm/66,45kWh) — só rodas e equipamentos mudam, por isso um card único. Preço oficial atual (site MINI Brasil, ago/2026) é R$409.990, bem acima dos valores de lançamento. Porta-malas de 450L (1.390L com bancos rebatidos). Recarga DC de até 130kW (10-80% em ~30min).",
     "imageUrl": "https://www.mini.com/content/dam/MINI/common/Range/new-generation/countryman/bev/bodytype-hub/mini-U25-BEV-campaign-wide.webp",
-    "videoUrl": "https://www.youtube.com/watch?v=QyOGaiSKIWY",
+    "videoUrl": "https://www.youtube.com/watch?v=geJO90flCrc",
     "personas": {
       "custo": 1,
       "urbano": 3,
@@ -3670,7 +3670,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de alta performance do Aceman (a E de entrada, 184cv, e a SE, 218cv, já estão cadastradas separadamente, ids mini-aceman-e e mini-aceman-se), com mais potência ainda (258cv/340Nm) e ajustes esportivos JCW. Autonomia de 312km (Inmetro/PBEV) — a maior entre os elétricos MINI hatch/SUV compacto. Capacidade de bateria não confirmada com segurança (fontes divergem e uma delas parece ter confundido com a ficha da Aceman E comum) — por isso não incluída.",
     "imageUrl": "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/aceman/bodytype-hub/mini-J05-gallery-exterior.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=_FcaW9_1XIQ",
     "personas": {
       "custo": 1,
       "urbano": 4,
@@ -3710,7 +3710,7 @@
     "consumptionKwh100": null,
     "techNotes": "Primeira vez que a linha JCW (John Cooper Works) é oferecida completa e 100% elétrica no Brasil (chegou junto com o JCW Aceman E, cadastrado separadamente, id mini-jcw-aceman-e). Versão de alta performance do Cooper SE (já cadastrado, id mini-cooper-se), com mais potência (258cv/340Nm vs 218cv/330Nm) e ajustes esportivos de suspensão/freios/visual. Autonomia de 299km (Inmetro/PBEV). Capacidade de bateria não confirmada com segurança — fontes divergem entre reaproveitar o valor do Cooper SE (54,2kWh) e não informar; por isso não incluída.",
     "imageUrl": "https://www.mini.com.br/content/dam/MINI/common/Range/new-generation/cooper/all-electric/bodytype-hub/mini-J01-BEV-gallery-front-wide.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=xYgqgNuGlrY",
     "personas": {
       "custo": 1,
       "urbano": 4,
@@ -3830,7 +3830,7 @@
     "consumptionKwh100": 20.3,
     "techNotes": "Baterias fabricadas pela CATL (química LFP). Carregamento AC completo em ~9h; DC de 30% a 80% em ~30min. Versão de entrada da linha Neta X, que segue com 3 versões ativas no Brasil (400/500/500 Luxury) — confirmado em pente-fino 19/08/2026. Torque de 210Nm e tração dianteira (FWD) preenchidos nessa revisão (mesmo motor em todas as versões da linha X).",
     "imageUrl": "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
-    "videoUrl": "https://www.youtube.com/watch?v=IfPvTxhPaDQ",
+    "videoUrl": "https://www.youtube.com/watch?v=RO632kTCcDk",
     "personas": {
       "custo": 3,
       "urbano": 3,
@@ -3870,7 +3870,7 @@
     "consumptionKwh100": 20.2,
     "techNotes": "Baterias fabricadas pela CATL (química LFP). Carregamento AC completo em ~11h; DC de 30% a 80% em ~30min. Existe também a versão 500 Luxury, com peso e bateria equivalentes. Torque de 210Nm e tração dianteira (FWD) preenchidos em pente-fino 19/08/2026 (mesmo motor em todas as versões da linha X, confirmado em múltiplas fontes).",
     "imageUrl": "https://netaauto.com.br/wp-content/webp-express/webp-images/uploads/2025/06/NETA-X-8.jpg.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=RO632kTCcDk",
     "personas": {
       "custo": 3,
       "urbano": 3,
@@ -4070,7 +4070,7 @@
     "consumptionKwh100": null,
     "techNotes": "Única versão do Koleos híbrido vendida no Brasil (esprit Alpine, \"1 versões disponíveis\" confirmado na página oficial de versões e preços) — não existe trim de entrada mais barato. Ficha oficial (site + catálogo PDF Renault, baixados em 11/09/2026): potência combinada 245cv@5500rpm. A Renault publica só o torque do conjunto elétrico — \"245cv com um motor a gasolina e dois motores elétricos totalizando 320Nm de torque elétrico\" —, sem uma cifra de torque combinado de sistema em nenhuma fonte oficial encontrada; o valor registrado aqui (320Nm) é esse torque elétrico, não necessariamente o torque total combinado do sistema. Até 75% de condução elétrica na cidade (dado interno Renault), autocarregável (não pluga). Consumo: 13,1km/l cidade. Dimensões: 4.780mm de comprimento, 1.880mm de largura, 1.680mm de altura, 2.820mm de entre-eixos. Porta-malas: 545 litros. 7 airbags (2 frontais + 2 laterais + 2 de cortina + 1 entre os bancos dianteiros — número \"7 airbags\" publicado explicitamente no catálogo oficial). Garantia: 5 anos sem limite de km geral + 8 anos sem limite de km pra bateria (texto legal do catálogo oficial, ano/modelo 2026/2027). Bateria: capacidade em kWh não publicada em nenhuma fonte oficial encontrada.",
     "imageUrl": "https://cdn.group.renault.com/ren/master/renault-new-cars/product-plans/aurora/overview/renault-koleos-header-desktop-001.jpg.ximg.large.jpg/f4054159ad.jpg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=YonvdCfWIsI",
     "personas": {
       "custo": 1,
       "urbano": 3,
@@ -4110,7 +4110,7 @@
     "consumptionKwh100": 17.8,
     "techNotes": "Hatch elétrico premium da Renault, com vendas bem baixas no Brasil (32 unidades emplacadas de jan-set/2025). Preço de tabela oficial é R$279.990, mas há descontos agressivos em concessionárias (achado por R$225.990 a R$199.900 em promoções pontuais) por conta do baixo giro de estoque. Recarga DC de 130kW (15-80% em ~36min) e AC de 22kW (carga completa em ~1h50).",
     "imageUrl": "https://cdn.group.renault.com/ren/br/renault-new-cars/product-plans/2025/megane-/megane_design2.jpg.ximg.xsmall.jpg/696b5a6e02.jpg",
-    "videoUrl": "https://www.youtube.com/watch?v=mNvf1xb9bOM",
+    "videoUrl": "https://www.youtube.com/watch?v=rr0ka5ihyMs",
     "personas": {
       "custo": 2,
       "urbano": 4,
@@ -4150,7 +4150,7 @@
     "consumptionKwh100": 20.25,
     "techNotes": "SUV 100% elétrico da Toyota — não é híbrido, entra no catálogo por completar a lacuna que o usuário apontou (linha Toyota inteira: Yaris Cross Hybrid, Corolla Hybrid, Corolla Cross Hybrid e bZ4X). Ficha oficial (catálogo PDF Toyota \"bZ4X MY26\", baixado em 11/09/2026): motor dianteiro 227cv/27,4kgf.m + motor traseiro 120cv/17,3kgf.m, potência total 343cv (publicada explicitamente pela Toyota). Torque registrado aqui é só do motor dianteiro (269Nm) — a Toyota não soma os dois torques numa ficha única. Bateria 73,1kWh, autonomia 361km Inmetro. Consumo (20,25 kWh/100km) é CALCULADO por nós (73,1kWh ÷ 361km × 100) — a Toyota não publica esse número diretamente. Carregamento AC 22kW / DC 150kW. Vão livre e peso confirmados; airbags e garantia de bateria não encontrados nesta ficha específica.",
     "imageUrl": "https://media.toyota.com.br/3bd14f56-d6f3-4ca9-a7e1-fff2e4034234.jpeg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=U9nkh8K5xZk",
     "personas": {
       "custo": 1,
       "urbano": 3,
@@ -4190,7 +4190,7 @@
     "consumptionKwh100": null,
     "techNotes": "Única versão híbrida do Corolla Cross no Brasil (XRX Hybrid) — as versões XRE/XR/XRX são a combustão (2.0L Dynamic Force, 175cv, não-híbrida). Ficha oficial (catálogo PDF Toyota, baixado do site em 11/09/2026): motor a combustão 1.8L 101cv/5.200rpm + 14,5kgf.m (142Nm)/3.600rpm, dois motores elétricos somando 72cv/16,6kgf.m. A Toyota NÃO publica uma potência combinada única pra este sistema HSD (o power-split não soma linearmente) — os 101cv registrados aqui são só do motor a combustão; o carro entrega mais que isso na prática graças ao motor elétrico. Preço R$223.790 é a versão de entrada de cor (varia até R$226.120 conforme a cor). Consumo INMETRO: 17,0 km/l urbano / 13,9 km/l estrada (não convertido pra kWh/100km porque não pluga). Garantia: 5 anos veículo + 3 anos adicionais pro sistema híbrido (bateria/inversor), totalizando 8 anos pro híbrido.",
     "imageUrl": "https://media.toyota.com.br/c78bcfd0-45ba-4b1d-8bab-8a8daede895b.png",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=-GSv1n5jFaQ",
     "personas": {
       "custo": 4,
       "urbano": 4,
@@ -4230,7 +4230,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de entrada híbrida do sedã Corolla (GLi HEV) — existe também a Altis Hybrid Premium, mais equipada, R$210.090. Mesmo conjunto motor+bateria do Corolla Cross Hybrid (plataforma compartilhada): motor 1.8L 101cv/5.200rpm + 14,5kgf.m etanol, motor elétrico 72cv/16,6kgf.m — a Toyota também NÃO publica potência combinada pra esta ficha (mesma ressalva do Corolla Cross Hybrid: os 101cv aqui são só do motor a combustão).",
     "imageUrl": "https://media.toyota.com.br/99e72450-f1f1-4244-9241-18bcf3808306.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=d2pLiWGmCpE",
     "personas": {
       "custo": 4,
       "urbano": 4,
@@ -4270,7 +4270,7 @@
     "consumptionKwh100": null,
     "techNotes": "Versão de entrada híbrida (XRE Hybrid) — existe também a XRX Hybrid, mais equipada, R$189.990. Ficha oficial (catálogo PDF Toyota, baixado do site em 11/09/2026): motor 1.5L 91cv/5.500rpm + 12,3kgf.m etanol, motor elétrico 80cv/14,4kgf.m. Diferente do Corolla Cross Hybrid e do Corolla Hybrid, aqui a Toyota PUBLICA uma potência combinada explícita: 111cv — é essa a usada aqui (torque combinado não é publicado; o valor registrado é só do motor elétrico). Consumo: dado não encontrado nesta ficha especificamente.",
     "imageUrl": "https://media.toyota.com.br/0990e340-6ac1-4a5d-bc5f-92b9317ba387.jpeg",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=dr2IRzF9xWU",
     "personas": {
       "custo": 5,
       "urbano": 5,
@@ -4310,7 +4310,7 @@
     "consumptionKwh100": 21.6,
     "techNotes": "PRIMEIRO carro Volkswagen no catálogo — a marca não tinha nenhum modelo eletrificado cadastrado até 14/09/2026. Confirmado à venda de forma convencional (não é mais só assinatura Sign&Drive, como era em 2023): site oficial vw.com.br já tem \"Monte o Seu\" funcionando pro ID.4, ano-modelo 2027, versão única Pro. Ficha oficial (página do modelo, capturada em 14/09/2026): motor elétrico de 210kW entrega 286cv e 545Nm de torque, bateria de 84kWh, autonomia de 389km (INMETRO), recarga DC até 185kW / AC até 11kW, porta-malas de 533 litros, entre-eixos de 2.771mm — todos esses números confirmados direto no texto da página oficial. Comprimento (4.584mm), largura (1.852mm), altura (1.634mm), aceleração 0-100km/h (6,7s) e velocidade máxima (180km/h) vêm de múltiplas fontes de imprensa consistentes entre si (incluindo a cifra de torque em kgfm — 55,6kgfm bate exatamente com os 545Nm — o que dá confiança), mas não foram encontrados literalmente escritos na página oficial. Consumo (21,6 kWh/100km) é CALCULADO por nós (84kWh ÷ 389km × 100), a VW não publica esse número diretamente. ATENÇÃO: não encontrei o número de airbags na própria página oficial da VW — agregadores de terceiros citam 7, mas como isso NÃO está confirmado em fonte primária, deixei o campo em branco em vez de repetir um número não verificado (mesmo cuidado do caso Kicks). Química da bateria e peso não encontrados em nenhuma fonte oficial até 14/09/2026. NOTA: a Volkswagen também vende o ID.Buzz (Kombi elétrica) no Brasil, mas só por assinatura (Sign&Drive, 24-36 meses) — não tem preço de compra convencional, por isso não virou linha no catálogo (reportado ao usuário separadamente).",
     "imageUrl": "https://assets.volkswagen.com/is/image/volkswagenag/id4-my27-externa-frente?fit=crop,1&fmt=webp-alpha&qlt=79&wid=1280&hei=1280&align=0.00,0.00&bfc=off",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=oNy9q0WNBJo",
     "personas": {
       "custo": 2,
       "urbano": 3,
@@ -4350,7 +4350,7 @@
     "consumptionKwh100": 17.9,
     "techNotes": "Antigo Volvo C40 Recharge, renomeado EC40 em 2025 — versão cupê-SUV do EX40, com carroceria de teto mais baixo e inclinado, mas mesma base mecânica. Versão Plus (RWD, 238cv/420Nm, bateria 69kWh, ~385km Inmetro) é a entrada de linha. A versão Ultra (bimotor, mais potente) está cadastrada separadamente (id volvo-ec40-ultra). Porta-malas provavelmente menor que o EX40 (carroceria cupê), mas sem fonte confiável específica.",
     "imageUrl": "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt5e9113fe09dfe427/685bf946947f79a03951f0cf/overview-exterior-gallery-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1800",
-    "videoUrl": "https://www.youtube.com/watch?v=yGS2Fxvvsjw",
+    "videoUrl": "https://www.youtube.com/watch?v=e0sk3gwhmlM",
     "personas": {
       "custo": 1,
       "urbano": 3,
@@ -4430,7 +4430,7 @@
     "consumptionKwh100": 20.2,
     "techNotes": "Sedã grande 100% elétrico, primeiro da Volvo com arquitetura 800V — estreou no Brasil no Festival Interlagos (ago/2026), já disponível nas 52 concessionárias da marca no país por R$659.950, versão única Ultra Twin Motor Performance. Bimotor AWD de 680cv/870Nm, 0-100km/h em 4,0s, velocidade máxima limitada a 180km/h. Bateria de 106kWh dá 524km de autonomia (ciclo Inmetro/PBEV; WLTP passa de 700km). Recarga DC de até 350kW (10-80% em ~22min, repondo até 300km em 10min). Porta-malas de 446L + porta-malas dianteiro (frunk) de 27L. Coeficiente de arrasto de 0,25 — o menor já registrado pela Volvo. Airbags (9) e config. de porta-malas assumidos iguais ao padrão europeu da linha, por falta de ficha técnica brasileira detalhada publicada até a data de verificação; peso não divulgado.",
     "imageUrl": "https://www.autoshow.com.br/conteudo/not/001/cont/imagens/IMG_5611.webp",
-    "videoUrl": null,
+    "videoUrl": "https://www.youtube.com/watch?v=yaTv4OQJnMA",
     "personas": {
       "custo": 1,
       "urbano": 2,
@@ -4590,7 +4590,7 @@
     "consumptionKwh100": 20.9,
     "techNotes": "Versão topo de linha do EX40 (P8 Ultra AWD), com bateria maior (82kWh vs 69kWh do P6) e bimotor (408cv/670Nm vs 238cv/420Nm), quase dobrando a potência. Preço tem bastante divergência entre fontes/datas — de R$329.703 (FIPE) a R$375.700 (maio/2026); usamos o valor mais recente encontrado. Porta-malas e airbags assumidos iguais ao P6 (mesma carroceria).",
     "imageUrl": "https://www.volvocars.com/images/cs/v3/assets/blt0feaa88e629251fc/blt36d2dc5cfa41f957/6852527a8319c416c2d91a22/overview-exterior-gallery-02-16x9.jpg?branch=prod_alias&quality=85&format=auto&h=1200&w=1200",
-    "videoUrl": "https://www.youtube.com/watch?v=7Kx8BQfQ9ME",
+    "videoUrl": "https://www.youtube.com/watch?v=KI3jHtvlQLs",
     "personas": {
       "custo": 1,
       "urbano": 3,
