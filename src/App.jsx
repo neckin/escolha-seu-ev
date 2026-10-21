@@ -609,9 +609,12 @@ export default function App() {
         out.ownershipMonthly = out.energyMonthly + (out.evMaintMonthly || 0);
       }
       // comparação com o que a pessoa já gasta hoje se locomovendo (Uber/99/ônibus/metrô) — opcional.
-      if (myCar.monthlyMobilitySpend && out.energyMonthly != null) {
+      // Quem hoje não tem carro passa a pagar também a manutenção, então ela entra na
+      // conta (custo de posse), não só a energia — senão a economia sai inflada.
+      if (myCar.monthlyMobilitySpend && out.ownershipMonthly != null) {
         out.fuelMonthly = Number(myCar.monthlyMobilitySpend);
-        out.fuelSavings = out.fuelMonthly - out.energyMonthly;
+        out.fuelSavings = out.fuelMonthly - out.ownershipMonthly;
+        if (out.evMaintMonthly == null) out.maintUnavailable = true;
         totalSavings += out.fuelSavings;
         hasSavings = true;
       }
