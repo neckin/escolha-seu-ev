@@ -64,7 +64,8 @@ const COLUMNS =
   "maintenanceKmBase:maintenance_km_base,maintenanceTotalCost:maintenance_total_cost," +
   "consumptionKwh100:consumption_kwh_100,techNotes:tech_notes," +
   "imageUrl:image_url,videoUrl:video_url,personas," +
-  "fuelKmL:fuel_km_l,electricRangeKm:electric_range_km";
+  "fuelKmL:fuel_km_l,electricRangeKm:electric_range_km," +
+  "chargeAcHours:charge_ac_hours,chargeDcMinutes:charge_dc_minutes";
 
 async function main() {
   const url = `${SUPABASE_URL}/rest/v1/cars?select=${encodeURIComponent(COLUMNS)}&order=name`;

@@ -32,6 +32,8 @@ create table if not exists cars (
   consumption_kwh_100 numeric,
   fuel_km_l numeric,          -- gasolina, ciclo combinado INMETRO (HEV; PHEV no modo híbrido)
   electric_range_km integer,  -- autonomia no modo elétrico INMETRO (só PHEV)
+  charge_ac_hours numeric,    -- recarga completa em casa (0-100%), tempo oficial da marca
+  charge_dc_minutes integer,  -- recarga rápida (10-80%), tempo oficial da marca; dc_kw = 0 = não aceita DC
   tech_notes text,
   image_url text,
   video_url text,

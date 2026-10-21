@@ -39,7 +39,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "audi-q6-sportback-e-tron",
@@ -81,7 +83,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "audi-sq6-sportback-e-tron",
@@ -123,7 +127,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "avatr-11",
@@ -165,7 +171,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-330e",
@@ -207,7 +215,9 @@
       "performance": 4
     },
     "fuelKmL": 9.9,
-    "electricRangeKm": 61
+    "electricRangeKm": 61,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-530e",
@@ -249,7 +259,9 @@
       "performance": 4
     },
     "fuelKmL": 11.5,
-    "electricRangeKm": 70
+    "electricRangeKm": 70,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-i4",
@@ -291,7 +303,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-i4-m50",
@@ -333,7 +347,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-i7",
@@ -375,7 +391,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-ix1",
@@ -417,7 +435,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-ix2",
@@ -459,7 +479,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-ix3",
@@ -501,7 +523,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "bmw-x5-xdrive50e",
@@ -543,7 +567,9 @@
       "performance": 5
     },
     "fuelKmL": 9.5,
-    "electricRangeKm": 76
+    "electricRangeKm": 76,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-atto-2-gl",
@@ -563,7 +589,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": 3.3,
-    "dcKw": null,
+    "dcKw": 0,
     "airbags": 6,
     "warranty": "6 anos/200.000 km veículo + 8 anos/200.000 km bateria Blade",
     "fuelType": "PHEV",
@@ -585,7 +611,9 @@
       "performance": 3
     },
     "fuelKmL": 14.7,
-    "electricRangeKm": 33
+    "electricRangeKm": 33,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-atto-2-gs",
@@ -605,7 +633,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": 6.6,
-    "dcKw": null,
+    "dcKw": 0,
     "airbags": 6,
     "warranty": "6 anos/200.000 km veículo + 8 anos/200.000 km bateria Blade",
     "fuelType": "PHEV",
@@ -627,7 +655,9 @@
       "performance": 3
     },
     "fuelKmL": 14.8,
-    "electricRangeKm": 75
+    "electricRangeKm": 75,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-atto-8",
@@ -646,7 +676,7 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
+    "acKw": 6.6,
     "dcKw": 72,
     "airbags": 9,
     "warranty": null,
@@ -669,7 +699,9 @@
       "performance": 4
     },
     "fuelKmL": 11.1,
-    "electricRangeKm": 111
+    "electricRangeKm": 111,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-dolphin",
@@ -711,7 +743,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-dolphin-mini-gl",
@@ -753,7 +787,9 @@
       "performance": 1
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-dolphin-mini-gs",
@@ -795,7 +831,9 @@
       "performance": 1
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-dolphin-plus",
@@ -837,7 +875,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "dolphinse",
@@ -879,7 +919,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-han-ev",
@@ -889,7 +931,7 @@
     "price": 559800,
     "powerCv": 517,
     "torqueNm": 700,
-    "batteryKwh": 76.9,
+    "batteryKwh": 85.4,
     "batteryChem": "LFP (Blade)",
     "motorType": "Bimotor AWD (um motor em cada eixo)",
     "rangeKm": 349,
@@ -898,8 +940,8 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 120,
     "airbags": null,
     "warranty": "8 anos bateria",
     "fuelType": "BEV",
@@ -921,7 +963,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-king-phev",
@@ -940,8 +984,8 @@
     "trunkL": 450,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 0,
     "airbags": null,
     "warranty": null,
     "fuelType": "PHEV",
@@ -963,7 +1007,9 @@
       "performance": 3
     },
     "fuelKmL": 14.6,
-    "electricRangeKm": 78
+    "electricRangeKm": 78,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-seal",
@@ -1005,7 +1051,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-sealion-7",
@@ -1047,7 +1095,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-shark-phev",
@@ -1066,8 +1116,8 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 55,
     "airbags": null,
     "warranty": "8 anos bateria + 5 anos cobertura total do veículo",
     "fuelType": "PHEV",
@@ -1089,7 +1139,9 @@
       "performance": 5
     },
     "fuelKmL": 8.6,
-    "electricRangeKm": 68
+    "electricRangeKm": 68,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-song-plus-phev",
@@ -1108,7 +1160,7 @@
     "trunkL": 552,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
+    "acKw": 6.6,
     "dcKw": 18,
     "airbags": null,
     "warranty": null,
@@ -1131,7 +1183,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-song-plus-premium-dmi",
@@ -1150,8 +1204,8 @@
     "trunkL": 552,
     "weightKg": null,
     "wallbox": "Incluso, sem custo (wallbox residencial 7,4kW, com instalação)",
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 18,
     "airbags": null,
     "warranty": "6 anos veículo sem limite de km / 8 anos bateria sem limite de km",
     "fuelType": "PHEV",
@@ -1173,7 +1227,9 @@
       "performance": 5
     },
     "fuelKmL": 11.2,
-    "electricRangeKm": 87
+    "electricRangeKm": 87,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-song-pro-dm-i-flex",
@@ -1192,8 +1248,8 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 0,
     "airbags": 6,
     "warranty": null,
     "fuelType": "PHEV",
@@ -1215,7 +1271,9 @@
       "performance": 3
     },
     "fuelKmL": 15,
-    "electricRangeKm": 57
+    "electricRangeKm": 57,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-tan",
@@ -1234,8 +1292,8 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": 110,
+    "acKw": 11,
+    "dcKw": 170,
     "airbags": null,
     "warranty": "8 anos bateria Blade",
     "fuelType": "BEV",
@@ -1257,7 +1315,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-yuan-plus",
@@ -1299,7 +1359,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "byd-yuan-pro",
@@ -1318,8 +1380,8 @@
     "trunkL": 265,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 65,
     "airbags": null,
     "warranty": "8 anos bateria / 5 anos veículo",
     "fuelType": "BEV",
@@ -1341,7 +1403,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "chevrolet-blazer-ev",
@@ -1383,7 +1447,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "chevrolet-captiva-ev",
@@ -1425,7 +1491,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "chevrolet-equinox-ev",
@@ -1467,7 +1535,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "chevrolet-spark-euv",
@@ -1509,7 +1579,9 @@
       "performance": 1
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "denza-b5",
@@ -1551,7 +1623,9 @@
       "performance": 5
     },
     "fuelKmL": 8.2,
-    "electricRangeKm": 74
+    "electricRangeKm": 74,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "fiat-500e",
@@ -1593,7 +1667,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "ford-maverick-hybrid",
@@ -1635,7 +1711,9 @@
       "performance": 2
     },
     "fuelKmL": 14.5,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "ford-mustang-mach-e",
@@ -1677,7 +1755,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-aion-es",
@@ -1719,7 +1799,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "aionut",
@@ -1761,7 +1843,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-aion-ut-premium",
@@ -1803,7 +1887,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-aion-v",
@@ -1845,7 +1931,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-aion-y-elite",
@@ -1887,7 +1975,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-aion-y",
@@ -1929,7 +2019,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-gs4-hybrid",
@@ -1971,7 +2063,9 @@
       "performance": 3
     },
     "fuelKmL": 13,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gac-hyptec-ht",
@@ -2013,7 +2107,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "ex2max",
@@ -2055,7 +2151,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "geely-ex2-pro",
@@ -2097,7 +2195,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "geely-ex5-em-i",
@@ -2139,7 +2239,9 @@
       "performance": 4
     },
     "fuelKmL": 14,
-    "electricRangeKm": 65
+    "electricRangeKm": 65,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "geely-ex5-em-i-ultra",
@@ -2181,7 +2283,9 @@
       "performance": 4
     },
     "fuelKmL": 14,
-    "electricRangeKm": 112
+    "electricRangeKm": 112,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "geely-ex5-max",
@@ -2223,7 +2327,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "geely-ex5",
@@ -2265,7 +2371,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gwm-haval-h6-phev",
@@ -2307,7 +2415,9 @@
       "performance": 5
     },
     "fuelKmL": 13.8,
-    "electricRangeKm": 77
+    "electricRangeKm": 77,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gwm-haval-h6-phev35",
@@ -2349,7 +2459,9 @@
       "performance": 5
     },
     "fuelKmL": 11.6,
-    "electricRangeKm": 126
+    "electricRangeKm": 126,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gwm-ora-03-bev58",
@@ -2391,7 +2503,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "ora5",
@@ -2433,7 +2547,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gwm-tank-300",
@@ -2475,7 +2591,9 @@
       "performance": 5
     },
     "fuelKmL": 7.6,
-    "electricRangeKm": 75
+    "electricRangeKm": 75,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "gwm-wey-07",
@@ -2517,7 +2635,9 @@
       "performance": 5
     },
     "fuelKmL": 10,
-    "electricRangeKm": 128
+    "electricRangeKm": 128,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "honda-accord-advanced-hybrid",
@@ -2559,7 +2679,9 @@
       "performance": 3
     },
     "fuelKmL": 16.6,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "honda-civic-advanced-hybrid",
@@ -2601,7 +2723,9 @@
       "performance": 3
     },
     "fuelKmL": 17.2,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "honda-cr-v-advanced-hybrid",
@@ -2643,7 +2767,9 @@
       "performance": 4
     },
     "fuelKmL": 13,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "honda-prelude",
@@ -2685,7 +2811,9 @@
       "performance": 5
     },
     "fuelKmL": 16.8,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "hyundai-ioniq-5",
@@ -2727,7 +2855,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "hyundai-kona-hibrido",
@@ -2769,7 +2899,9 @@
       "performance": 3
     },
     "fuelKmL": 17.2,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jac-e-js1",
@@ -2811,7 +2943,9 @@
       "performance": 1
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jaecoo-7-phev",
@@ -2853,7 +2987,9 @@
       "performance": 4
     },
     "fuelKmL": 14.3,
-    "electricRangeKm": 79
+    "electricRangeKm": 79,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jetour-s06",
@@ -2895,7 +3031,9 @@
       "performance": 5
     },
     "fuelKmL": 13.4,
-    "electricRangeKm": 70
+    "electricRangeKm": 70,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jetour-t1",
@@ -2937,7 +3075,9 @@
       "performance": 5
     },
     "fuelKmL": 13,
-    "electricRangeKm": 88
+    "electricRangeKm": 88,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jetour-t2-phev",
@@ -2979,7 +3119,9 @@
       "performance": 4
     },
     "fuelKmL": 11,
-    "electricRangeKm": 75
+    "electricRangeKm": 75,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "jetour-t2-4x4-xwd",
@@ -3021,7 +3163,9 @@
       "performance": 5
     },
     "fuelKmL": 9.9,
-    "electricRangeKm": 106
+    "electricRangeKm": 106,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "kia-carnival-hybrid",
@@ -3063,7 +3207,9 @@
       "performance": 3
     },
     "fuelKmL": 11.1,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "kia-niro-hev",
@@ -3105,7 +3251,9 @@
       "performance": 2
     },
     "fuelKmL": 17.2,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "land-rover-range-rover-p550e",
@@ -3147,7 +3295,9 @@
       "performance": 5
     },
     "fuelKmL": 7.9,
-    "electricRangeKm": 71
+    "electricRangeKm": 71,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "land-rover-range-rover-sport-p550e",
@@ -3189,7 +3339,9 @@
       "performance": 5
     },
     "fuelKmL": 7.9,
-    "electricRangeKm": 71
+    "electricRangeKm": 71,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "land-rover-range-rover-velar-p400e",
@@ -3231,7 +3383,9 @@
       "performance": 4
     },
     "fuelKmL": 8.7,
-    "electricRangeKm": 40
+    "electricRangeKm": 40,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "leapmotor-b10",
@@ -3273,7 +3427,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "leapmotor-c10",
@@ -3315,7 +3471,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "leapmotor-c10-reev",
@@ -3357,7 +3515,9 @@
       "performance": 3
     },
     "fuelKmL": 12,
-    "electricRangeKm": 111
+    "electricRangeKm": 111,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "lexus-nx-450h-plus",
@@ -3399,7 +3559,9 @@
       "performance": 4
     },
     "fuelKmL": 13.8,
-    "electricRangeKm": 56
+    "electricRangeKm": 56,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "lexus-rx-450h-plus",
@@ -3441,7 +3603,9 @@
       "performance": 4
     },
     "fuelKmL": 13.4,
-    "electricRangeKm": 54
+    "electricRangeKm": 54,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "lexus-rz-500e",
@@ -3483,7 +3647,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mg-cyberster",
@@ -3525,7 +3691,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mg-s5",
@@ -3567,7 +3735,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mg-mg4",
@@ -3609,7 +3779,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mg4urban",
@@ -3651,7 +3823,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-aceman-e",
@@ -3693,7 +3867,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-aceman-se",
@@ -3735,7 +3911,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-cooper-se",
@@ -3777,7 +3955,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-countryman-se-all4",
@@ -3819,7 +3999,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-jcw-aceman-e",
@@ -3861,7 +4043,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mini-jcw-cooper-e",
@@ -3903,7 +4087,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "mitsubishi-outlander-phev",
@@ -3945,7 +4131,9 @@
       "performance": 3
     },
     "fuelKmL": 11.1,
-    "electricRangeKm": 58
+    "electricRangeKm": 58,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "neta-aya",
@@ -3987,7 +4175,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "neta-x-400",
@@ -4029,7 +4219,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "neta-x-500",
@@ -4071,7 +4263,9 @@
       "performance": 2
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "omoda-7-shs-p",
@@ -4113,7 +4307,9 @@
       "performance": 4
     },
     "fuelKmL": 13,
-    "electricRangeKm": 60
+    "electricRangeKm": 60,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "omoda-e5",
@@ -4155,7 +4351,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "porsche-macan-electric",
@@ -4197,7 +4395,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "porsche-taycan",
@@ -4239,7 +4439,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "renault-koleos-hybrid-e-tech",
@@ -4281,7 +4483,9 @@
       "performance": 3
     },
     "fuelKmL": 12.6,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "renault-megane-e-tech",
@@ -4323,7 +4527,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "toyota-bz4x",
@@ -4365,7 +4571,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "toyota-corolla-cross-hybrid",
@@ -4407,7 +4615,9 @@
       "performance": 2
     },
     "fuelKmL": 15.3,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "toyota-corolla-hybrid",
@@ -4449,7 +4659,9 @@
       "performance": 2
     },
     "fuelKmL": 16.4,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "toyota-yaris-cross-hybrid",
@@ -4491,7 +4703,9 @@
       "performance": 2
     },
     "fuelKmL": 16.6,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "volkswagen-id4-pro",
@@ -4533,7 +4747,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "volvo-ec40-plus",
@@ -4553,7 +4769,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 175,
     "airbags": null,
     "warranty": null,
     "fuelType": "BEV",
@@ -4575,7 +4791,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 7,
+    "chargeDcMinutes": 27
   },
   {
     "id": "volvo-ec40-ultra",
@@ -4595,7 +4813,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 175,
     "airbags": null,
     "warranty": null,
     "fuelType": "BEV",
@@ -4617,7 +4835,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 8,
+    "chargeDcMinutes": 28
   },
   {
     "id": "volvo-es90",
@@ -4659,7 +4879,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 10,
+    "chargeDcMinutes": 22
   },
   {
     "id": "volvo-ex30",
@@ -4679,7 +4901,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 150,
     "airbags": 6,
     "warranty": "36 meses/100.000 km veículo, 8 anos/160.000 km bateria",
     "fuelType": "BEV",
@@ -4701,7 +4923,9 @@
       "performance": 4
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 6,
+    "chargeDcMinutes": 26
   },
   {
     "id": "volvo-ex30-ultra",
@@ -4721,7 +4945,7 @@
     "weightKg": 1960,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 175,
     "airbags": null,
     "warranty": "36 meses/100.000 km veículo, 8 anos/160.000 km bateria",
     "fuelType": "BEV",
@@ -4743,7 +4967,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 8,
+    "chargeDcMinutes": 28
   },
   {
     "id": "volvo-ex40",
@@ -4763,7 +4989,7 @@
     "weightKg": 2050,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 175,
     "airbags": 7,
     "warranty": null,
     "fuelType": "BEV",
@@ -4785,7 +5011,9 @@
       "performance": 3
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 7,
+    "chargeDcMinutes": 27
   },
   {
     "id": "volvo-ex40-ultra",
@@ -4805,7 +5033,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 175,
     "airbags": 7,
     "warranty": null,
     "fuelType": "BEV",
@@ -4827,7 +5055,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 8,
+    "chargeDcMinutes": 28
   },
   {
     "id": "volvo-ex90",
@@ -4847,7 +5077,7 @@
     "weightKg": 2757,
     "wallbox": null,
     "acKw": null,
-    "dcKw": 350,
+    "dcKw": 250,
     "airbags": 9,
     "warranty": null,
     "fuelType": "BEV",
@@ -4869,7 +5099,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": 10,
+    "chargeDcMinutes": 30
   },
   {
     "id": "volvo-xc60-recharge-t8",
@@ -4889,7 +5121,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": null,
-    "dcKw": null,
+    "dcKw": 0,
     "airbags": 8,
     "warranty": null,
     "fuelType": "PHEV",
@@ -4911,7 +5143,9 @@
       "performance": 5
     },
     "fuelKmL": 9.4,
-    "electricRangeKm": 48
+    "electricRangeKm": 48,
+    "chargeAcHours": 3,
+    "chargeDcMinutes": null
   },
   {
     "id": "volvo-xc90-recharge-t8",
@@ -4931,7 +5165,7 @@
     "weightKg": null,
     "wallbox": null,
     "acKw": 7,
-    "dcKw": null,
+    "dcKw": 0,
     "airbags": null,
     "warranty": "2 anos (termo de garantia da bateria não confirmado — costuma ser 8 anos/160.000km em outros modelos Volvo com T8)",
     "fuelType": "PHEV",
@@ -4953,7 +5187,9 @@
       "performance": 5
     },
     "fuelKmL": 9.4,
-    "electricRangeKm": 47
+    "electricRangeKm": 47,
+    "chargeAcHours": 3,
+    "chargeDcMinutes": null
   },
   {
     "id": "zeekr-001",
@@ -4995,7 +5231,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "zeekr-7x",
@@ -5037,7 +5275,9 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   },
   {
     "id": "zeekr-x",
@@ -5079,6 +5319,8 @@
       "performance": 5
     },
     "fuelKmL": null,
-    "electricRangeKm": null
+    "electricRangeKm": null,
+    "chargeAcHours": null,
+    "chargeDcMinutes": null
   }
 ]

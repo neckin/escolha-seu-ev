@@ -103,6 +103,8 @@ const RESPONSIVE_CSS = `
 .ev-car-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .ev-car-columns { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
 .ev-car-similar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.ev-charge-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .ev-charge-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 860px) {
   .ev-car-hero, .ev-car-columns { grid-template-columns: minmax(0, 1fr); gap: 18px; }
   .ev-car-similar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -548,7 +550,8 @@ export default function App() {
                maintenanceKmBase:maintenance_km_base, maintenanceTotalCost:maintenance_total_cost,
                consumptionKwh100:consumption_kwh_100, techNotes:tech_notes,
                imageUrl:image_url, videoUrl:video_url, personas,
-               fuelKmL:fuel_km_l, electricRangeKm:electric_range_km`
+               fuelKmL:fuel_km_l, electricRangeKm:electric_range_km,
+               chargeAcHours:charge_ac_hours, chargeDcMinutes:charge_dc_minutes`
             )
             .order("name");
           if (!dbError && data && data.length > 0) loadedCars = data;
@@ -1430,7 +1433,7 @@ function SpecGrid({ car, T, className }) {
       )}
       <Spec label="Porta-malas" value={car.trunkL ? `${car.trunkL} L` : null} T={T} />
       <Spec label="Peso" value={car.weightKg ? `${car.weightKg} kg` : null} T={T} />
-      <Spec label="AC / DC" value={car.acKw || car.dcKw ? `${car.acKw ?? "—"} kW / ${car.dcKw ?? "—"} kW` : null} T={T} />
+      <Spec label="AC / DC" value={acDcLabel(car)} T={T} />
       <Spec label="Airbags" value={car.airbags} T={T} />
       <Spec label="Wallbox" value={car.wallbox} T={T} />
       <Spec label="Garantia" value={car.warranty} T={T} />
@@ -1558,6 +1561,65 @@ function MyCarComparison({ car, myCar, d, onEdit, T }) {
           )}
         </div>
       )}
+    </>
+  );
+}
+
+// dc_kw = 0 quer dizer "não aceita recarga rápida"; null é "não sabemos"
+const acDcLabel = (c) =>
+  c.acKw == null && c.dcKw == null ? null : `${c.acKw ?? "—"} kW / ${c.dcKw === 0 ? "sem DC" : `${c.dcKw ?? "—"} kW`}`;
+
+// ---- recarga na prática ----
+// Tempo oficial da marca quando existe; senão, estimativa pela bateria e pela
+// potência (com ~10% a mais pelas perdas e pela recarga que desacelera no fim).
+const CHARGE_LOSS = 1.1;
+const HOUSE_SOCKET_KW = 2.2; // tomada comum 220V/10A
+const fmtHours = (h) => (h < 1 ? `${Math.round(h * 60)} min` : `${String(h < 10 ? Math.round(h * 10) / 10 : Math.round(h)).replace(".", ",")} h`);
+
+function chargingInfo(car, energyPrice) {
+  const bat = car.batteryKwh;
+  const home = car.chargeAcHours
+    ? { value: `~${fmtHours(car.chargeAcHours)}`, note: "0 a 100%, tempo informado pela marca" }
+    : bat && car.acKw
+      ? { value: `~${fmtHours((bat / car.acKw) * CHARGE_LOSS)}`, note: `0 a 100%, estimado com carregador de ${String(car.acKw).replace(".", ",")} kW` }
+      : null;
+  const socketKw = Math.min(HOUSE_SOCKET_KW, car.acKw || HOUSE_SOCKET_KW);
+  const socket = bat ? { value: `~${fmtHours((bat / socketKw) * CHARGE_LOSS)}`, note: "0 a 100% em tomada 220V/10A, estimado" } : null;
+  const fast = car.dcKw === 0
+    ? { value: "Não aceita", note: "só recarrega em corrente alternada (AC)" }
+    : car.chargeDcMinutes
+      ? { value: `~${car.chargeDcMinutes} min`, note: `10 a 80%, em carregador de até ${car.dcKw} kW (tempo da marca)` }
+      : car.dcKw
+        ? { value: `até ${car.dcKw} kW`, note: "potência máxima; a marca não informa o tempo" }
+        : null;
+  const fullCost = bat ? { value: money(bat * energyPrice * CHARGE_LOSS), note: `bateria cheia em casa, a R$ ${energyPrice.toFixed(2).replace(".", ",")}/kWh` } : null;
+  return { home, socket, fast, fullCost };
+}
+
+function ChargingSection({ car, energyPrice, T }) {
+  const info = chargingInfo(car, energyPrice);
+  const tiles = [
+    ["Em casa (wallbox)", info.home],
+    ["Tomada comum", info.socket],
+    ["Recarga rápida", info.fast],
+    ["Carga completa custa", info.fullCost],
+  ];
+  return (
+    <>
+      <dl className="ev-charge-grid" style={{ display: "grid", gap: 10, margin: 0 }}>
+        {tiles.map(([label, t]) => (
+          <div key={label} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: "12px 14px" }}>
+            <dt style={{ fontSize: 11.5, color: T.inkDim, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</dt>
+            <dd style={{ margin: "4px 0 0" }}>
+              <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 18, fontWeight: 600, color: T.ink }}>{t ? t.value : "—"}</div>
+              <div style={{ fontSize: 12, color: T.inkDim, marginTop: 3, lineHeight: 1.4 }}>{t ? t.note : "dado ainda não cadastrado"}</div>
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <div style={{ fontSize: 12, color: T.inkDim, marginTop: 8, lineHeight: 1.5 }}>
+        Tempos reais variam com a temperatura, a carga inicial da bateria e o carregador. Estimativas usam a capacidade da bateria e a potência máxima que o carro aceita.
+      </div>
     </>
   );
 }
@@ -1717,6 +1779,14 @@ function CarPage({ car, cars, myCar, vsMyCar, best, inCompare, onCompare, onInsu
           </div>
         </section>
 
+        {/* ---------- RECARGA ---------- */}
+        {car.fuelType !== "HEV" && (
+          <section style={{ marginTop: 32 }}>
+            <SectionTitle T={T}>Recarga na prática</SectionTitle>
+            <ChargingSection car={car} energyPrice={(myCar && Number(myCar.energyPrice)) || 0.9} T={T} />
+          </section>
+        )}
+
         {/* ---------- FICHA + PERFIL ---------- */}
         <div className="ev-car-columns" style={{ marginTop: 32 }}>
           <section>
@@ -1792,7 +1862,9 @@ function CompareModal({ cars, onClose, T }) {
     // só faz sentido pro plug-in: no elétrico é a própria autonomia, no híbrido não existe
     ["Autonomia elétrica (plug-in)", (c) => (c.electricRangeKm != null ? `${c.electricRangeKm} km` : null)],
     ["Consumo", (c) => consumptionLabel(c)],
-    ["AC / DC", (c) => (c.acKw != null || c.dcKw != null ? `${c.acKw ?? "—"} kW / ${c.dcKw ?? "—"} kW` : null)],
+    ["AC / DC", (c) => acDcLabel(c)],
+    ["Recarga em casa", (c) => (c.fuelType === "HEV" ? "Não pluga" : chargingInfo(c, 0.9).home?.value ?? null)],
+    ["Recarga rápida", (c) => (c.fuelType === "HEV" ? "Não pluga" : chargingInfo(c, 0.9).fast?.value ?? null)],
     ["Vão livre", (c) => (c.groundClearance != null ? `${c.groundClearance} mm` : null)],
     ["Porta-malas", (c) => (c.trunkL != null ? `${c.trunkL} L` : null)],
     ["Peso", (c) => (c.weightKg != null ? `${c.weightKg} kg` : null)],
