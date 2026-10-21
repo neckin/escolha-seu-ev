@@ -260,6 +260,7 @@ const consumptionLabel = (car) => {
 };
 
 const SITE_URL = "https://escolha-seu-ev.vercel.app";
+const HOME_TITLE = "Escolha seu EV: compare carros elétricos e híbridos à venda no Brasil"; // igual ao <title> do index.html
 const carPath = (car) => `/carro/${car.id}`;
 
 const videoLinkFor = (car) =>
@@ -1586,9 +1587,10 @@ function CarPage({ car, cars, myCar, vsMyCar, best, inCompare, onCompare, onInsu
 
   useEffect(() => {
     if (!car) return;
-    const prev = document.title;
     document.title = `${car.name}: preço, autonomia e custo mensal | Escolha seu EV`;
-    return () => { document.title = prev; };
+    // volta pro título da home, não pro anterior: quem chegou direto aqui
+    // carregou o HTML do carro, então o "anterior" já era o título dele
+    return () => { document.title = HOME_TITLE; };
   }, [car]);
 
   const backLink = (
