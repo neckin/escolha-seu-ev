@@ -497,6 +497,10 @@ export default function App() {
 
   const [showTutorial, setShowTutorial] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
+  // O tutorial aponta pra partes da lista (filtros, selos, comparar). Quem chega
+  // direto numa página de carro (ex.: vindo do Google) só vê o tutorial quando
+  // for pra lista — antes disso ele destacaria elementos que não existem.
+  const [tutorialPending, setTutorialPending] = useState(false);
 
   const tourRefs = {
     personaRow: useRef(null),
@@ -560,9 +564,9 @@ export default function App() {
 
         try {
           const tutRes = await window.storage.get(TUTORIAL_KEY, false);
-          if (!tutRes || !tutRes.value) setShowTutorial(true); // first visit
+          if (!tutRes || !tutRes.value) setTutorialPending(true); // first visit
         } catch {
-          setShowTutorial(true); // couldn't check, assume first visit
+          setTutorialPending(true); // couldn't check, assume first visit
         }
 
         setCars(loadedCars);
@@ -585,6 +589,13 @@ export default function App() {
     if (ids.length) { setCompareIds(ids); setShowCompare(true); }
     window.history.replaceState(null, "", window.location.pathname);
   }, [cars]);
+
+  useEffect(() => {
+    if (tutorialPending && !carPageId && !loading) {
+      setShowTutorial(true);
+      setTutorialPending(false);
+    }
+  }, [tutorialPending, carPageId, loading]);
 
   const toggleTheme = async () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -777,7 +788,7 @@ export default function App() {
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             <button
-              onClick={() => { setTutorialStep(0); setShowTutorial(true); }}
+              onClick={() => { if (carPageId) navigate("/"); setTutorialStep(0); setShowTutorial(true); }}
               title="Como usar"
               style={{
                 width: 38, height: 38, borderRadius: 8, background: T.panel, border: `1px solid ${T.line}`,
