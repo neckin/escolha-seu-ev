@@ -60,6 +60,10 @@
     {
       "source": "/cotacao",
       "destination": "/index.html"
+    },
+    {
+      "source": "/carro/:id",
+      "destination": "/index.html"
     }
   ]
 }

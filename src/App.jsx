@@ -7,7 +7,7 @@ import {
   Zap, Battery, Users, Mountain, TrendingUp, DollarSign, Plus, X,
   ChevronDown, ChevronUp, Car, Gauge, Check,
   Sun, Moon, Fuel, ArrowRight, Play, Plug, HelpCircle, ArrowLeft, Sparkles,
-  Accessibility, Briefcase, ShieldCheck, Building2, PiggyBank
+  Accessibility, Briefcase, ShieldCheck, Building2, PiggyBank, Share2
 } from "lucide-react";
 import { supabase } from "./supabaseClient";
 import InsuranceModal from "./InsuranceModal.jsx";
@@ -94,6 +94,24 @@ const FONT_IMPORT = `
 const RESPONSIVE_CSS = `
 @media (max-width: 860px) {
   .ev-header-subtitle { display: none; }
+}
+
+.ev-car-link:hover { text-decoration: underline !important; text-underline-offset: 3px; }
+
+/* Página do carro: foto e resumo lado a lado no desktop, empilhados no celular;
+   ficha técnica em 3 colunas só quando há largura pra isso. */
+.ev-car-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.ev-car-columns { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.ev-car-similar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 860px) {
+  .ev-car-hero, .ev-car-columns { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .ev-car-similar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .ev-car-specs { grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; }
+}
+@media (max-width: 480px) {
+  .ev-car-similar { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Diálogos: caixa centrada e com largura de leitura no desktop; a folha que
@@ -240,6 +258,9 @@ const consumptionLabel = (car) => {
   if (car.fuelType === "PHEV" && kwh && kml) return `${kwh} elétrico · ${kml} híbrido`;
   return car.fuelType === "HEV" ? kml : kwh;
 };
+
+const SITE_URL = "https://escolha-seu-ev.vercel.app";
+const carPath = (car) => `/carro/${car.id}`;
 
 const videoLinkFor = (car) =>
   car.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(car.name + " review teste elétrico 2026")}`;
@@ -438,6 +459,30 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
+  // Página de cada carro (/carro/<id>) é caminho real, não hash: é o endereço
+  // que o Google indexa e que a pessoa compartilha. O build gera um HTML por
+  // carro com título e descrição próprios (scripts/prerender-car-pages.mjs);
+  // daqui pra frente a navegação é client-side, sem recarregar.
+  const [path, setPath] = useState(() => window.location.pathname);
+  useEffect(() => {
+    const onPop = () => setPath(window.location.pathname);
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  const navigate = (to) => {
+    if (to === window.location.pathname + window.location.search) return;
+    window.history.pushState(null, "", to);
+    setPath(window.location.pathname);
+    window.scrollTo(0, 0);
+  };
+  // onClick de <a href>: mantém ctrl/cmd+clique e botão do meio abrindo aba nova
+  const linkTo = (to) => (e) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    navigate(to);
+  };
+  const carPageId = (path.match(/^\/carro\/([^/]+)\/?$/) || [])[1] || null;
+
   const [cars, setCars] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -529,6 +574,17 @@ export default function App() {
       }
     })();
   }, [route]);
+
+  // Link de comparação compartilhado (/?comparar=id1,id2): abre direto a
+  // comparação com esses carros, ignorando ids que não existem mais.
+  useEffect(() => {
+    if (!cars) return;
+    const param = new URLSearchParams(window.location.search).get("comparar");
+    if (!param) return;
+    const ids = param.split(",").filter((id) => cars.some((c) => c.id === id)).slice(0, 4);
+    if (ids.length) { setCompareIds(ids); setShowCompare(true); }
+    window.history.replaceState(null, "", window.location.pathname);
+  }, [cars]);
 
   const toggleTheme = async () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -761,6 +817,24 @@ export default function App() {
         </div>
       </header>
 
+      {carPageId ? (
+        <CarPage
+          car={cars.find((c) => c.id === carPageId) || null}
+          cars={cars}
+          myCar={myCar}
+          vsMyCar={vsMyCar}
+          best={bestPersonaFor}
+          inCompare={compareIds.includes(carPageId)}
+          onCompare={(id) => {
+            setCompareIds((prev) => (prev.includes(id) ? prev : prev.length >= 4 ? prev : [...prev, id]));
+            navigate("/");
+          }}
+          onInsurance={setInsuranceCar}
+          onEditMyCar={() => setShowMyCarForm(true)}
+          linkTo={linkTo}
+          T={T}
+        />
+      ) : (
       <main style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px 100px" }}>
         {error && (
           <div style={{ background: hexA(T.warn, 0.12), border: `1px solid ${T.warn}`, color: T.warn, borderRadius: 8, padding: 10, fontSize: 13, marginBottom: 16 }}>
@@ -899,7 +973,6 @@ export default function App() {
             const isOpen = expanded === car.id;
             const best = bestPersonaFor(car);
             const inCompare = compareIds.includes(car.id);
-            const radarData = PERSONAS.map((p) => ({ label: p.label, value: car.personas?.[p.key] || 0 }));
 
             return (
               <div key={car.id} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, overflow: "hidden" }}>
@@ -907,7 +980,14 @@ export default function App() {
                 <div style={{ padding: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                     <div>
-                      <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, lineHeight: 1.2 }}>{car.name}</div>
+                      <a
+                        href={carPath(car)}
+                        onClick={linkTo(carPath(car))}
+                        className="ev-car-link"
+                        style={{ display: "block", fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16, lineHeight: 1.2, color: T.ink, textDecoration: "none" }}
+                      >
+                        {car.name}
+                      </a>
                       <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3, flexWrap: "wrap" }}>
                         <span style={{ fontSize: 12, color: T.inkDim }}>{car.category}</span>
                         {car.fuelType === "PHEV" && (
@@ -998,177 +1078,21 @@ export default function App() {
 
                 {isOpen && (
                   <div style={{ borderTop: `1px solid ${T.line}`, padding: 16, background: T.panelAlt }}>
-                    <div style={{ height: 190, marginBottom: 12 }}>
-                      <ResponsiveContainer width="100%" height="100%">
-                        <RadarChart data={radarData} outerRadius="70%">
-                          <PolarGrid stroke={T.line} />
-                          <PolarAngleAxis dataKey="label" tick={{ fill: T.inkDim, fontSize: 11.5 }} />
-                          <PolarRadiusAxis domain={[0, 5]} tick={false} axisLine={false} />
-                          <Radar dataKey="value" stroke={T.radar} fill={T.radar} fillOpacity={0.35} />
-                          <Tooltip contentStyle={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 8, fontSize: 12 }} />
-                        </RadarChart>
-                      </ResponsiveContainer>
-                    </div>
-
-                    {car.techNotes ? (
-                      <div style={{ fontSize: 12.5, color: T.inkDim, lineHeight: 1.5, marginBottom: 14 }}>
-                        <span style={{ color: T.accentText, fontWeight: 600 }}>Motor e bateria: </span>
-                        {car.techNotes}
-                        {car.priceVerifiedDate && (
-                          <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 6 }}>Ficha completa verificada em {car.priceVerifiedDate}.</div>
-                        )}
-                      </div>
-                    ) : (
-                      <div style={{ fontSize: 12, color: T.accentText, lineHeight: 1.5, marginBottom: 14, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
-                        {car.priceVerifiedDate ? (
-                          <>Preço checado em {car.priceVerifiedDate} contra fonte oficial/imprensa recente. As demais specs técnicas (vão livre, porta-malas, garantia etc.) ainda vêm de fonte agregada e não foram verificadas individualmente.</>
-                        ) : (
-                          <>Dados desse modelo vêm de fonte agregada de mercado (preço, autonomia, potência) e ainda não foram verificados individualmente. Faltam specs técnicas detalhadas: confirme na concessionária antes de decidir, ou complete no modo edição.</>
-                        )}
-                      </div>
-                    )}
-
-                    {BRAND_GROUPS[car.brand] && (
-                      <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 10, padding: "8px 10px", background: T.panelAlt, borderRadius: 8, border: `1px solid ${T.line}` }}>
-                        <strong style={{ color: T.ink }}>{car.brand}</strong>: {BRAND_GROUPS[car.brand]}
-                      </div>
-                    )}
-
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12 }}>
-                      <Spec label="Motor" value={car.motorType} T={T} />
-                      <Spec label="Bateria" value={car.batteryKwh ? `${car.batteryKwh} kWh · ${car.batteryChem || ""}` : null} T={T} />
-                      <Spec label="Torque" value={car.torqueNm ? `${car.torqueNm} Nm` : null} T={T} />
-                      <Spec label="0–100 km/h" value={car.accel ? `${car.accel}s` : null} T={T} />
-                      <Spec label="Consumo" value={consumptionLabel(car)} T={T} />
-                      {car.fuelType === "PHEV" && (
-                        <Spec label="Autonomia elétrica" value={car.electricRangeKm ? `${car.electricRangeKm} km (INMETRO)` : null} T={T} />
-                      )}
-                      <Spec label="Porta-malas" value={car.trunkL ? `${car.trunkL} L` : null} T={T} />
-                      <Spec label="Peso" value={car.weightKg ? `${car.weightKg} kg` : null} T={T} />
-                      <Spec label="AC / DC" value={car.acKw || car.dcKw ? `${car.acKw ?? "—"} kW / ${car.dcKw ?? "—"} kW` : null} T={T} />
-                      <Spec label="Airbags" value={car.airbags} T={T} />
-                      <Spec label="Wallbox" value={car.wallbox} T={T} />
-                      <Spec label="Garantia" value={car.warranty} T={T} />
-                      <Spec label="Intervalo revisão" value={car.maintenanceInterval} T={T} />
-                      <Spec label="1ª revisão" value={car.maintenanceFirstCost} T={T} />
-                      <Spec
-                        label="Manutenção (média/10k km)"
-                        value={maintCostPer10k(car) ? money(maintCostPer10k(car)) : null}
-                        hint={
-                          car.maintenanceKmBase
-                            ? `Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas até ${car.maintenanceKmBase.toLocaleString("pt-BR")} km, normalizada numa taxa comparável a cada 10.000 km rodados.`
-                            : "Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes."
-                        }
-                        T={T}
-                      />
-                    </div>
-
-                    {/* ---- video ---- */}
                     <a
-                      href={videoLinkFor(car)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: "flex", alignItems: "center", gap: 8, marginTop: 12, padding: 10, borderRadius: 8,
-                        background: T.panelAlt, border: `1px solid ${T.line}`, textDecoration: "none", color: T.ink
-                      }}
+                      href={carPath(car)}
+                      onClick={linkTo(carPath(car))}
+                      style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12.5, fontWeight: 700, color: T.accentText, textDecoration: "none", marginBottom: 10 }}
                     >
-                      <div style={{ width: 28, height: 28, borderRadius: 999, background: T.warn, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <Play size={12} color="#fff" fill="#fff" />
-                      </div>
-                      <div style={{ fontSize: 12.5 }}>
-                        {car.videoUrl
-                          ? "Assistir review em vídeo deste modelo"
-                          : `Buscar vídeos sobre o ${car.name} no YouTube`}
-                      </div>
+                      Ver página completa do {car.name} <ArrowRight size={13} />
                     </a>
+                    <PersonaRadar car={car} T={T} height={190} />
+                    <DataNotes car={car} T={T} />
+                    <SpecGrid car={car} T={T} />
+                    <VideoLink car={car} T={T} />
 
                     {/* ---- vs. meu carro atual ---- */}
                     <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${T.line}` }}>
-                      <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.6, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
-                        <Fuel size={12} /> {myCar && myCar.hasCar === false ? "Vs. sua mobilidade hoje" : "Vs. seu carro atual"}
-                      </div>
-                      {!myCar ? (
-                        <button
-                          onClick={() => setShowMyCarForm(true)}
-                          style={{ fontSize: 12.5, color: T.accentText, background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", width: "100%", textAlign: "left" }}
-                        >
-                          Diga como você se locomove hoje (com ou sem carro) pra ver a economia deste modelo →
-                        </button>
-                      ) : (
-                        (() => {
-                          const d = vsMyCar(car);
-                          if (!d) return <div style={{ fontSize: 12, color: T.inkDim }}>Sem dados suficientes do seu carro pra comparar.</div>;
-                          return (
-                            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                              {d.groundClearance != null && (
-                                <DeltaRow label="Vão livre" delta={d.groundClearance} unit="mm" T={T} />
-                              )}
-                              {d.trunkL != null && (
-                                <DeltaRow label="Porta-malas" delta={d.trunkL} unit="L" T={T} />
-                              )}
-                              {d.powerCv != null && (
-                                <DeltaRow label="Potência" delta={d.powerCv} unit="cv" T={T} />
-                              )}
-                              {d.monthlySavings != null && (
-                                <div style={{
-                                  marginTop: 6, padding: 10, borderRadius: 8,
-                                  background: d.monthlySavings >= 0 ? hexA(T.good, 0.1) : hexA(T.warn, 0.1),
-                                  border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
-                                }}>
-                                  {d.fuelMonthly != null && (
-                                    <div style={{ fontSize: 12, color: T.inkDim }}>
-                                      {myCar.hasCar === false
-                                        ? `Sua mobilidade hoje: ${money(d.fuelMonthly)}/mês`
-                                        : `Combustível (${myCar.name || "seu carro"}): ${money(d.fuelMonthly)}/mês`}
-                                      {` · ${RUN_COST_LABEL[car.fuelType]}: `}{money(d.energyMonthly)}/mês
-                                    </div>
-                                  )}
-                                  {d.fuelMonthly != null && <PhevShareNote car={car} share={d.electricShare} T={T} />}
-                                  {myCar.hasCar === false
-                                    ? d.evMaintMonthly != null && (
-                                        <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>
-                                          Manutenção estimada (este EV): {money(d.evMaintMonthly)}/mês
-                                        </div>
-                                      )
-                                    : d.myMaintMonthly != null && (
-                                        <div style={{ fontSize: 12, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
-                                          Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
-                                        </div>
-                                      )}
-                                  <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
-                                    {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
-                                    {money(Math.abs(d.monthlySavings))}/mês
-                                    {d.myMaintMonthly == null && myCar.hasCar !== false && <span style={{ fontWeight: 400, fontSize: 11.5, color: T.inkDim }}> (só combustível/energia)</span>}
-                                  </div>
-                                  {d.maintUnavailable && (
-                                    <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
-                                      Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                              {/* custo de posse absoluto: aparece pra quem ainda não tem carro mesmo sem
-                                  ter preenchido o gasto atual — não depende de nenhuma comparação. */}
-                              {myCar.hasCar === false && d.monthlySavings == null && d.ownershipMonthly != null && (
-                                <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}` }}>
-                                  <div style={{ fontSize: 12, color: T.inkDim }}>
-                                    {RUN_COST_LABEL[car.fuelType]}: {money(d.energyMonthly)}/mês
-                                    {d.evMaintMonthly != null && <> · Manutenção estimada: {money(d.evMaintMonthly)}/mês</>}
-                                  </div>
-                                  <PhevShareNote car={car} share={d.electricShare} T={T} />
-                                  <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.ink, marginTop: 3 }}>
-                                    ~{money(d.ownershipMonthly)}/mês pra rodar este {car.fuelType === "BEV" ? "elétrico" : car.fuelType === "PHEV" ? "plug-in" : "híbrido"}
-                                  </div>
-                                  <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
-                                    Não inclui parcela de financiamento nem seguro, só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })()
-                      )}
+                      <MyCarComparison car={car} myCar={myCar} d={myCar ? vsMyCar(car) : null} onEdit={() => setShowMyCarForm(true)} T={T} />
                     </div>
                   </div>
                 )}
@@ -1223,6 +1147,7 @@ export default function App() {
           </div>
         </div>
       </main>
+      )}
 
       {/* ---------- FOOTER ---------- */}
       <footer style={{ borderTop: `1px solid ${T.line}`, padding: "22px 16px 90px", textAlign: "center" }}>
@@ -1322,7 +1247,7 @@ function iconBtnStyle(T, color) {
 // hospedamos a imagem). Se não tiver imageUrl, ou se o link quebrar (site da
 // marca saiu do ar, trocou a URL, bloqueou hotlink etc.), some sem deixar
 // buraco no lugar — o card volta a ficar igual aos que nunca tiveram foto.
-function CarImage({ src, alt, T }) {
+function CarImage({ src, alt, T, height = 132, eager = false }) {
   const [broken, setBroken] = useState(false);
   if (!src || broken) return null;
   return (
@@ -1344,11 +1269,11 @@ function CarImage({ src, alt, T }) {
       <img
         src={src}
         alt={alt}
-        loading="lazy"
+        loading={eager ? "eager" : "lazy"}
         onError={() => setBroken(true)}
         style={{
           width: "100%",
-          height: 132,
+          height,
           objectFit: "contain",
           display: "block",
           filter: "saturate(0.88) contrast(1.02)",
@@ -1431,7 +1356,414 @@ function PhevShareNote({ car, share, T }) {
   );
 }
 
+// ---- blocos do detalhe de um carro: usados no card expandido e na página do carro ----
+
+function PersonaRadar({ car, T, height, outerRadius = "70%" }) {
+  const radarData = PERSONAS.map((p) => ({ label: p.label, value: car.personas?.[p.key] || 0 }));
+  return (
+    <div style={{ height, marginBottom: 12 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <RadarChart data={radarData} outerRadius={outerRadius}>
+          <PolarGrid stroke={T.line} />
+          <PolarAngleAxis dataKey="label" tick={{ fill: T.inkDim, fontSize: 11.5 }} />
+          <PolarRadiusAxis domain={[0, 5]} tick={false} axisLine={false} />
+          <Radar dataKey="value" stroke={T.radar} fill={T.radar} fillOpacity={0.35} />
+          <Tooltip contentStyle={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 8, fontSize: 12 }} />
+        </RadarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+function DataNotes({ car, T }) {
+  return (
+    <>
+      {car.techNotes ? (
+        <div style={{ fontSize: 12.5, color: T.inkDim, lineHeight: 1.5, marginBottom: 14 }}>
+          <span style={{ color: T.accentText, fontWeight: 600 }}>Motor e bateria: </span>
+          {car.techNotes}
+          {car.priceVerifiedDate && (
+            <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 6 }}>Ficha completa verificada em {car.priceVerifiedDate}.</div>
+          )}
+        </div>
+      ) : (
+        <div style={{ fontSize: 12, color: T.accentText, lineHeight: 1.5, marginBottom: 14, background: hexA(T.accent2, 0.1), border: `1px solid ${T.accent2}`, borderRadius: 8, padding: 10 }}>
+          {car.priceVerifiedDate ? (
+            <>Preço checado em {car.priceVerifiedDate} contra fonte oficial/imprensa recente. As demais specs técnicas (vão livre, porta-malas, garantia etc.) ainda vêm de fonte agregada e não foram verificadas individualmente.</>
+          ) : (
+            <>Dados desse modelo vêm de fonte agregada de mercado (preço, autonomia, potência) e ainda não foram verificados individualmente. Faltam specs técnicas detalhadas: confirme na concessionária antes de decidir, ou complete no modo edição.</>
+          )}
+        </div>
+      )}
+
+      {BRAND_GROUPS[car.brand] && (
+        <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 10, padding: "8px 10px", background: T.panelAlt, borderRadius: 8, border: `1px solid ${T.line}` }}>
+          <strong style={{ color: T.ink }}>{car.brand}</strong>: {BRAND_GROUPS[car.brand]}
+        </div>
+      )}
+    </>
+  );
+}
+
+function SpecGrid({ car, T, className }) {
+  return (
+    <div className={className} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 12 }}>
+      <Spec label="Motor" value={car.motorType} T={T} />
+      <Spec label="Bateria" value={car.batteryKwh ? `${car.batteryKwh} kWh${car.batteryChem ? ` · ${car.batteryChem}` : ""}` : null} T={T} />
+      <Spec label="Torque" value={car.torqueNm ? `${car.torqueNm} Nm` : null} T={T} />
+      <Spec label="0–100 km/h" value={car.accel ? `${car.accel}s` : null} T={T} />
+      <Spec label="Consumo" value={consumptionLabel(car)} T={T} />
+      {car.fuelType === "PHEV" && (
+        <Spec label="Autonomia elétrica" value={car.electricRangeKm ? `${car.electricRangeKm} km (INMETRO)` : null} T={T} />
+      )}
+      <Spec label="Porta-malas" value={car.trunkL ? `${car.trunkL} L` : null} T={T} />
+      <Spec label="Peso" value={car.weightKg ? `${car.weightKg} kg` : null} T={T} />
+      <Spec label="AC / DC" value={car.acKw || car.dcKw ? `${car.acKw ?? "—"} kW / ${car.dcKw ?? "—"} kW` : null} T={T} />
+      <Spec label="Airbags" value={car.airbags} T={T} />
+      <Spec label="Wallbox" value={car.wallbox} T={T} />
+      <Spec label="Garantia" value={car.warranty} T={T} />
+      <Spec label="Intervalo revisão" value={car.maintenanceInterval} T={T} />
+      <Spec label="1ª revisão" value={car.maintenanceFirstCost} T={T} />
+      <Spec
+        label="Manutenção (média/10k km)"
+        value={maintCostPer10k(car) ? money(maintCostPer10k(car)) : null}
+        hint={
+          car.maintenanceKmBase
+            ? `Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas até ${car.maintenanceKmBase.toLocaleString("pt-BR")} km, normalizada numa taxa comparável a cada 10.000 km rodados.`
+            : "Não é o preço de uma revisão isolada: é a soma de todas as revisões programadas conhecidas, normalizada numa taxa comparável a cada 10.000 km rodados, pra dar pra comparar carros com intervalos e prazos diferentes."
+        }
+        T={T}
+      />
+    </div>
+  );
+}
+
+function VideoLink({ car, T }) {
+  return (
+    <a
+      href={videoLinkFor(car)}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: "flex", alignItems: "center", gap: 8, marginTop: 12, padding: 10, borderRadius: 8,
+        background: T.panelAlt, border: `1px solid ${T.line}`, textDecoration: "none", color: T.ink
+      }}
+    >
+      <div style={{ width: 28, height: 28, borderRadius: 999, background: T.warn, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <Play size={12} color="#fff" fill="#fff" />
+      </div>
+      <div style={{ fontSize: 12.5 }}>
+        {car.videoUrl
+          ? "Assistir review em vídeo deste modelo"
+          : `Buscar vídeos sobre o ${car.name} no YouTube`}
+      </div>
+    </a>
+  );
+}
+
+// "Vs. seu carro atual / sua mobilidade": d é o resultado de vsMyCar(car), que
+// depende do perfil salvo e por isso é calculado no App.
+function MyCarComparison({ car, myCar, d, onEdit, T }) {
+  return (
+    <>
+      <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.6, color: T.inkDim, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+        <Fuel size={12} /> {myCar && myCar.hasCar === false ? "Vs. sua mobilidade hoje" : "Vs. seu carro atual"}
+      </div>
+      {!myCar ? (
+        <button
+          onClick={onEdit}
+          style={{ fontSize: 12.5, color: T.accentText, background: "transparent", border: `1px dashed ${T.line}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", width: "100%", textAlign: "left" }}
+        >
+          Diga como você se locomove hoje (com ou sem carro) pra ver a economia deste modelo →
+        </button>
+      ) : !d ? (
+        <div style={{ fontSize: 12, color: T.inkDim }}>Sem dados suficientes do seu carro pra comparar.</div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {d.groundClearance != null && (
+            <DeltaRow label="Vão livre" delta={d.groundClearance} unit="mm" T={T} />
+          )}
+          {d.trunkL != null && (
+            <DeltaRow label="Porta-malas" delta={d.trunkL} unit="L" T={T} />
+          )}
+          {d.powerCv != null && (
+            <DeltaRow label="Potência" delta={d.powerCv} unit="cv" T={T} />
+          )}
+          {d.monthlySavings != null && (
+            <div style={{
+              marginTop: 6, padding: 10, borderRadius: 8,
+              background: d.monthlySavings >= 0 ? hexA(T.good, 0.1) : hexA(T.warn, 0.1),
+              border: `1px solid ${d.monthlySavings >= 0 ? T.good : T.warn}`
+            }}>
+              {d.fuelMonthly != null && (
+                <div style={{ fontSize: 12, color: T.inkDim }}>
+                  {myCar.hasCar === false
+                    ? `Sua mobilidade hoje: ${money(d.fuelMonthly)}/mês`
+                    : `Combustível (${myCar.name || "seu carro"}): ${money(d.fuelMonthly)}/mês`}
+                  {` · ${RUN_COST_LABEL[car.fuelType]}: `}{money(d.energyMonthly)}/mês
+                </div>
+              )}
+              {d.fuelMonthly != null && <PhevShareNote car={car} share={d.electricShare} T={T} />}
+              {myCar.hasCar === false
+                ? d.evMaintMonthly != null && (
+                    <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>
+                      Manutenção estimada (este EV): {money(d.evMaintMonthly)}/mês
+                    </div>
+                  )
+                : d.myMaintMonthly != null && (
+                    <div style={{ fontSize: 12, color: T.inkDim, marginTop: d.fuelMonthly != null ? 2 : 0 }}>
+                      Manutenção ({myCar.name || "seu carro"}): {money(d.myMaintMonthly)}/mês · Manutenção (este EV): {money(d.evMaintMonthly)}/mês
+                    </div>
+                  )}
+              <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: d.monthlySavings >= 0 ? T.good : T.warn, marginTop: 3 }}>
+                {d.monthlySavings >= 0 ? "Economiza " : "Gasta mais "}
+                {money(Math.abs(d.monthlySavings))}/mês
+                {d.myMaintMonthly == null && myCar.hasCar !== false && <span style={{ fontWeight: 400, fontSize: 11.5, color: T.inkDim }}> (só combustível/energia)</span>}
+              </div>
+              {d.maintUnavailable && (
+                <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
+                  Este modelo ainda não tem dado de custo de manutenção cadastrado, então a economia acima considera só combustível/energia.
+                </div>
+              )}
+            </div>
+          )}
+          {/* custo de posse absoluto: aparece pra quem ainda não tem carro mesmo sem
+              ter preenchido o gasto atual — não depende de nenhuma comparação. */}
+          {myCar.hasCar === false && d.monthlySavings == null && d.ownershipMonthly != null && (
+            <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}` }}>
+              <div style={{ fontSize: 12, color: T.inkDim }}>
+                {RUN_COST_LABEL[car.fuelType]}: {money(d.energyMonthly)}/mês
+                {d.evMaintMonthly != null && <> · Manutenção estimada: {money(d.evMaintMonthly)}/mês</>}
+              </div>
+              <PhevShareNote car={car} share={d.electricShare} T={T} />
+              <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.ink, marginTop: 3 }}>
+                ~{money(d.ownershipMonthly)}/mês pra rodar este {car.fuelType === "BEV" ? "elétrico" : car.fuelType === "PHEV" ? "plug-in" : "híbrido"}
+              </div>
+              <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
+                Não inclui parcela de financiamento nem seguro, só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+// Até 4 carros pra seguir comparando: primeiro os da mesma categoria, depois
+// do mesmo tipo de propulsão, sempre pelo preço mais próximo.
+function similarCars(car, cars, n = 4) {
+  const dist = (c) => Math.abs((c.price || 0) - (car.price || 0));
+  const others = cars.filter((c) => c.id !== car.id);
+  const same = others.filter((c) => c.category === car.category).sort((a, b) => dist(a) - dist(b));
+  const fill = others.filter((c) => c.category !== car.category && c.fuelType === car.fuelType).sort((a, b) => dist(a) - dist(b));
+  return [...same, ...fill].slice(0, n);
+}
+
+const FUEL_LABEL = { BEV: "100% elétrico", PHEV: "Híbrido plug-in", HEV: "Híbrido" };
+
+function SectionTitle({ children, T }) {
+  return (
+    <h2 style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 18, letterSpacing: -0.2, color: T.ink, margin: "0 0 12px" }}>
+      {children}
+    </h2>
+  );
+}
+
+function CarPage({ car, cars, myCar, vsMyCar, best, inCompare, onCompare, onInsurance, onEditMyCar, linkTo, T }) {
+  const [shareMsg, setShareMsg] = useState(null);
+
+  useEffect(() => {
+    if (!car) return;
+    const prev = document.title;
+    document.title = `${car.name}: preço, autonomia e custo mensal | Escolha seu EV`;
+    return () => { document.title = prev; };
+  }, [car]);
+
+  const backLink = (
+    <a href="/" onClick={linkTo("/")} style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 13, fontWeight: 600, color: T.accentText, textDecoration: "none" }}>
+      <ArrowLeft size={14} /> Todos os carros
+    </a>
+  );
+
+  if (!car) {
+    return (
+      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 16px 100px" }}>
+        {backLink}
+        <h1 style={{ fontFamily: "'Manrope', sans-serif", fontSize: 24, margin: "18px 0 8px" }}>Carro não encontrado</h1>
+        <p style={{ color: T.inkDim, fontSize: 14 }}>Esse modelo pode ter saído de linha ou mudado de endereço. Veja a lista completa de elétricos e híbridos à venda no Brasil.</p>
+      </main>
+    );
+  }
+
+  const bestPersona = best(car);
+  const d = myCar ? vsMyCar(car) : null;
+  const similar = similarCars(car, cars);
+  const url = `${SITE_URL}${carPath(car)}`;
+
+  const share = async () => {
+    const data = { title: car.name, text: `${car.name} no Escolha seu EV`, url };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+      await navigator.clipboard.writeText(url);
+      setShareMsg("Link copiado");
+    } catch {
+      setShareMsg(null); // compartilhamento cancelado: não é erro
+    }
+    setTimeout(() => setShareMsg(null), 2500);
+  };
+
+  // 4 números de topo: o que mais pesa na decisão de cada tipo de carro
+  const stats = [
+    ["Potência", car.powerCv ? `${car.powerCv} cv` : "—"],
+    car.fuelType === "PHEV"
+      ? ["Autonomia elétrica", car.electricRangeKm ? `${car.electricRangeKm} km` : "—"]
+      : ["Autonomia", car.fuelType === "HEV" ? "Não pluga" : car.rangeKm ? `${car.rangeKm} km` : "—"],
+    ["0–100 km/h", car.accel ? `${car.accel}s` : "—"],
+    ["Consumo", car.fuelType === "HEV" ? (car.fuelKmL ? `${car.fuelKmL} km/l` : "—") : car.consumptionKwh100 ? `${car.consumptionKwh100} kWh/100km` : "—"],
+  ];
+
+  const btn = {
+    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6, borderRadius: 8,
+    padding: "10px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer", textDecoration: "none",
+    background: "transparent", border: `1px solid ${T.line}`, color: T.ink
+  };
+
+  return (
+    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 16px 100px" }}>
+      <nav aria-label="Navegação" style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", fontSize: 13, color: T.inkDim }}>
+        {backLink}
+        <span aria-hidden="true">/</span>
+        <span>{car.brand}</span>
+      </nav>
+
+      <article>
+        {/* ---------- RESUMO ---------- */}
+        <section className="ev-car-hero">
+          {car.imageUrl ? (
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, overflow: "hidden" }}>
+              <CarImage src={car.imageUrl} alt={car.name} T={T} height={300} eager />
+            </div>
+          ) : <div />}
+
+          <div>
+            <div style={{ fontSize: 12, textTransform: "uppercase", letterSpacing: 0.8, color: T.inkDim, fontFamily: "'IBM Plex Mono', monospace" }}>
+              {FUEL_LABEL[car.fuelType]} · {car.category}
+            </div>
+            <h1 style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800, fontSize: 30, lineHeight: 1.15, letterSpacing: -0.5, margin: "6px 0 10px", color: T.ink }}>
+              {car.name}
+            </h1>
+            <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 28, fontWeight: 600, color: T.accent2 }}>
+              {money(car.price)}
+            </div>
+            {car.priceVerifiedDate && (
+              <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>Preço de tabela checado em {car.priceVerifiedDate}</div>
+            )}
+
+            <div style={{ marginTop: 12 }}>
+              <BadgeRow badges={badgesFor(car, bestPersona, T)} T={T} />
+            </div>
+
+            <dl style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, margin: "16px 0 0" }}>
+              {stats.map(([label, value]) => (
+                <div key={label} style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 10, padding: "10px 12px" }}>
+                  <dt style={{ fontSize: 11.5, color: T.inkDim, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</dt>
+                  <dd style={{ margin: "3px 0 0", fontFamily: "'IBM Plex Mono', monospace", fontSize: 16, fontWeight: 600, color: T.ink }}>{value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap" }}>
+              <button
+                onClick={() => onInsurance(car)}
+                style={{ ...btn, background: T.accent2, border: `1px solid ${T.accent2}`, color: T.bg, flex: "1 1 180px" }}
+              >
+                <ShieldCheck size={15} /> Cotar seguro deste carro
+              </button>
+              <button onClick={() => onCompare(car.id)} style={{ ...btn, flex: "1 1 140px" }}>
+                {inCompare ? <Check size={15} /> : <Plus size={15} />} {inCompare ? "Na comparação" : "Comparar com outros"}
+              </button>
+              <button onClick={share} style={btn} aria-live="polite">
+                <Share2 size={15} /> {shareMsg || "Compartilhar"}
+              </button>
+            </div>
+            <VideoLink car={car} T={T} />
+          </div>
+        </section>
+
+        {/* ---------- CUSTO PRA VOCÊ ---------- */}
+        <section style={{ marginTop: 32 }}>
+          <SectionTitle T={T}>Quanto custa pra você</SectionTitle>
+          <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: 16 }}>
+            <MyCarComparison car={car} myCar={myCar} d={d} onEdit={onEditMyCar} T={T} />
+            {myCar && (
+              <button onClick={onEditMyCar} style={{ marginTop: 10, background: "none", border: "none", padding: 0, color: T.accentText, fontSize: 12.5, textDecoration: "underline", cursor: "pointer" }}>
+                Alterar meus dados de uso
+              </button>
+            )}
+          </div>
+        </section>
+
+        {/* ---------- FICHA + PERFIL ---------- */}
+        <div className="ev-car-columns" style={{ marginTop: 32 }}>
+          <section>
+            <SectionTitle T={T}>Ficha técnica</SectionTitle>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: "8px 16px 12px" }}>
+              <SpecGrid car={car} T={T} className="ev-car-specs" />
+            </div>
+          </section>
+          <section>
+            <SectionTitle T={T}>Pra quem ele serve</SectionTitle>
+            <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: 16 }}>
+              {bestPersona && (
+                <div style={{ fontSize: 13, color: T.inkDim, marginBottom: 4 }}>
+                  Melhor perfil: <strong style={{ color: T.ink }}>{bestPersona.label}</strong> ({bestPersona.hint.toLowerCase()})
+                </div>
+              )}
+              <PersonaRadar car={car} T={T} height={230} outerRadius="62%" />
+            </div>
+          </section>
+        </div>
+
+        {/* ---------- NOTAS ---------- */}
+        <section style={{ marginTop: 32 }}>
+          <SectionTitle T={T}>De onde vêm os números</SectionTitle>
+          <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: 16 }}>
+            <DataNotes car={car} T={T} />
+          </div>
+        </section>
+
+        {/* ---------- PARECIDOS ---------- */}
+        {similar.length > 0 && (
+          <section style={{ marginTop: 32 }}>
+            <SectionTitle T={T}>Compare com parecidos</SectionTitle>
+            <div className="ev-car-similar">
+              {similar.map((c) => (
+                <a
+                  key={c.id}
+                  href={carPath(c)}
+                  onClick={linkTo(carPath(c))}
+                  style={{ display: "block", background: T.panel, border: `1px solid ${T.line}`, borderRadius: 12, padding: 12, textDecoration: "none", color: T.ink }}
+                >
+                  <div className="ev-car-link" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 14, lineHeight: 1.25 }}>{c.name}</div>
+                  <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>{FUEL_LABEL[c.fuelType]}</div>
+                  <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: T.accent2, marginTop: 8 }}>{money(c.price)}</div>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
+      </article>
+    </main>
+  );
+}
+
 function CompareModal({ cars, onClose, T }) {
+  const [copied, setCopied] = useState(false);
+  const copyLink = async () => {
+    const url = `${SITE_URL}/?comparar=${cars.map((c) => c.id).join(",")}`;
+    try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 2500); } catch { /* sem permissão de área de transferência */ }
+  };
   // Cada getter retorna null (não uma string tipo "null kg") quando falta o dado —
   // só assim o "—" de fallback na renderização da célula funciona de verdade.
   const rows = [
@@ -1501,9 +1833,18 @@ function CompareModal({ cars, onClose, T }) {
             .ev-compare-carousel { display: block; }
           }
         `}</style>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, gap: 8 }}>
           <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 16 }}>Comparação</div>
-          <button onClick={onClose} aria-label="Fechar comparação" title="Fechar (Esc)" style={iconBtnStyle(T)}><X size={15} /></button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button
+              onClick={copyLink}
+              aria-live="polite"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "transparent", border: `1px solid ${T.line}`, color: T.ink, borderRadius: 8, padding: "8px 12px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }}
+            >
+              {copied ? <Check size={14} /> : <Share2 size={14} />} {copied ? "Link copiado" : "Copiar link"}
+            </button>
+            <button onClick={onClose} aria-label="Fechar comparação" title="Fechar (Esc)" style={iconBtnStyle(T)}><X size={15} /></button>
+          </div>
         </div>
         {distinctCategories.length > 1 && (
           <div style={{
