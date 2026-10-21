@@ -208,6 +208,39 @@ const maintCostPer10k = (car) =>
     ? Math.round((car.maintenanceTotalCost / car.maintenanceKmBase) * 10000)
     : null;
 
+// Custo mensal de rodar (energia + combustível), conforme a propulsão. Os
+// números de consumo vêm do INMETRO/PBEV: kWh/100km pro elétrico, km/l de
+// gasolina pro híbrido. No plug-in, supõe recarga diária em casa: os primeiros
+// km de cada dia (até a autonomia elétrica) saem da tomada, o resto da bomba.
+// Devolve null quando falta dado pra fazer a conta.
+const RUN_DAYS_PER_MONTH = 30;
+function runningCostMonthly(car, kmPerMonth, energyPrice, fuelPrice) {
+  if (!kmPerMonth) return null;
+  if (car.fuelType === "HEV") {
+    if (!car.fuelKmL) return null;
+    const fuel = (kmPerMonth / car.fuelKmL) * fuelPrice;
+    return { energy: 0, fuel, total: fuel, electricShare: 0 };
+  }
+  if (!car.consumptionKwh100) return null;
+  let electricShare = 1;
+  if (car.fuelType === "PHEV") {
+    if (!car.fuelKmL || !car.electricRangeKm) return null;
+    electricShare = Math.min(1, car.electricRangeKm / (kmPerMonth / RUN_DAYS_PER_MONTH));
+  }
+  const energy = ((kmPerMonth * electricShare) / 100) * car.consumptionKwh100 * energyPrice;
+  const fuel = electricShare < 1 ? ((kmPerMonth * (1 - electricShare)) / car.fuelKmL) * fuelPrice : 0;
+  return { energy, fuel, total: energy + fuel, electricShare };
+}
+
+const RUN_COST_LABEL = { BEV: "Energia (este elétrico)", PHEV: "Energia + gasolina (este plug-in)", HEV: "Gasolina (este híbrido)" };
+
+const consumptionLabel = (car) => {
+  const kwh = car.consumptionKwh100 ? `${car.consumptionKwh100} kWh/100km` : null;
+  const kml = car.fuelKmL ? `${car.fuelKmL} km/l` : null;
+  if (car.fuelType === "PHEV" && kwh && kml) return `${kwh} elétrico · ${kml} híbrido`;
+  return car.fuelType === "HEV" ? kml : kwh;
+};
+
 const videoLinkFor = (car) =>
   car.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(car.name + " review teste elétrico 2026")}`;
 
@@ -464,7 +497,8 @@ export default function App() {
                maintenanceInterval:maintenance_interval, maintenanceFirstCost:maintenance_first_cost,
                maintenanceKmBase:maintenance_km_base, maintenanceTotalCost:maintenance_total_cost,
                consumptionKwh100:consumption_kwh_100, techNotes:tech_notes,
-               imageUrl:image_url, videoUrl:video_url, personas`
+               imageUrl:image_url, videoUrl:video_url, personas,
+               fuelKmL:fuel_km_l, electricRangeKm:electric_range_km`
             )
             .order("name");
           if (!dbError && data && data.length > 0) loadedCars = data;
@@ -561,13 +595,15 @@ export default function App() {
     }
     let totalSavings = 0;
     let hasSavings = false;
+    const run = runningCostMonthly(car, myCar.kmPerMonth, myCar.energyPrice || 0.9, myCar.fuelPrice || 6.0);
+    if (run) out.electricShare = run.electricShare;
     // "ainda não tenho carro": não tem km/L nem preço de combustível pra comparar —
     // compara com o que a pessoa já gasta hoje se locomovendo (Uber/99/ônibus/metrô).
     if (myCar.hasCar === false) {
       // custo de posse: independe de a pessoa ter preenchido o gasto atual — dá pra
       // mostrar "quanto custaria rodar" mesmo sem nenhuma base de comparação.
-      if (myCar.kmPerMonth && car.consumptionKwh100) {
-        out.energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
+      if (run) {
+        out.energyMonthly = run.total;
         const evMaintPer10k = maintCostPer10k(car);
         if (evMaintPer10k != null) out.evMaintMonthly = (myCar.kmPerMonth / 10000) * evMaintPer10k;
         out.ownershipMonthly = out.energyMonthly + (out.evMaintMonthly || 0);
@@ -580,12 +616,11 @@ export default function App() {
         hasSavings = true;
       }
     } else {
-      if (myCar.kmPerLiter && myCar.fuelPrice && myCar.kmPerMonth && car.consumptionKwh100) {
+      if (myCar.kmPerLiter && myCar.fuelPrice && run) {
         const fuelMonthly = (myCar.kmPerMonth / myCar.kmPerLiter) * myCar.fuelPrice;
-        const energyMonthly = (myCar.kmPerMonth / 100) * car.consumptionKwh100 * (myCar.energyPrice || 0.9);
         out.fuelMonthly = fuelMonthly;
-        out.energyMonthly = energyMonthly;
-        out.fuelSavings = fuelMonthly - energyMonthly;
+        out.energyMonthly = run.total;
+        out.fuelSavings = fuelMonthly - run.total;
         totalSavings += out.fuelSavings;
         hasSavings = true;
       }
@@ -1001,7 +1036,10 @@ export default function App() {
                       <Spec label="Bateria" value={car.batteryKwh ? `${car.batteryKwh} kWh · ${car.batteryChem || ""}` : null} T={T} />
                       <Spec label="Torque" value={car.torqueNm ? `${car.torqueNm} Nm` : null} T={T} />
                       <Spec label="0–100 km/h" value={car.accel ? `${car.accel}s` : null} T={T} />
-                      <Spec label="Consumo" value={car.consumptionKwh100 ? `${car.consumptionKwh100} kWh/100km` : null} T={T} />
+                      <Spec label="Consumo" value={consumptionLabel(car)} T={T} />
+                      {car.fuelType === "PHEV" && (
+                        <Spec label="Autonomia elétrica" value={car.electricRangeKm ? `${car.electricRangeKm} km (INMETRO)` : null} T={T} />
+                      )}
                       <Spec label="Porta-malas" value={car.trunkL ? `${car.trunkL} L` : null} T={T} />
                       <Spec label="Peso" value={car.weightKg ? `${car.weightKg} kg` : null} T={T} />
                       <Spec label="AC / DC" value={car.acKw || car.dcKw ? `${car.acKw ?? "—"} kW / ${car.dcKw ?? "—"} kW` : null} T={T} />
@@ -1080,9 +1118,10 @@ export default function App() {
                                       {myCar.hasCar === false
                                         ? `Sua mobilidade hoje: ${money(d.fuelMonthly)}/mês`
                                         : `Combustível (${myCar.name || "seu carro"}): ${money(d.fuelMonthly)}/mês`}
-                                      {" · Energia (este EV): "}{money(d.energyMonthly)}/mês
+                                      {` · ${RUN_COST_LABEL[car.fuelType]}: `}{money(d.energyMonthly)}/mês
                                     </div>
                                   )}
+                                  {d.fuelMonthly != null && <PhevShareNote car={car} share={d.electricShare} T={T} />}
                                   {myCar.hasCar === false
                                     ? d.evMaintMonthly != null && (
                                         <div style={{ fontSize: 12, color: T.inkDim, marginTop: 2 }}>
@@ -1111,11 +1150,12 @@ export default function App() {
                               {myCar.hasCar === false && d.monthlySavings == null && d.ownershipMonthly != null && (
                                 <div style={{ marginTop: 6, padding: 10, borderRadius: 8, background: T.panelAlt, border: `1px solid ${T.line}` }}>
                                   <div style={{ fontSize: 12, color: T.inkDim }}>
-                                    Energia: {money(d.energyMonthly)}/mês
+                                    {RUN_COST_LABEL[car.fuelType]}: {money(d.energyMonthly)}/mês
                                     {d.evMaintMonthly != null && <> · Manutenção estimada: {money(d.evMaintMonthly)}/mês</>}
                                   </div>
+                                  <PhevShareNote car={car} share={d.electricShare} T={T} />
                                   <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.ink, marginTop: 3 }}>
-                                    ~{money(d.ownershipMonthly)}/mês pra rodar este elétrico
+                                    ~{money(d.ownershipMonthly)}/mês pra rodar este {car.fuelType === "BEV" ? "elétrico" : car.fuelType === "PHEV" ? "plug-in" : "híbrido"}
                                   </div>
                                   <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 4 }}>
                                     Não inclui parcela de financiamento nem seguro, só o custo de uso (energia + manutenção). Preencha "quanto você gasta hoje com transporte" pra comparar com sua mobilidade atual.
@@ -1376,6 +1416,18 @@ function DeltaRow({ label, delta, unit, T }) {
   );
 }
 
+// a conta do plug-in depende de uma suposição (recarga todo dia em casa) que
+// muda muito o resultado — precisa ficar à vista, não escondida no número
+function PhevShareNote({ car, share, T }) {
+  if (car.fuelType !== "PHEV" || share == null) return null;
+  const pct = Math.round(share * 100);
+  return (
+    <div style={{ fontSize: 11.5, color: T.inkDim, marginTop: 2 }}>
+      Supondo recarga diária em casa: {pct}% dos seus km no modo elétrico ({car.electricRangeKm} km de autonomia elétrica INMETRO por carga){pct < 100 ? ", o resto a gasolina" : ""}.
+    </div>
+  );
+}
+
 function CompareModal({ cars, onClose, T }) {
   // Cada getter retorna null (não uma string tipo "null kg") quando falta o dado —
   // só assim o "—" de fallback na renderização da célula funciona de verdade.
@@ -1389,6 +1441,9 @@ function CompareModal({ cars, onClose, T }) {
     ["Bateria", (c) => (c.batteryKwh != null ? `${c.batteryKwh} kWh${c.batteryChem ? ` (${c.batteryChem})` : ""}` : null)],
     ["Motor", (c) => c.motorType],
     ["Autonomia", (c) => (c.rangeKm != null ? `${c.rangeKm} km` : null)],
+    // só faz sentido pro plug-in: no elétrico é a própria autonomia, no híbrido não existe
+    ["Autonomia elétrica (plug-in)", (c) => (c.electricRangeKm != null ? `${c.electricRangeKm} km` : null)],
+    ["Consumo", (c) => consumptionLabel(c)],
     ["AC / DC", (c) => (c.acKw != null || c.dcKw != null ? `${c.acKw ?? "—"} kW / ${c.dcKw ?? "—"} kW` : null)],
     ["Vão livre", (c) => (c.groundClearance != null ? `${c.groundClearance} mm` : null)],
     ["Porta-malas", (c) => (c.trunkL != null ? `${c.trunkL} L` : null)],

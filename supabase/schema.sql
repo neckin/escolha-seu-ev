@@ -30,6 +30,8 @@ create table if not exists cars (
   maintenance_km_base integer,
   maintenance_total_cost integer,
   consumption_kwh_100 numeric,
+  fuel_km_l numeric,          -- gasolina, ciclo combinado INMETRO (HEV; PHEV no modo híbrido)
+  electric_range_km integer,  -- autonomia no modo elétrico INMETRO (só PHEV)
   tech_notes text,
   image_url text,
   video_url text,
