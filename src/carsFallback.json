@@ -2436,8 +2436,8 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 48,
     "airbags": 6,
     "warranty": null,
     "fuelType": "PHEV",
@@ -2460,7 +2460,7 @@
     },
     "fuelKmL": 11.6,
     "electricRangeKm": 126,
-    "chargeAcHours": null,
+    "chargeAcHours": 5,
     "chargeDcMinutes": null
   },
   {
@@ -2920,8 +2920,8 @@
     "trunkL": 121,
     "weightKg": 1180,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6,
+    "dcKw": 20,
     "airbags": 2,
     "warranty": null,
     "fuelType": "BEV",
@@ -3008,8 +3008,8 @@
     "trunkL": 416,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
-    "dcKw": null,
+    "acKw": 6.6,
+    "dcKw": 40,
     "airbags": 6,
     "warranty": "7 anos/150.000 km veículo + 8 anos/160.000 km bateria",
     "fuelType": "PHEV",
@@ -3668,7 +3668,7 @@
     "trunkL": null,
     "weightKg": null,
     "wallbox": null,
-    "acKw": null,
+    "acKw": 11,
     "dcKw": 150,
     "airbags": null,
     "warranty": null,
@@ -3693,7 +3693,7 @@
     "fuelKmL": null,
     "electricRangeKm": null,
     "chargeAcHours": null,
-    "chargeDcMinutes": null
+    "chargeDcMinutes": 38
   },
   {
     "id": "mg-s5",
@@ -4109,7 +4109,7 @@
     "weightKg": null,
     "wallbox": "Não incluso (carregador portátil 3,5kW de série)",
     "acKw": 3.5,
-    "dcKw": null,
+    "dcKw": 0,
     "airbags": 11,
     "warranty": "5 anos veículo / 8 anos bateria",
     "fuelType": "PHEV",
@@ -5277,7 +5277,7 @@
     "fuelKmL": null,
     "electricRangeKm": null,
     "chargeAcHours": null,
-    "chargeDcMinutes": null
+    "chargeDcMinutes": 16
   },
   {
     "id": "zeekr-x",
