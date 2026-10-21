@@ -12,6 +12,7 @@ import {
 import { supabase } from "./supabaseClient";
 import InsuranceModal from "./InsuranceModal.jsx";
 import PrivacyPage from "./PrivacyPage.jsx";
+import { IPVA_STATES, IPVA_BY_UF, ipvaSchedule } from "./ipva.js";
 // Fallback offline: gerado a partir do Supabase (fonte da verdade do
 // catálogo) por scripts/generate-fallback-snapshot.mjs — não editar à mão.
 // Usado só se o Supabase não estiver configurado ou a consulta falhar.
@@ -104,6 +105,8 @@ const RESPONSIVE_CSS = `
 .ev-car-columns { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 20px; align-items: start; }
 .ev-car-similar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .ev-charge-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ev-tco-inputs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 560px) { .ev-tco-inputs { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 860px) { .ev-charge-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 860px) {
   .ev-car-hero, .ev-car-columns { grid-template-columns: minmax(0, 1fr); gap: 18px; }
@@ -1624,6 +1627,147 @@ function ChargingSection({ car, energyPrice, T }) {
   );
 }
 
+// ---- custo em 5 anos ----
+// Compra + energia/combustível + revisões + IPVA do estado + seguro (se a
+// pessoa informar). Revenda fica de fora: não há dado confiável de
+// desvalorização de elétricos no Brasil. IPVA começa no ano seguinte ao atual.
+const TCO_YEARS = 5;
+const UF_KEY = "ev-comparador:uf:v1";
+const pctLabel = (r) => `${String(Math.round(r * 10000) / 100).replace(".", ",")}%`;
+
+function readUf() {
+  try { return localStorage.getItem(UF_KEY) || "SP"; } catch { return "SP"; }
+}
+
+function tcoFor(car, { uf, kmPerMonth, energyPrice, fuelPrice, insuranceYear, ipvaOverride }) {
+  const months = TCO_YEARS * 12;
+  const run = runningCostMonthly(car, kmPerMonth, energyPrice, fuelPrice);
+  const per10k = maintCostPer10k(car);
+  const ipva = ipvaSchedule(car, uf, new Date().getFullYear() + 1, TCO_YEARS, ipvaOverride);
+  const parts = [
+    { key: "compra", label: "Compra", value: car.price ?? null, note: "preço de tabela" },
+    { key: "uso", label: RUN_COST_LABEL[car.fuelType], value: run ? run.total * months : null, note: run ? `${money(run.total)}/mês` : "falta dado de consumo" },
+    { key: "revisoes", label: "Revisões", value: per10k != null ? (per10k * kmPerMonth * months) / 10000 : null, note: per10k != null ? `${money(per10k)} a cada 10 mil km` : "a marca não divulga o custo" },
+    { key: "ipva", label: "IPVA", value: ipva ? ipva.reduce((s, y) => s + y.value, 0) : null, note: !ipva ? "" : ipva.every((y) => y.rate === ipva[0].rate) ? `${pctLabel(ipva[0].rate)} ao ano` : ipva.map((y) => `${y.year}: ${pctLabel(y.rate)}`).join(" · ") },
+    { key: "seguro", label: "Seguro", value: insuranceYear ? insuranceYear * TCO_YEARS : null, note: insuranceYear ? `${money(insuranceYear)}/ano, informado por você` : "informe quanto pagaria por ano" },
+  ];
+  const total = parts.reduce((s, p) => s + (p.value || 0), 0);
+  const missing = parts.filter((p) => p.value == null && p.key !== "seguro").map((p) => p.label.toLowerCase());
+  return { parts, total, missing, ipva };
+}
+
+function TcoSection({ car, myCar, onEditMyCar, onInsurance, T }) {
+  const [uf, setUf] = useState(readUf);
+  const [km, setKm] = useState(() => (myCar && Number(myCar.kmPerMonth)) || 1000);
+  const [insurance, setInsurance] = useState("");
+  const [rateText, setRateText] = useState("");
+  // o perfil salvo carrega depois do primeiro render; quando chegar, a km dele manda
+  const savedKm = myCar && Number(myCar.kmPerMonth);
+  useEffect(() => { if (savedKm) setKm(savedKm); }, [savedKm]);
+  // a alíquota digitada vale só pro carro e estado em que foi digitada
+  useEffect(() => { setRateText(""); }, [car.id, uf]);
+
+  const chooseUf = (v) => {
+    setUf(v);
+    try { localStorage.setItem(UF_KEY, v); } catch { /* preferência só deste navegador */ }
+  };
+
+  const override = rateText.trim() === "" ? null : Number(rateText.replace(",", ".")) / 100;
+  const energyPrice = (myCar && Number(myCar.energyPrice)) || 0.9;
+  const fuelPrice = (myCar && Number(myCar.fuelPrice)) || 6.0;
+  const t = tcoFor(car, {
+    uf, kmPerMonth: Number(km) || 0, energyPrice, fuelPrice,
+    insuranceYear: Number(insurance) || 0,
+    ipvaOverride: Number.isFinite(override) ? override : null,
+  });
+  const st = IPVA_BY_UF[uf];
+  const max = Math.max(...t.parts.map((p) => p.value || 0), 1);
+
+  const field = { background: T.bg, border: `1px solid ${T.line}`, borderRadius: 7, padding: "9px", color: T.ink, fontSize: 13, boxSizing: "border-box", width: "100%" };
+  const label = { fontSize: 12.5, color: T.ink, fontWeight: 600, display: "flex", flexDirection: "column", gap: 5 };
+
+  return (
+    <div style={{ background: T.panel, border: `1px solid ${T.line}`, borderRadius: 14, padding: 16 }}>
+      <div className="ev-tco-inputs" style={{ display: "grid", gap: 12 }}>
+        <label style={label}>
+          Seu estado
+          <select value={uf} onChange={(e) => chooseUf(e.target.value)} style={field}>
+            {IPVA_STATES.map((s) => <option key={s.uf} value={s.uf}>{s.name}</option>)}
+          </select>
+        </label>
+        <label style={label}>
+          Km por mês
+          <input type="number" inputMode="numeric" min="0" value={km} onChange={(e) => setKm(e.target.value)} style={field} />
+        </label>
+        <label style={label}>
+          Seguro por ano (opcional)
+          <input type="number" inputMode="numeric" min="0" value={insurance} onChange={(e) => setInsurance(e.target.value)} placeholder="Ex.: 6000" style={field} />
+        </label>
+      </div>
+
+      <div style={{ marginTop: 18 }}>
+        <div style={{ fontSize: 12, color: T.inkDim, textTransform: "uppercase", letterSpacing: 0.6 }}>Total em {TCO_YEARS} anos</div>
+        <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 30, fontWeight: 600, color: T.ink, lineHeight: 1.2 }}>{money(t.total)}</div>
+        <div style={{ fontSize: 13, color: T.inkDim }}>
+          equivale a {money(t.total / (TCO_YEARS * 12))} por mês, compra incluída
+          {t.missing.length > 0 && <> · sem {t.missing.join(" e ")}, por falta de dado</>}
+        </div>
+      </div>
+
+      <dl style={{ margin: "16px 0 0", display: "flex", flexDirection: "column", gap: 12 }}>
+        {t.parts.map((p) => (
+          <div key={p.key}>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
+              <dt style={{ fontSize: 13, fontWeight: 600, color: T.ink }}>{p.label}</dt>
+              <dd style={{ margin: 0, fontFamily: "'IBM Plex Mono', monospace", fontSize: 14, fontWeight: 600, color: p.value == null ? T.inkDim : T.ink }}>
+                {p.value == null ? "—" : money(p.value)}
+              </dd>
+            </div>
+            <div aria-hidden="true" style={{ height: 6, borderRadius: 4, background: T.panelAlt, marginTop: 5, overflow: "hidden" }}>
+              {p.value != null && <div style={{ width: `${Math.max(1, (p.value / max) * 100)}%`, height: "100%", borderRadius: 4, background: T.accent }} />}
+            </div>
+            <div style={{ fontSize: 12, color: T.inkDim, marginTop: 4, lineHeight: 1.45 }}>
+              {p.note}
+              {p.key === "seguro" && (
+                <> · <button onClick={() => onInsurance(car)} style={{ background: "none", border: "none", padding: 0, color: T.accentText, fontSize: 12, textDecoration: "underline", cursor: "pointer" }}>cotar com a D&B</button></>
+              )}
+            </div>
+          </div>
+        ))}
+      </dl>
+
+      {st && (
+        <div style={{ marginTop: 16, padding: 12, borderRadius: 10, background: T.panelAlt, fontSize: 12.5, lineHeight: 1.5, color: T.inkDim }}>
+          <div style={{ color: T.ink, fontWeight: 600, marginBottom: 2 }}>
+            IPVA em {st.name}{" "}
+            <span style={{ fontSize: 11, fontWeight: 600, padding: "1px 7px", borderRadius: 999, border: `1px ${st.conf === "oficial" ? "solid" : "dashed"} ${st.conf === "oficial" ? T.good : T.line}`, color: st.conf === "oficial" ? T.good : T.inkDim, whiteSpace: "nowrap" }}>
+              {st.conf === "oficial" ? "conferido na lei/Sefaz" : "segundo a imprensa"}
+            </span>
+          </div>
+          {st.summary}{" "}
+          Fonte: {st.url ? <a href={st.url} target="_blank" rel="noopener noreferrer" style={{ color: T.accentText }}>{st.source}</a> : st.source}.
+          <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap", color: T.ink, fontWeight: 600 }}>
+            Sabe a alíquota certa? Use outra:
+            <input
+              type="text" inputMode="decimal" value={rateText} onChange={(e) => setRateText(e.target.value)}
+              placeholder={t.ipva ? pctLabel(t.ipva[0].rate).replace("%", "") : ""}
+              aria-label="Alíquota de IPVA em porcentagem"
+              style={{ ...field, width: 80, padding: "6px 8px" }}
+            />
+            <span style={{ fontWeight: 400, color: T.inkDim }}>% ao ano</span>
+          </label>
+        </div>
+      )}
+
+      <div style={{ fontSize: 12, color: T.inkDim, marginTop: 12, lineHeight: 1.55 }}>
+        Energia e combustível a R$ {energyPrice.toFixed(2).replace(".", ",")}/kWh e R$ {fuelPrice.toFixed(2).replace(".", ",")}/litro
+        {onEditMyCar && <> (<button onClick={onEditMyCar} style={{ background: "none", border: "none", padding: 0, color: T.accentText, fontSize: 12, textDecoration: "underline", cursor: "pointer" }}>alterar</button>)</>}.
+        {" "}O IPVA usa um valor do carro que cai 10% ao ano, uma estimativa simples. Não entram: financiamento, revenda ao fim dos 5 anos, pneus, licenciamento e estacionamento.
+      </div>
+    </div>
+  );
+}
+
 // Até 4 carros pra seguir comparando: primeiro os da mesma categoria, depois
 // do mesmo tipo de propulsão, sempre pelo preço mais próximo.
 function similarCars(car, cars, n = 4) {
@@ -1777,6 +1921,12 @@ function CarPage({ car, cars, myCar, vsMyCar, best, inCompare, onCompare, onInsu
               </button>
             )}
           </div>
+        </section>
+
+        {/* ---------- CUSTO EM 5 ANOS ---------- */}
+        <section style={{ marginTop: 32 }}>
+          <SectionTitle T={T}>Custo em 5 anos</SectionTitle>
+          <TcoSection car={car} myCar={myCar} onEditMyCar={onEditMyCar} onInsurance={onInsurance} T={T} />
         </section>
 
         {/* ---------- RECARGA ---------- */}
