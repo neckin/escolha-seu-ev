@@ -1,0 +1,158 @@
+// Relatório semanal das cotações feitas pelo site, por e-mail. Roda pelo Cron
+// da Vercel (vercel.json, segunda às 8h de Brasília) e lê os últimos 7 dias da
+// tabela quote_events. Nome, contato, veículo e preços vêm da Segfy
+// (show-results), porque o registro próprio não guarda dado pessoal.
+//
+// Variáveis (só no servidor):
+//   CRON_SECRET   — a Vercel manda "Authorization: Bearer <CRON_SECRET>" na
+//                   chamada do cron; sem a variável o endpoint não roda.
+//   REPORT_EMAILS — destinatários, separados por vírgula.
+//   + as do Supabase (api/_lib/quoteLog.js) e do SMTP (api/_lib/mailer.js).
+
+import { segfyRequest } from "../_lib/segfyClient.js";
+import { listQuoteEvents } from "../_lib/quoteLog.js";
+import { sendEmail } from "../_lib/mailer.js";
+import { escapeHtml, money, formatPhone, insurerName } from "../_lib/quoteFormat.js";
+
+const DAYS = 7;
+const SOURCE_LABELS = { comparador: "Comparador", cotacao: "Página de cotação (site da D&B)" };
+
+function brDateTime(iso) {
+  return new Date(iso).toLocaleString("pt-BR", {
+    timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+  });
+}
+
+function brDay(date) {
+  return date.toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", day: "2-digit", month: "2-digit" });
+}
+
+function formatCep(digits) {
+  const d = String(digits || "").replace(/\D/g, "");
+  return d.length === 8 ? `${d.slice(0, 5)}-${d.slice(5)}` : d;
+}
+
+async function fetchQuote(guid) {
+  try {
+    const { data } = await segfyRequest("/api/vehicle/version/1.0/show-results", {
+      method: "POST",
+      body: { config: { token: process.env.SEGFY_BROKER_TOKEN }, data: { guid, id: "", multicalculo_id: "" } },
+    });
+    const results = (data?.results || []).flatMap((q) => q.results || []).filter((r) => r.premium != null);
+    const comprehensive = results
+      .filter((r) => /compreens/i.test(r.company_coverages?.coverage_type || ""))
+      .sort((a, b) => a.premium - b.premium);
+    return {
+      quotation: data?.data?.data || null,
+      quotationId: data?.quotation_id || data?.id || guid,
+      insurers: new Set(results.map((r) => r.company?.name)).size,
+      cheapest: comprehensive[0] || null,
+    };
+  } catch (error) {
+    console.error("[quote-report] show-results", guid, error.message);
+    return { quotation: null, quotationId: guid, insurers: 0, cheapest: null };
+  }
+}
+
+// Agrupa os eventos por cotação: o 'quote' diz quando e de onde veio, o
+// 'choice' (pode chegar numa semana posterior à cotação) diz o plano escolhido.
+export function groupEvents(events) {
+  const byGuid = new Map();
+  for (const e of events) {
+    const entry = byGuid.get(e.quote_guid) || { guid: e.quote_guid, quotedAt: null, source: null, carId: null, choice: null };
+    if (e.event === "quote") Object.assign(entry, { quotedAt: e.created_at, source: e.source, carId: e.car_id });
+    if (e.event === "choice") entry.choice = e;
+    byGuid.set(e.quote_guid, entry);
+  }
+  return [...byGuid.values()];
+}
+
+function quoteCard(entry, details) {
+  const q = details.quotation;
+  const customer = q?.customer || {};
+  const vehicle = q?.vehicle || {};
+  const row = (label, value) =>
+    `<tr><td style="padding:3px 12px 3px 0;color:#555;vertical-align:top">${label}</td><td style="padding:3px 0">${value}</td></tr>`;
+  const choice = entry.choice
+    ? `<strong>${escapeHtml(insurerName({ company: { name: entry.choice.insurer } }))} · ${money(entry.choice.premium)}/ano</strong>
+       (${escapeHtml(entry.choice.coverage_type || "—")})${entry.choice.payment ? `<br>Pagamento: ${escapeHtml(entry.choice.payment)}` : ""}
+       <br><span style="color:#555">em ${brDateTime(entry.choice.created_at)}</span>`
+    : `<span style="color:#9A5B00">Não escolheu plano</span>`;
+  const when = entry.quotedAt ? brDateTime(entry.quotedAt) : "semana anterior";
+  return `
+    <div style="border:1px solid #DDE3EA;border-radius:8px;padding:12px 14px;margin:0 0 12px">
+      <div style="font-size:15px;margin:0 0 8px"><strong>${escapeHtml(customer.name || "Cliente não encontrado na Segfy")}</strong>
+        <span style="color:#555"> · ${escapeHtml(when)}</span></div>
+      <table style="border-collapse:collapse">
+        ${row("Celular", escapeHtml(formatPhone(customer.cellphone) || "—"))}
+        ${row("E-mail", escapeHtml(customer.email || "—"))}
+        ${row("Veículo", escapeHtml([vehicle.brand, vehicle.model, vehicle.model_year].filter(Boolean).join(" ") || "—")
+          + (vehicle.zero_km ? " (0 km)" : ""))}
+        ${row("CEP", escapeHtml(formatCep(q?.zip_code) || "—"))}
+        ${row("Origem", escapeHtml(SOURCE_LABELS[entry.source] || "—") + (entry.carId ? ` · carro <code>${escapeHtml(entry.carId)}</code>` : ""))}
+        ${row("Completa mais barata", details.cheapest
+          ? `${escapeHtml(insurerName(details.cheapest))} · ${money(details.cheapest.premium)}/ano (${details.insurers} seguradoras responderam)`
+          : "Nenhuma seguradora devolveu cobertura completa")}
+        ${row("Plano escolhido", choice)}
+        ${row("ID na Segfy", `<code>${escapeHtml(details.quotationId)}</code>`)}
+      </table>
+    </div>`;
+}
+
+export async function buildReport(events, now = new Date()) {
+  const entries = groupEvents(events);
+  const details = [];
+  for (let i = 0; i < entries.length; i += 5) {
+    details.push(...(await Promise.all(entries.slice(i, i + 5).map((e) => fetchQuote(e.guid)))));
+  }
+  const items = entries.map((entry, i) => ({ entry, details: details[i] }));
+  const chosen = items.filter((it) => it.entry.choice);
+  const onlyQuoted = items.filter((it) => !it.entry.choice);
+  const quotes = entries.filter((e) => e.quotedAt).length;
+  const start = new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000);
+  const period = `${brDay(start)} a ${brDay(now)}`;
+
+  const section = (title, list) =>
+    list.length ? `<h3 style="margin:20px 0 8px">${title} (${list.length})</h3>${list.map((it) => quoteCard(it.entry, it.details)).join("")}` : "";
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;font-size:14px;color:#0B1F33;max-width:640px">
+      <h2 style="margin:0 0 4px">Cotações do Escolha seu EV</h2>
+      <p style="margin:0 0 16px;color:#555">Semana de ${period}</p>
+      <p style="margin:0 0 4px"><strong>${quotes}</strong> ${quotes === 1 ? "cotação feita" : "cotações feitas"} ·
+        <strong>${chosen.length}</strong> ${chosen.length === 1 ? "plano escolhido" : "planos escolhidos"}</p>
+      ${items.length ? "" : `<p style="color:#555">Nenhuma cotação pelo site nesta semana.</p>`}
+      ${section("Escolheram plano: falta pagamento e emissão", chosen)}
+      ${section("Só cotaram: vale um contato", onlyQuoted)}
+      <p style="color:#555;font-size:12px;margin-top:20px">Relatório automático (toda segunda-feira) das cotações
+        feitas no comparador e na página de cotação do site da D&B. Os dados do cliente vêm da Segfy; CPF e
+        questionário completo estão na cotação, pelo ID.</p>
+    </div>`;
+
+  return { html, subject: `Escolha seu EV · ${quotes} ${quotes === 1 ? "cotação" : "cotações"}, ${chosen.length} ${chosen.length === 1 ? "plano escolhido" : "planos escolhidos"} (${period})` };
+}
+
+export default async function handler(req, res) {
+  const secret = process.env.CRON_SECRET;
+  if (!secret || req.headers.authorization !== `Bearer ${secret}`) {
+    res.status(401).json({ error: "Não autorizado." });
+    return;
+  }
+
+  const to = (process.env.REPORT_EMAILS || "").split(",").map((s) => s.trim()).filter(Boolean);
+  if (!to.length) {
+    res.status(500).json({ error: "REPORT_EMAILS não configurado." });
+    return;
+  }
+
+  try {
+    const now = new Date();
+    const events = await listQuoteEvents(new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000).toISOString());
+    const { html, subject } = await buildReport(events, now);
+    await sendEmail({ to: to.join(", "), subject, html });
+    res.status(200).json({ ok: true, events: events.length });
+  } catch (error) {
+    console.error("[quote-report]", error.message);
+    res.status(500).json({ error: "Falha ao gerar o relatório." });
+  }
+}

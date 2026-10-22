@@ -578,6 +578,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
 
     socket.on("connect", () => {
       segfyApi("calculate", {
+        meta: { source: embedded ? "cotacao" : "comparador", carId: car?.id },
         config: {
           insurers: QUOTED_INSURERS,
           callback: roomId,

@@ -98,6 +98,11 @@ export default function PrivacyPage({ T, onBack }) {
           <strong style={{ color: T.ink }}>eles nunca são armazenados no banco de dados deste site</strong>. A coleta só ocorre se você iniciar essa ação voluntariamente e concordar
           com o termo de consentimento exibido no formulário.
           <br /><br />
+          Para acompanhar o atendimento, o site guarda apenas um registro técnico de cada cotação: o código
+          dela na Segfy, a data, a página de onde veio e, se houver, o plano escolhido (seguradora, valor e
+          forma de pagamento), sem nome, CPF, telefone ou e-mail. Com esse código, a D&B Corretora consulta os
+          dados da cotação na Segfy para entrar em contato com você.
+          <br /><br />
           Se, depois da cotação, você clicar em "Quero este plano", nós recebemos por e-mail seu nome, telefone,
           e-mail, o veículo, o plano e a forma de pagamento escolhidos, para entrar em contato com você, e você
           recebe no seu e-mail um resumo da cotação.
@@ -148,6 +153,7 @@ export default function PrivacyPage({ T, onBack }) {
           Dados de navegação ficam no seu navegador até você limpá-los ou até o site os sobrescrever.{" "}
           <strong style={{ color: T.ink }}>Os dados do formulário de seguro não são armazenados neste site</strong>:
           eles ficam registrados na plataforma da Segfy e, se você escolher um plano, no e-mail que recebemos.
+          O site guarda só o registro técnico da cotação descrito na seção 3, sem dados de identificação.
           Guardamos esses dados pelo tempo necessário para a cotação e a contratação e pelos prazos exigidos pela
           regulação do setor de seguros.
         </Section>
@@ -177,7 +183,7 @@ export default function PrivacyPage({ T, onBack }) {
           O site é servido exclusivamente via HTTPS (conexão criptografada). Os headers de segurança HTTP
           estão configurados para proteger contra ataques comuns (clickjacking, MIME sniffing, injeção de
           scripts). Os dados do formulário de cotação passam por um servidor do próprio site apenas para serem
-          encaminhados à Segfy, sem serem gravados. As credenciais de acesso à Segfy e ao e-mail ficam só nesse
+          encaminhados à Segfy, sem serem gravados (fica só o registro técnico da seção 3). As credenciais de acesso à Segfy e ao e-mail ficam só nesse
           servidor e nunca chegam ao navegador.
           <br /><br />
           A Vercel pode processar esses dados em servidores fora do Brasil. Essa transferência ocorre apenas para

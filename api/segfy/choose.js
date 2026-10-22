@@ -8,15 +8,16 @@
 // assim ninguém consegue usar este endpoint para mandar e-mail a um endereço
 // qualquer nem forjar um preço.
 //
-// E-mail via SMTP da caixa de automações da D&B. Variáveis (só no servidor):
-//   SMTP_HOST, SMTP_PORT (587 = STARTTLS, recomendada pelo suporte da
-//   HostGator; a 465 descartava as mensagens), SMTP_USER, SMTP_PASS
-//   EMAIL_FROM      — remetente, ex.: "D&B Corretora <automacoes@dbcorr.com.br>"
+// E-mail via SMTP da caixa de automações da D&B (ver api/_lib/mailer.js).
 //   DB_NOTIFY_EMAIL — quem recebe o aviso na D&B
 
-import nodemailer from "nodemailer";
 import { segfyRequest } from "../_lib/segfyClient.js";
 import { isAllowedOrigin } from "../_lib/origin.js";
+import { sendEmail } from "../_lib/mailer.js";
+import {
+  escapeHtml, money, brDate, formatPhone, coverageLabel, insurerName, bestOfferPerInsurer,
+} from "../_lib/quoteFormat.js";
+import { logQuoteEvent } from "../_lib/quoteLog.js";
 import { paymentOptions, formatPlan } from "../../src/installments.js";
 
 const RETURN_DEADLINE = "até 1 dia útil";
@@ -26,97 +27,7 @@ const RETURN_DEADLINE = "até 1 dia útil";
 // barra duplo clique e repetição imediata.
 const recentlyChosen = new Map();
 const DEDUPE_MS = 10 * 60 * 1000;
-
-const INSURER_NAMES = {
-  porto: "Porto Seguro", azul: "Azul Seguros", itau: "Itaú Seguros", allianz: "Allianz",
-  liberty: "Liberty", bradesco: "Bradesco Seguros", suhai: "Suhai", mitsui: "Mitsui Sumitomo",
-};
-
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function money(value) {
-  return value == null
-    ? "—"
-    : Number(value).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 2 });
-}
-
-function brDate(iso) {
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
-  return m ? `${m[3]}/${m[2]}/${m[1]}` : "";
-}
-
-function formatPhone(digits) {
-  const d = String(digits || "").replace(/\D/g, "");
-  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
-  return d;
-}
-
-function coverageLabel(result) {
-  const type = result?.company_coverages?.coverage_type || "";
-  return /compreens/i.test(type) ? "Cobertura completa" : `Cobertura parcial (${type || "ver detalhes"})`;
-}
-
-function insurerName(result) {
-  const key = result?.company?.name;
-  return INSURER_NAMES[key] || key || "Seguradora";
-}
-
-// Melhor oferta (compreensiva mais barata, senão a mais barata) de cada seguradora.
-function bestOfferPerInsurer(results) {
-  const groups = {};
-  for (const r of results) {
-    if (r.premium == null) continue;
-    (groups[r.company?.name] ||= []).push(r);
-  }
-  return Object.values(groups)
-    .map((list) => {
-      const sorted = list.sort((a, b) => a.premium - b.premium);
-      return sorted.find((r) => /compreens/i.test(r.company_coverages?.coverage_type || "")) || sorted[0];
-    })
-    .sort((a, b) => a.premium - b.premium);
-}
-
-let transporter = null;
-
-function getTransporter() {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
-  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) throw new Error("SMTP_HOST/SMTP_USER/SMTP_PASS não configurados.");
-  if (!transporter) {
-    const port = Number(SMTP_PORT) || 587;
-    transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port,
-      secure: port === 465,
-      // Na 587 a conexão começa aberta e sobe para TLS (STARTTLS); exige o
-      // TLS para a senha nunca trafegar sem criptografia.
-      requireTLS: port !== 465,
-      // Nome no EHLO. Sem isso o nodemailer usa o hostname da máquina (ou
-      // [127.0.0.1]) e o filtro de saída da HostGator descarta a mensagem
-      // em silêncio: aceita com 250 OK e não entrega fora do servidor.
-      name: SMTP_USER.split("@")[1],
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-    });
-  }
-  return transporter;
-}
-
-export async function verifySmtp() {
-  return getTransporter().verify();
-}
-
-async function sendEmail({ to, subject, html, replyTo }) {
-  const from = process.env.EMAIL_FROM || process.env.SMTP_USER;
-  await getTransporter().sendMail({ from, to, subject, html, ...(replyTo ? { replyTo } : {}) });
-}
 
 // Forma de pagamento preferida, conferida contra o parcelamento que a própria
 // Segfy devolveu para este plano. Valor inválido ou ausente = "decidir com a D&B".
@@ -263,6 +174,15 @@ export default async function handler(req, res) {
       subject: `Finalizar pagamento: ${customer.name} · ${insurerName(chosen)} ${money(chosen.premium)}/ano`,
       html: brokerEmailHtml({ customer, vehicle, chosen, quotationId, validity, favoriteOk: favorite.ok, payment }),
       replyTo: customer.email,
+    });
+
+    await logQuoteEvent({
+      event: "choice",
+      quote_guid: guid,
+      insurer: chosen.company?.name || null,
+      premium: chosen.premium,
+      coverage_type: chosen.company_coverages?.coverage_type || null,
+      payment,
     });
 
     // 3. Resumo para o cliente — se falhar, a D&B já foi avisada.

@@ -10,6 +10,10 @@
 
 import { segfyRequest } from "../../_lib/segfyClient.js";
 import { isAllowedOrigin } from "../../_lib/origin.js";
+import { logQuoteEvent } from "../../_lib/quoteLog.js";
+
+const SOURCES = ["comparador", "cotacao"];
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Só o que o front usa. show-results/show-quotation devolvem os dados pessoais
 // do cliente (nome, CPF, telefone) a partir do guid, então não ficam expostos;
@@ -74,8 +78,18 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = withBrokerToken(req.body);
+    // `meta` (página de origem e carro) é só para o registro interno; não vai à Segfy.
+    const { meta, ...payload } = req.body && typeof req.body === "object" ? req.body : {};
+    const body = withBrokerToken(payload);
     const { status, data } = await segfyRequest(path, { method: "POST", body });
+    if (action === "calculate" && data?.status === "OK" && UUID_RE.test(data.guid || "")) {
+      await logQuoteEvent({
+        event: "quote",
+        quote_guid: data.guid,
+        source: SOURCES.includes(meta?.source) ? meta.source : null,
+        car_id: typeof meta?.carId === "string" ? meta.carId.slice(0, 80) : null,
+      });
+    }
     res.status(status).json(withoutBrokerToken(data));
   } catch (error) {
     console.error(`[segfy:${action}]`, error.message);
