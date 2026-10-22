@@ -54,13 +54,21 @@ async function fetchQuote(guid) {
   }
 }
 
+// "instagram / stories / renovacao-2026-10-19", ou null sem link marcado.
+function utmLabel(e) {
+  const parts = [e.utm_source, e.utm_medium, e.utm_campaign].filter(Boolean);
+  return parts.length ? parts.join(" / ") : null;
+}
+
 // Agrupa os eventos por cotação: o 'quote' diz quando e de onde veio, o
 // 'choice' (pode chegar numa semana posterior à cotação) diz o plano escolhido.
 export function groupEvents(events) {
   const byGuid = new Map();
   for (const e of events) {
-    const entry = byGuid.get(e.quote_guid) || { guid: e.quote_guid, quotedAt: null, source: null, carId: null, choice: null };
-    if (e.event === "quote") Object.assign(entry, { quotedAt: e.created_at, source: e.source, carId: e.car_id });
+    const entry = byGuid.get(e.quote_guid) || { guid: e.quote_guid, quotedAt: null, source: null, carId: null, utm: null, choice: null };
+    if (e.event === "quote") {
+      Object.assign(entry, { quotedAt: e.created_at, source: e.source, carId: e.car_id, utm: utmLabel(e) });
+    }
     if (e.event === "choice") entry.choice = e;
     byGuid.set(e.quote_guid, entry);
   }
@@ -90,6 +98,7 @@ function quoteCard(entry, details) {
           + (vehicle.zero_km ? " (0 km)" : ""))}
         ${row("CEP", escapeHtml(formatCep(q?.zip_code) || "—"))}
         ${row("Origem", escapeHtml(SOURCE_LABELS[entry.source] || "—") + (entry.carId ? ` · carro <code>${escapeHtml(entry.carId)}</code>` : ""))}
+        ${row("Link", entry.utm ? `<code>${escapeHtml(entry.utm)}</code>` : `<span style="color:#555">sem marcação (acesso direto, bio sem UTM ou site da D&amp;B)</span>`)}
         ${row("Completa mais barata", details.cheapest
           ? `${escapeHtml(insurerName(details.cheapest))} · ${money(details.cheapest.premium)}/ano (${details.insurers} seguradoras responderam)`
           : "Nenhuma seguradora devolveu cobertura completa")}
@@ -97,6 +106,25 @@ function quoteCard(entry, details) {
         ${row("ID na Segfy", `<code>${escapeHtml(details.quotationId)}</code>`)}
       </table>
     </div>`;
+}
+
+// O que mais converte: cotações e planos escolhidos por link de origem.
+function originTable(entries) {
+  const rows = new Map();
+  for (const e of entries) {
+    const key = e.utm || "sem marcação";
+    const r = rows.get(key) || { quotes: 0, choices: 0 };
+    if (e.quotedAt) r.quotes++;
+    if (e.choice) r.choices++;
+    rows.set(key, r);
+  }
+  const sorted = [...rows.entries()].sort((a, b) => b[1].choices - a[1].choices || b[1].quotes - a[1].quotes);
+  const td = "padding:4px 12px 4px 0;border-bottom:1px solid #EEE";
+  return `<h3 style="margin:20px 0 8px">Por origem</h3>
+    <table style="border-collapse:collapse;font-size:13px">
+      <tr><th style="${td};text-align:left">Link</th><th style="${td};text-align:right">Cotações</th><th style="${td};text-align:right">Planos escolhidos</th></tr>
+      ${sorted.map(([k, r]) => `<tr><td style="${td}"><code>${escapeHtml(k)}</code></td><td style="${td};text-align:right">${r.quotes}</td><td style="${td};text-align:right">${r.choices}</td></tr>`).join("")}
+    </table>`;
 }
 
 export async function buildReport(events, now = new Date()) {
@@ -121,7 +149,7 @@ export async function buildReport(events, now = new Date()) {
       <p style="margin:0 0 16px;color:#555">Semana de ${period}</p>
       <p style="margin:0 0 4px"><strong>${quotes}</strong> ${quotes === 1 ? "cotação feita" : "cotações feitas"} ·
         <strong>${chosen.length}</strong> ${chosen.length === 1 ? "plano escolhido" : "planos escolhidos"}</p>
-      ${items.length ? "" : `<p style="color:#555">Nenhuma cotação pelo site nesta semana.</p>`}
+      ${items.length ? originTable(entries) : `<p style="color:#555">Nenhuma cotação pelo site nesta semana.</p>`}
       ${section("Escolheram plano: falta pagamento e emissão", chosen)}
       ${section("Só cotaram: vale um contato", onlyQuoted)}
       <p style="color:#555;font-size:12px;margin-top:20px">Relatório automático (toda segunda-feira) das cotações

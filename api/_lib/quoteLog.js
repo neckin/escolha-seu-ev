@@ -20,12 +20,19 @@ function headers(key) {
 export async function logQuoteEvent(row) {
   const config = supabaseConfig();
   if (!config) return;
-  try {
-    const res = await fetch(`${config.url}/rest/v1/quote_events`, {
+  const insert = (body) =>
+    fetch(`${config.url}/rest/v1/quote_events`, {
       method: "POST",
       headers: { ...headers(config.key), Prefer: "return=minimal" },
-      body: JSON.stringify(row),
+      body: JSON.stringify(body),
     });
+  try {
+    let res = await insert(row);
+    // Colunas utm_* ainda não criadas no banco: grava o resto mesmo assim.
+    const utmKeys = Object.keys(row).filter((k) => k.startsWith("utm_"));
+    if (!res.ok && utmKeys.length) {
+      res = await insert(Object.fromEntries(Object.entries(row).filter(([k]) => !utmKeys.includes(k))));
+    }
     if (!res.ok) console.error("[quote-log]", res.status, await res.text());
   } catch (error) {
     console.error("[quote-log]", error.message);

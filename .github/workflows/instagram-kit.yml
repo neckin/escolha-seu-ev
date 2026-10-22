@@ -1,0 +1,41 @@
+name: Kit semanal de Instagram (seguro auto)
+
+on:
+  schedule:
+    # 10:00 UTC toda segunda-feira = 07:00 no horário de Brasília
+    - cron: "0 10 * * 1"
+  workflow_dispatch: {} # permite gerar de novo pelo botão no GitHub
+
+jobs:
+  kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - run: npm ci
+
+      # O runner do GitHub já traz Google Chrome e ffmpeg, usados para
+      # desenhar as peças e montar o Reels.
+      - name: Gerar o kit e mandar por e-mail
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          KIT_EMAILS: ${{ secrets.KIT_EMAILS }}
+          SUSEP_REGISTRO: ${{ secrets.SUSEP_REGISTRO }}
+        run: node scripts/instagram-kit/build.mjs --out instagram-kit-out --email
+
+      # Cópia de segurança das peças, baixável na página da execução por 30 dias.
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: instagram-kit
+          path: instagram-kit-out
+          retention-days: 30

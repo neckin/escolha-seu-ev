@@ -99,7 +99,8 @@ export default function PrivacyPage({ T, onBack }) {
           com o termo de consentimento exibido no formulário.
           <br /><br />
           Para acompanhar o atendimento, o site guarda apenas um registro técnico de cada cotação: o código
-          dela na Segfy, a data, a página de onde veio e, se houver, o plano escolhido (seguradora, valor e
+          dela na Segfy, a data, a página e o link de divulgação de onde veio (por exemplo, um post do
+          Instagram) e, se houver, o plano escolhido (seguradora, valor e
           forma de pagamento), sem nome, CPF, telefone ou e-mail. Com esse código, a D&B Corretora consulta os
           dados da cotação na Segfy para entrar em contato com você.
           <br /><br />

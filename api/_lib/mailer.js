@@ -32,7 +32,7 @@ export async function verifySmtp() {
   return getTransporter().verify();
 }
 
-export async function sendEmail({ to, subject, html, replyTo }) {
+export async function sendEmail({ to, subject, html, replyTo, attachments }) {
   const from = process.env.EMAIL_FROM || process.env.SMTP_USER;
-  await getTransporter().sendMail({ from, to, subject, html, ...(replyTo ? { replyTo } : {}) });
+  await getTransporter().sendMail({ from, to, subject, html, ...(replyTo ? { replyTo } : {}), ...(attachments ? { attachments } : {}) });
 }

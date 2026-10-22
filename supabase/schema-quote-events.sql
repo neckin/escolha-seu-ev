@@ -24,6 +24,12 @@ create table if not exists quote_events (
   payment text
 );
 
+-- Origem da visita (link divulgado com utm_*, ex.: Stories do Instagram).
+-- Em banco já criado, rode só estas três linhas.
+alter table quote_events add column if not exists utm_source text;
+alter table quote_events add column if not exists utm_medium text;
+alter table quote_events add column if not exists utm_campaign text;
+
 create index if not exists quote_events_created_at_idx on quote_events (created_at);
 create index if not exists quote_events_guid_idx on quote_events (quote_guid);
 

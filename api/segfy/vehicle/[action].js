@@ -14,6 +14,17 @@ import { logQuoteEvent } from "../../_lib/quoteLog.js";
 
 const SOURCES = ["comparador", "cotacao"];
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UTM_RE = /^[\w.-]{1,80}$/;
+
+// Só os três campos de origem, com texto simples (vêm da URL do visitante).
+function utmFields(utm) {
+  if (!utm || typeof utm !== "object") return {};
+  const out = {};
+  for (const key of ["utm_source", "utm_medium", "utm_campaign"]) {
+    if (typeof utm[key] === "string" && UTM_RE.test(utm[key])) out[key] = utm[key].toLowerCase();
+  }
+  return out;
+}
 
 // Só o que o front usa. show-results/show-quotation devolvem os dados pessoais
 // do cliente (nome, CPF, telefone) a partir do guid, então não ficam expostos;
@@ -88,6 +99,7 @@ export default async function handler(req, res) {
         quote_guid: data.guid,
         source: SOURCES.includes(meta?.source) ? meta.source : null,
         car_id: typeof meta?.carId === "string" ? meta.carId.slice(0, 80) : null,
+        ...utmFields(meta?.utm),
       });
     }
     res.status(status).json(withoutBrokerToken(data));

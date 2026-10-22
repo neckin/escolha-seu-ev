@@ -35,6 +35,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 import { paymentOptions, headlineInstallment, formatPlan } from "./installments.js";
+import { readCampaign } from "./campaign.js";
 import { X, ShieldCheck, Loader2, FlaskConical, Info, AlertTriangle } from "lucide-react";
 
 // Mistura um hex do tema com alpha — mantém tints translúcidos acompanhando
@@ -578,7 +579,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
 
     socket.on("connect", () => {
       segfyApi("calculate", {
-        meta: { source: embedded ? "cotacao" : "comparador", carId: car?.id },
+        meta: { source: embedded ? "cotacao" : "comparador", carId: car?.id, utm: readCampaign() },
         config: {
           insurers: QUOTED_INSURERS,
           callback: roomId,
