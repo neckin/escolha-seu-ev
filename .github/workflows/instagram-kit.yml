@@ -19,8 +19,11 @@ jobs:
 
       - run: npm ci
 
-      # O runner do GitHub já traz Google Chrome e ffmpeg, usados para
-      # desenhar as peças e montar o Reels.
+      # O runner do GitHub já traz o Google Chrome (desenha as peças); o ffmpeg
+      # (monta o Reels) não vem mais na imagem do Ubuntu 24.04.
+      - name: Instalar ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+
       - name: Gerar o kit e mandar por e-mail
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
