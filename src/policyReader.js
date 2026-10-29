@@ -8,6 +8,8 @@
 // por rótulos comuns ("CPF", "Classe de bônus", "Vigência"...) e tudo que for
 // lido é marcado na tela para a pessoa conferir antes de cotar.
 
+import { FIPE_BRANDS } from "./fipeBrands.js";
+
 // pdf.js é pesado (~1 MB): só carrega quando alguém envia um arquivo.
 async function loadPdfJs() {
   const [pdfjs, worker] = await Promise.all([
@@ -100,9 +102,11 @@ function expandTables(text) {
   for (let i = 0; i < lines.length - 1; i++) {
     const labels = lines[i].trim().split(/\s{2,}/);
     const values = lines[i + 1].trim().split(/\s{2,}/);
-    if (labels.length < 2 || labels.length !== values.length) continue;
+    if (labels.length < 2 || values.length < 2) continue;
     if (labels.some((l) => /\d|:/.test(l) || l.length > 40)) continue;
-    labels.forEach((l, k) => pairs.push(`${l}: ${values[k]}`));
+    // Colunas a mais ou a menos (célula vazia): só a primeira é confiável.
+    if (labels.length !== values.length) pairs.push(`${labels[0]}: ${values[0]}`);
+    else labels.forEach((l, k) => pairs.push(`${l}: ${values[k]}`));
   }
   return pairs.length ? `${pairs.join("\n")}\n${text}` : text;
 }
@@ -175,8 +179,16 @@ function pick(map, value) {
 // marca do veículo pelo nome.
 export function parsePolicy(rawText, { brands = [] } = {}) {
   const out = {};
-  const text = expandTables(rawText);
+  // Endossos marcam com * os campos alterados ("304012-7*").
+  const clean = rawText.replace(/\*/g, "");
+  const text = expandTables(clean);
   const norm = normalize(text);
+
+  // Endosso de substituição traz o veículo antigo ("substituído") e o atual:
+  // os dados do veículo vêm só do trecho a partir do atual.
+  const currentAt = normalize(clean).lastIndexOf("veiculo atual");
+  const vText = currentAt >= 0 ? expandTables(clean.slice(currentAt)) : text;
+  const vNorm = normalize(vText);
 
   // CPF: o primeiro CPF válido perto do rótulo; senão, o primeiro válido do
   // documento (CNPJ da seguradora e corretora tem 14 dígitos e não casa).
@@ -226,14 +238,14 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
   if (cep) out.cep = onlyDigits(cep);
 
   // Veículo: código FIPE (6 dígitos + verificador) e ano modelo.
-  const fipe = windowAfter(text, /fipe/, 60).map((w) => /\b(\d{6}-?\d)\b/.exec(w)?.[1]).find(Boolean);
+  const fipe = windowAfter(vText, /fipe/, 60).map((w) => /\b(\d{6}-?\d)\b/.exec(w)?.[1]).find(Boolean);
   if (fipe) out.fipe = onlyDigits(fipe).replace(/(\d{6})(\d)/, "$1-$2");
 
   // Descrição do veículo ("BYD DOLPHIN 95 CV ELÉTRICO"), para achar o modelo
   // pelo nome quando a apólice não traz o FIPE (ou ele não está na Segfy).
   const vehicleRaw = valueAfter(
-    text,
-    /marca\s*\/\s*modelo|modelo do ve[ií]culo|ve[ií]culo segurado|descri[cç][aã]o do ve[ií]culo|ve[ií]culo|modelo/,
+    vText,
+    /marca\s*\/\s*(?:modelo|tipo)(?: do ve[ií]culo)?|modelo do ve[ií]culo|ve[ií]culo segurado|descri[cç][aã]o do ve[ií]culo|ve[ií]culo|modelo/,
     (v) => /[A-Za-zÀ-ÿ]{3}/.test(firstCell(v)) && firstCell(v).length >= 5 && !/^(\d{4}|sim|n[aã]o)\b/i.test(v)
   );
   const modelo = vehicleRaw && firstCell(vehicleRaw)
@@ -242,23 +254,30 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
     .trim();
   if (modelo && modelo.length >= 3) out.modelo = modelo;
 
-  const yearPair = /ano\s*(?:de\s*)?fab(?:rica[cç][aã]o)?\.?\s*\/\s*mod(?:elo)?\.?\s*:?\s*(\d{4})\s*\/\s*(\d{4})/i.exec(text);
-  const modelYear = yearPair?.[2] || windowAfter(text, /ano\s*(?:do\s*)?modelo/, 30).map((w) => /\b(19|20)\d{2}\b/.exec(w)?.[0]).find(Boolean);
+  const yearPair = /ano\s*(?:de\s*)?fab(?:rica[cç][aã]o)?\.?\s*\/\s*mod(?:elo)?\.?\s*:?\s*(\d{4})\s*\/\s*(\d{4})(\s*-?\s*0\s?km\b)?/i.exec(vText);
+  const modelYear = yearPair?.[2] || windowAfter(vText, /ano\s*(?:do\s*)?modelo/, 30).map((w) => /\b(19|20)\d{2}\b/.exec(w)?.[0]).find(Boolean);
   if (modelYear) out.ano = modelYear;
+  if (yearPair?.[3]) out.zeroKm = "sim"; // "2026/2027 - 0KM"
 
-  // Marca: a da lista da Segfy mais citada como palavra inteira (testando
-  // também as partes de nomes compostos, ex.: "GM - Chevrolet").
-  let bestBrand = null;
-  for (const b of brands) {
-    const names = new Set(
-      [b.value, b.text].flatMap((s) => [s, ...String(s || "").split(/\s*[-/]\s*/)]).map((s) => normalize(s).trim()).filter((s) => s.length >= 2)
-    );
-    let count = 0;
-    for (const name of names) {
-      const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g");
-      count = Math.max(count, (norm.match(re) || []).length);
+  // Marca: pelo prefixo do FIPE (muitas apólices escrevem só o modelo);
+  // senão, a da lista da Segfy mais citada como palavra inteira no trecho do
+  // veículo e, se não houver, no documento (testando também as partes de
+  // nomes compostos, ex.: "GM - Chevrolet").
+  const fipeBrand = out.fipe && brands.find((b) => b.value === FIPE_BRANDS[out.fipe.slice(0, 3)]);
+  let bestBrand = fipeBrand ? { id: fipeBrand.id } : null;
+  for (const haystack of fipeBrand ? [] : [vNorm, norm]) {
+    for (const b of brands) {
+      const names = new Set(
+        [b.value, b.text].flatMap((s) => [s, ...String(s || "").split(/\s*[-/]\s*/)]).map((s) => normalize(s).trim()).filter((s) => s.length >= 2)
+      );
+      let count = 0;
+      for (const name of names) {
+        const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g");
+        count = Math.max(count, (haystack.match(re) || []).length);
+      }
+      if (count && (!bestBrand || count > bestBrand.count)) bestBrand = { id: b.id, count };
     }
-    if (count && (!bestBrand || count > bestBrand.count)) bestBrand = { id: b.id, count };
+    if (bestBrand) break;
   }
   if (bestBrand) out.brandId = bestBrand.id;
 

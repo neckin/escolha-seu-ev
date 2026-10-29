@@ -637,7 +637,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     }
 
     const qPatch = {};
-    for (const key of ["financiado", "temSeguro", "seguradoraAtual", "fimVigencia", "classeBonus"]) {
+    for (const key of ["zeroKm", "financiado", "temSeguro", "seguradoraAtual", "fimVigencia", "classeBonus"]) {
       if (data[key] != null && data[key] !== "" && q[key] === "") {
         qPatch[key] = data[key];
         filled.add(key);
