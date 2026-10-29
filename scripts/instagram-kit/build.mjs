@@ -34,6 +34,18 @@ const GAS_KM_L = 12; // carro a gasolina de referência
 const MAX_CAR_PRICE = 230000; // carro da semana: só até R$ 230 mil (populares e médios)
 const COTACAO_URL = "https://ev.dbcorr.com.br/cotacao";
 
+// Trilhas do Reels, em rodízio semanal. Todas da Pixabay (licença livre para
+// uso comercial, sem crédito obrigatório) e sem "Content ID Registered", para
+// o Instagram não silenciar o vídeo. O repositório é público e a licença não
+// permite redistribuir o áudio solto, por isso o arquivo é baixado na hora.
+const REELS_MUSIC = [
+  { title: "Upbeat Corporate", artist: "The_Mountain", page: "https://pixabay.com/music/corporate-upbeat-corporate-576594/", url: "https://cdn.pixabay.com/download/audio/2026/08/05/audio_70e1bbcd7e.mp3?filename=the_mountain-upbeat-corporate-576594.mp3" },
+  { title: "Advertising Marketing", artist: "AtlasAudio", page: "https://pixabay.com/music/corporate-advertising-marketing-617541/", url: "https://cdn.pixabay.com/download/audio/2026/10/08/audio_e0b3fc85ac.mp3?filename=atlasaudio-advertising-marketing-617541.mp3" },
+  { title: "Creative Technology Showreel", artist: "Pumpupthemind", page: "https://pixabay.com/music/beats-creative-technology-showreel-241274/", url: "https://cdn.pixabay.com/download/audio/2024/09/16/audio_a10608d6cd.mp3?filename=pumpupthemind-creative-technology-showreel-241274.mp3" },
+  { title: "Corporate Upbeat", artist: "The_Mountain", page: "https://pixabay.com/music/corporate-corporate-upbeat-610127/", url: "https://cdn.pixabay.com/download/audio/2026/09/25/audio_c0491f626a.mp3?filename=the_mountain-corporate-upbeat-610127.mp3" },
+  { title: "Video Marketing", artist: "AtlasAudio", page: "https://pixabay.com/music/corporate-video-marketing-617621/", url: "https://cdn.pixabay.com/download/audio/2026/10/09/audio_1ed3b90b15.mp3?filename=atlasaudio-video-marketing-617621.mp3" },
+];
+
 function arg(name, fallback) {
   const i = process.argv.indexOf(`--${name}`);
   if (i === -1) return fallback;
@@ -127,7 +139,7 @@ Antes de aceitar a renovação, cote em 8 seguradoras de uma vez e compare. Se t
 Cote o seguro antes da entrega: com o modelo e o ano, 8 seguradoras calculam na hora e você escolhe o plano. A D&B conclui a contratação com você.`,
 };
 
-function captions({ weekCar, theme, cost, monday, signature }) {
+function captions({ weekCar, theme, cost, monday, signature, music }) {
   const wed = addDays(monday, 2);
   const fri = addDays(monday, 4);
   const week = iso(monday);
@@ -164,7 +176,9 @@ ${[...base, "#reels", tag(weekCar.brand)].join(" ")}`,
         `Repostar o Reels com a figurinha de link → ${utm("stories", `reels-${week}`)}`,
         `Caixa de perguntas: "Qual a sua dúvida sobre seguro auto?"`,
       ],
-      note: "Ao publicar, escolha uma música do próprio Instagram (o vídeo sai sem áudio) e use capa.jpg como capa.",
+      note: music
+        ? `O vídeo já sai com música: "${music.title}", de ${music.artist} (Pixabay, livre para uso comercial). Se publicar pelo aplicativo, pode trocar por uma música do próprio Instagram. Use capa.jpg como capa.`
+        : "Ao publicar, escolha uma música do próprio Instagram (desta vez o vídeo saiu sem áudio) e use capa.jpg como capa.",
     },
     {
       day: `Sexta ${brDay(fri)}`, kind: "Carrossel · Carro da semana", folder: "3-carro-da-semana",
@@ -200,7 +214,23 @@ async function renderSlides(browser, htmls, dir) {
   return files;
 }
 
-async function renderReels(browser, html, dir) {
+// Baixa a trilha da semana. Se a Pixabay falhar, o Reels sai sem áudio e o
+// e-mail avisa para escolher a música no aplicativo.
+async function downloadMusic(track, dir) {
+  try {
+    const res = await fetch(track.url, { headers: { "User-Agent": "Mozilla/5.0", Referer: track.page } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    fs.mkdirSync(dir, { recursive: true });
+    const file = path.join(dir, "trilha.mp3");
+    fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
+    return file;
+  } catch (error) {
+    console.error(`Trilha "${track.title}" indisponível (${error.message}); o Reels vai sem áudio.`);
+    return null;
+  }
+}
+
+async function renderReels(browser, html, dir, musicFile) {
   const framesDir = path.join(dir, "frames");
   fs.mkdirSync(framesDir, { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
@@ -214,11 +244,25 @@ async function renderReels(browser, html, dir) {
   }
   await page.close();
 
+  const ffmpeg = process.env.FFMPEG_PATH || "ffmpeg";
   const out = path.join(dir, "reels.mp4");
-  execFileSync(process.env.FFMPEG_PATH || "ffmpeg", [
+  const silent = musicFile ? path.join(dir, "mudo.mp4") : out;
+  execFileSync(ffmpeg, [
     "-y", "-loglevel", "error", "-framerate", String(fps), "-i", path.join(framesDir, "%04d.jpg"),
-    "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", "-movflags", "+faststart", out,
+    "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "20", "-movflags", "+faststart", silent,
   ]);
+  if (musicFile) {
+    // Em outra passada, copiando o vídeo: codificar imagem e som juntos
+    // estourava a memória. Entram os primeiros segundos da música, com fade
+    // na entrada e na saída, no volume padrão das redes (-14 LUFS).
+    execFileSync(ffmpeg, [
+      "-y", "-loglevel", "error", "-i", silent, "-t", String(REELS_SECONDS), "-i", musicFile,
+      "-af", `afade=t=in:d=0.3,afade=t=out:st=${REELS_SECONDS - 1.5}:d=1.5,loudnorm=I=-14:TP=-1.5`,
+      "-ar", "44100", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", out,
+    ]);
+    fs.rmSync(silent, { force: true });
+    fs.rmSync(musicFile, { force: true });
+  }
   const cover = path.join(dir, "capa.jpg");
   fs.copyFileSync(path.join(framesDir, `${String(Math.round(REELS_COVER_SECONDS * fps)).padStart(4, "0")}.jpg`), cover);
   fs.rmSync(framesDir, { recursive: true, force: true });
@@ -260,15 +304,17 @@ async function main() {
   const logo = (file) => `data:image/png;base64,${fs.readFileSync(path.join(ROOT, "public", "brand", file)).toString("base64")}`;
   const signature = "D&B Corretora de Seguros · Águas Claras, Brasília";
   const kit = { logoGold: logo("db-corretora-logo.png"), logoNavy: logo("db-corretora-logo-navy.png"), energyPrice: ENERGY_PRICE, fuelPrice: FUEL_PRICE, signature };
-  const posts = captions({ weekCar, theme, cost, monday, signature });
-
-  console.log(`Semana ${iso(monday)} · tema: ${theme.id} · carro da semana: ${weekCar.name}`);
   fs.rmSync(outDir, { recursive: true, force: true });
+  const track = REELS_MUSIC[weekIndex % REELS_MUSIC.length];
+  const musicFile = arg("no-video") ? null : await downloadMusic(track, outDir);
+  const posts = captions({ weekCar, theme, cost, monday, signature, music: musicFile ? track : null });
+
+  console.log(`Semana ${iso(monday)} · tema: ${theme.id} · carro da semana: ${weekCar.name} · trilha: ${musicFile ? track.title : "nenhuma"}`);
   const browser = await chromium.launch({ channel: "chrome" });
   const files = [];
   try {
     files.push(...(await renderSlides(browser, quoteSlides(theme, kit), path.join(outDir, posts[0].folder))));
-    if (!arg("no-video")) files.push(...(await renderReels(browser, reelsPage(weekCar, kit), path.join(outDir, posts[1].folder))));
+    if (!arg("no-video")) files.push(...(await renderReels(browser, reelsPage(weekCar, kit), path.join(outDir, posts[1].folder), musicFile)));
     files.push(...(await renderSlides(browser, weekCarSlides(weekCar, cost, kit), path.join(outDir, posts[2].folder))));
   } finally {
     await browser.close();
