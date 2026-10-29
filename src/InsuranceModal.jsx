@@ -36,7 +36,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 import { paymentOptions, headlineInstallment, formatPlan } from "./installments.js";
 import { readCampaign } from "./campaign.js";
-import { extractPdfText, parsePolicy, PolicyPasswordError } from "./policyReader.js";
+import { extractPdfText, parsePolicy, matchModel, PolicyPasswordError } from "./policyReader.js";
 import { X, ShieldCheck, Loader2, FlaskConical, Info, AlertTriangle, FileUp } from "lucide-react";
 
 // Mistura um hex do tema com alpha — mantém tints translúcidos acompanhando
@@ -320,7 +320,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   const [policySkippedVehicle, setPolicySkippedVehicle] = useState(false);
   const policyFileRef = useRef(null);
   const policyInputRef = useRef(null);
-  const pendingFipeRef = useRef(null); // código FIPE da apólice, aplicado quando os modelos carregarem
+  // Veículo da apólice ({ fipe, modelo }): escolhe o modelo sempre que a lista
+  // de modelos carregar, inclusive depois de a pessoa escolher a marca à mão.
+  const [policyVehicle, setPolicyVehicle] = useState(null);
   // A leitura do PDF leva ~1 s: usa a lista de marcas mais recente e, se ela
   // ainda não chegou, guarda o texto para achar a marca quando chegar.
   const latestBrandsRef = useRef(brands);
@@ -450,7 +452,6 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     const data = parsePolicy(text, { brands });
     if (!data.brandId || selectedBrandId) return;
     brandAutoPickedRef.current = true;
-    if (data.fipe) pendingFipeRef.current = data.fipe;
     setSelectedBrandId(data.brandId);
     setPolicyFilled((prev) => new Set(prev).add("brand"));
   }, [brands]);
@@ -477,14 +478,12 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
         if (cancelled) return;
         const list = res.data?.models || [];
         setModels(list);
-        // Apólice enviada: escolhe o modelo pelo código FIPE dela.
-        const fipe = pendingFipeRef.current;
-        const match = fipe && list.find((m) => m.data_fipe?.fipe_code === fipe);
+        // Apólice enviada: escolhe o modelo pelo FIPE ou, sem dúvida, pelo nome.
+        const match = policyVehicle && matchModel(list, policyVehicle);
         if (match) {
           setSelectedModelId(match.model_id);
           setPolicyFilled((prev) => new Set(prev).add("model"));
         }
-        pendingFipeRef.current = null;
       })
       .catch((err) => {
         if (!cancelled) setModelsError(err.message);
@@ -496,7 +495,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     return () => {
       cancelled = true;
     };
-  }, [useApiMode, selectedBrandId, form.ano, brands]);
+  }, [useApiMode, selectedBrandId, form.ano, brands, policyVehicle]);
 
   // ---- modo API própria: busca de profissão na lista da Segfy (com debounce) ----
   useEffect(() => {
@@ -627,8 +626,8 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
         brandAutoPickedRef.current = true;
         setSelectedBrandId(data.brandId);
         filled.add("brand");
-        if (data.fipe) pendingFipeRef.current = data.fipe;
       }
+      setPolicyVehicle(data.fipe || data.modelo ? { fipe: data.fipe, modelo: data.modelo } : null);
     }
     setForm((f) => ({ ...f, ...formPatch }));
 
@@ -1140,9 +1139,15 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                     {models.map((m) => <option key={m.model_id} value={m.model_id}>{m.text}</option>)}
                   </select>
                   {!selectedBrandId || !form.ano ? (
-                    <span style={{ fontSize: 10.5, color: T.inkDim, marginTop: 2 }}>Escolha marca e ano primeiro</span>
+                    <span style={{ fontSize: 10.5, color: T.inkDim, marginTop: 2 }}>
+                      {policyVehicle?.modelo ? `Na apólice: “${policyVehicle.modelo}”. ` : ""}Escolha marca e ano primeiro
+                    </span>
                   ) : modelsError ? (
                     <span style={{ fontSize: 10.5, color: T.warn, marginTop: 2 }}>{modelsError}</span>
+                  ) : !selectedModelId && !modelsLoading && policyVehicle?.modelo ? (
+                    <span style={{ fontSize: 10.5, color: T.inkDim, marginTop: 2 }}>
+                      Na apólice: “{policyVehicle.modelo}”. Escolha o equivalente na lista.
+                    </span>
                   ) : null}
                 </label>
               </div>

@@ -229,6 +229,19 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
   const fipe = windowAfter(text, /fipe/, 60).map((w) => /\b(\d{6}-?\d)\b/.exec(w)?.[1]).find(Boolean);
   if (fipe) out.fipe = onlyDigits(fipe).replace(/(\d{6})(\d)/, "$1-$2");
 
+  // Descrição do veículo ("BYD DOLPHIN 95 CV ELÉTRICO"), para achar o modelo
+  // pelo nome quando a apólice não traz o FIPE (ou ele não está na Segfy).
+  const vehicleRaw = valueAfter(
+    text,
+    /marca\s*\/\s*modelo|modelo do ve[ií]culo|ve[ií]culo segurado|descri[cç][aã]o do ve[ií]culo|ve[ií]culo|modelo/,
+    (v) => /[A-Za-zÀ-ÿ]{3}/.test(firstCell(v)) && firstCell(v).length >= 5 && !/^(\d{4}|sim|n[aã]o)\b/i.test(v)
+  );
+  const modelo = vehicleRaw && firstCell(vehicleRaw)
+    .split(/c[oó]d(?:igo|\.)?\s*fipe|\bfipe\b|\bano\b|\bplaca\b|\bchassi\b/i)[0]
+    .replace(/^[^:]{1,25}:\s*/, "") // rótulo em cima e "Modelo: ..." embaixo
+    .trim();
+  if (modelo && modelo.length >= 3) out.modelo = modelo;
+
   const yearPair = /ano\s*(?:de\s*)?fab(?:rica[cç][aã]o)?\.?\s*\/\s*mod(?:elo)?\.?\s*:?\s*(\d{4})\s*\/\s*(\d{4})/i.exec(text);
   const modelYear = yearPair?.[2] || windowAfter(text, /ano\s*(?:do\s*)?modelo/, 30).map((w) => /\b(19|20)\d{2}\b/.exec(w)?.[0]).find(Boolean);
   if (modelYear) out.ano = modelYear;
@@ -271,3 +284,40 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
 
   return out;
 }
+
+// ---- modelo na lista da Segfy ----------------------------------------------
+
+// Palavras que quase todo modelo tem e não ajudam a distinguir.
+const MODEL_STOPWORDS = new Set([
+  "eletrico", "hibrido", "flex", "gasolina", "diesel", "aut", "automatico", "mec", "manual", "cv", "16v", "8v",
+  "4p", "5p", "turbo", "tb", "ev", "phev", "hev", "4x2", "4x4", "awd", "fwd",
+]);
+
+function modelTokens(s) {
+  return normalize(s)
+    .replace(/(\d)[.,](\d)/g, "$1$2")
+    .split(/[^a-z0-9]+/)
+    .filter((t) => t.length >= 2 && !MODEL_STOPWORDS.has(t));
+}
+
+// Escolhe o modelo da lista da Segfy (`models` de model-list) que corresponde
+// ao veículo da apólice: pelo código FIPE, se houver; senão pelo nome, só
+// quando um único modelo ganha com folga (2+ palavras em comum, ou é o único
+// com alguma). Na dúvida devolve null e a pessoa escolhe na lista.
+export function matchModel(models, { fipe, modelo } = {}) {
+  if (fipe) {
+    const byFipe = models.find((m) => m.data_fipe?.fipe_code === fipe);
+    if (byFipe) return byFipe;
+  }
+  if (!modelo) return null;
+  const wanted = new Set(modelTokens(modelo));
+  const scored = models
+    .map((m) => ({ m, score: modelTokens(String(m.text || "").replace(/\s-\s[\d-]+$/, "")).filter((t) => wanted.has(t)).length }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  if (!scored.length) return null;
+  const [best, second] = scored;
+  if (scored.length === 1 || (best.score >= 2 && best.score > second.score)) return best.m;
+  return null;
+}
+
