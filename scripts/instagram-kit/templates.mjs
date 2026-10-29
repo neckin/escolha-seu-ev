@@ -150,6 +150,11 @@ export const QUOTE_THEMES = [
     slides: ["versus", "steps"], cta: "Cote agora",
   },
   {
+    // Na segunda posição para cair na semana de 02/11/2026, a primeira com o tema.
+    id: "apolice", kicker: "Já tem seguro?", title: "Mande a apólice. A gente preenche.", sub: "E compare o seu seguro com 8 seguradoras.",
+    slides: ["policy", "insurers"], cta: "Compare o seu seguro",
+  },
+  {
     id: "tres-passos", kicker: "Seguro auto", title: "Seguro auto em 3 passos", sub: "Sem ligação e sem esperar retorno.",
     slides: ["steps", "insurers"], cta: "Faça o teste",
   },
@@ -159,7 +164,7 @@ export const QUOTE_THEMES = [
   },
   {
     id: "renovacao", kicker: "Renovação", title: "Seu seguro vence nos próximos 60 dias?", sub: "Cote antes e compare com a proposta de renovação.",
-    slides: [{ list: "O que ter em mãos", items: ["CEP onde o carro dorme", "Dados do condutor principal", "Marca, modelo e ano do carro", "Seguradora e classe de bônus atuais"] }, "steps"], cta: "Cote antes de vencer",
+    slides: [{ list: "O que ter em mãos", items: ["O PDF da apólice atual, que já preenche quase tudo", "CEP onde o carro dorme", "Dados do condutor principal", "Marca, modelo e ano do carro"] }, "steps"], cta: "Cote antes de vencer",
   },
   {
     id: "carro-novo", kicker: "Carro novo", title: "Vai buscar o carro novo?", sub: "Deixe o seguro encaminhado antes da entrega.",
@@ -254,6 +259,41 @@ function listSlide(kit, { list, items }, n, total) {
   });
 }
 
+// O que a cotação lê da apólice em PDF (src/policyReader.js). Só PDF com
+// texto: foto ou digitalização não funciona, por isso o slide fala em PDF.
+const POLICY_FIELDS = ["Carro, ano e código FIPE", "Dados do condutor principal", "CEP onde o carro dorme", "Seguradora, vencimento e bônus"];
+
+function policySlide(kit, n, total) {
+  return page({
+    ...CAROUSEL, bg: C.ivory,
+    body: `<img class="logo" src="${kit.logoNavy}" style="right:80px;top:80px;width:88px">
+      <div style="position:absolute;left:80px;right:80px;top:110px">
+        <div class="label">Como funciona</div>
+        <div class="num" style="font-size:64px;color:${C.navy};margin-top:24px;line-height:1.05">Envie o PDF da apólice<br>e confira o que foi preenchido</div>
+      </div>
+      <div style="position:absolute;left:80px;right:80px;top:420px;display:flex;gap:36px;align-items:center">
+        <div style="flex:none;width:250px;height:320px;background:${C.white};border:2px solid #E2E2DC;border-radius:14px;position:relative;padding:38px 30px">
+          <div style="position:absolute;right:-2px;top:-2px;width:64px;height:64px;background:${C.ivory};border-left:2px solid #E2E2DC;border-bottom:2px solid #E2E2DC;border-bottom-left-radius:14px"></div>
+          <div style="font-family:Manrope;font-weight:800;font-size:28px;color:${C.navy};margin-top:70px">apólice.pdf</div>
+          ${[100, 78, 90].map((w) => `<div style="height:12px;width:${w}%;background:#E8E6DF;border-radius:6px;margin-top:20px"></div>`).join("")}
+          <div style="position:absolute;left:30px;bottom:30px;background:${C.navy};color:${C.goldSoft};font-family:Manrope;font-weight:800;font-size:20px;letter-spacing:.12em;padding:8px 14px;border-radius:6px">PDF</div>
+        </div>
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="${C.gold}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <div style="flex:1">
+          ${POLICY_FIELDS.map((t, i) => `<div style="display:flex;gap:20px;align-items:center;padding:24px 0;border-top:2px solid ${i ? "#E2E2DC" : C.gold}">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="${C.gold}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M20 6 9 17l-5-5"/></svg>
+            <span style="font-size:32px;font-weight:500;line-height:1.25;color:${C.navy}">${esc(t)}</span></div>`).join("")}
+        </div>
+      </div>
+      <div style="position:absolute;left:80px;right:80px;top:880px;font-size:34px;line-height:1.4;color:${C.graphite}">
+        Você só completa o que faltar. Depois, 8 seguradoras calculam ao mesmo tempo.</div>
+      <div style="position:absolute;left:80px;right:80px;bottom:150px;display:flex;gap:18px;align-items:flex-start;font-size:26px;line-height:1.4;color:${C.graphite}">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${C.gold}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        <span>O arquivo é lido no seu próprio aparelho e não é enviado para ninguém. Se preferir, preencha à mão.</span></div>
+      ${footer({ dark: false, text: kit.signature, page: n, total })}`,
+  });
+}
+
 export function quoteSlides(theme, kit) {
   const total = theme.slides.length + 2;
   const body = theme.slides.map((s, i) => {
@@ -261,6 +301,7 @@ export function quoteSlides(theme, kit) {
     if (s === "versus") return versusSlide(kit, n, total);
     if (s === "steps") return stepsSlide(kit, n, total);
     if (s === "insurers") return insurersSlide(kit, n, total);
+    if (s === "policy") return policySlide(kit, n, total);
     return listSlide(kit, s, n, total);
   });
   return [

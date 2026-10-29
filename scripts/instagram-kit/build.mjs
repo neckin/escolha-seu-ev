@@ -100,6 +100,13 @@ const QUOTE_CAPTIONS = {
 Na D&B você cota online, a qualquer hora: preenche uma vez, 8 seguradoras calculam ao mesmo tempo e as ofertas aparecem na tela em poucos minutos.
 
 Você compara preço, franquia e cobertura, escolhe o plano e a forma de pagamento. A gente fala com você só para fechar.`,
+  apolice: `Já tem seguro auto? Então você já tem quase tudo para comparar. 📄
+
+Na cotação online da D&B, envie o PDF da sua apólice atual (o que a seguradora mandou por e-mail ou está no app dela). O formulário é preenchido com o carro, os dados do condutor, a seguradora, o vencimento e a classe de bônus. Você só confere e completa o que faltar.
+
+Aí 8 seguradoras calculam ao mesmo tempo e você vê, antes de renovar, se dá para pagar menos ou ter uma cobertura melhor.
+
+🔒 O arquivo é lido no seu próprio aparelho e não é enviado para ninguém. Se preferir, é só preencher à mão.`,
   "tres-passos": `Seguro auto em 3 passos, sem ligação e sem esperar retorno:
 
 1️⃣ Preencha os dados do carro e do condutor
@@ -112,7 +119,7 @@ ${INSURERS.join(", ")}: todas calculam o seu seguro ao mesmo tempo, e você vê 
 Sem ligar para cada uma, sem esperar ninguém.`,
   renovacao: `Seu seguro vence nos próximos 60 dias? 📅
 
-Antes de aceitar a renovação, cote em 8 seguradoras de uma vez e compare. Tenha em mãos o CEP onde o carro dorme, os dados do condutor e a sua classe de bônus.
+Antes de aceitar a renovação, cote em 8 seguradoras de uma vez e compare. Se tiver o PDF da apólice atual, envie na cotação: ele já preenche quase tudo.
 
 É online, a qualquer hora, e leva poucos minutos.`,
   "carro-novo": `Vai buscar o carro novo? 🚗🔑
@@ -138,7 +145,9 @@ function captions({ weekCar, theme, cost, monday, signature }) {
 
 ${base.join(" ")}`,
       stories: [
-        `Enquete: "Como você cotou seu último seguro?" (Ligando / Online)`,
+        theme.id === "apolice"
+          ? `Enquete: "Você compara antes de renovar o seguro?" (Sempre / Renovo direto)`
+          : `Enquete: "Como você cotou seu último seguro?" (Ligando / Online)`,
         `Figurinha de link "Cotar seguro" → ${utm("stories", `${theme.id}-${week}`)}`,
       ],
     },
