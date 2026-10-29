@@ -321,6 +321,11 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   const policyFileRef = useRef(null);
   const policyInputRef = useRef(null);
   const pendingFipeRef = useRef(null); // código FIPE da apólice, aplicado quando os modelos carregarem
+  // A leitura do PDF leva ~1 s: usa a lista de marcas mais recente e, se ela
+  // ainda não chegou, guarda o texto para achar a marca quando chegar.
+  const latestBrandsRef = useRef(brands);
+  latestBrandsRef.current = brands;
+  const pendingPolicyTextRef = useRef(null);
 
   // Honeypot: campo oculto para detectar bots. Humanos não o veem nem o
   // preenchem — se tiver conteúdo, o envio é silenciosamente bloqueado.
@@ -436,6 +441,19 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     if (match) setSelectedBrandId(match.id);
     brandAutoPickedRef.current = true;
   }, [useApiMode, brands, car?.brand]);
+
+  // Apólice lida antes de a lista de marcas chegar: aplica a marca agora.
+  useEffect(() => {
+    const text = pendingPolicyTextRef.current;
+    if (!text || brands.length === 0) return;
+    pendingPolicyTextRef.current = null;
+    const data = parsePolicy(text, { brands });
+    if (!data.brandId || selectedBrandId) return;
+    brandAutoPickedRef.current = true;
+    if (data.fipe) pendingFipeRef.current = data.fipe;
+    setSelectedBrandId(data.brandId);
+    setPolicyFilled((prev) => new Set(prev).add("brand"));
+  }, [brands]);
 
   // ---- modo API própria: carrega modelos reais quando marca + ano estão definidos ----
   useEffect(() => {
@@ -635,6 +653,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     setPolicyStatus("reading");
     setPolicyError("");
     try {
+      pendingPolicyTextRef.current = null;
       const text = await extractPdfText(file, password);
       // Sem camada de texto (foto ou PDF escaneado).
       if (text.replace(/\s/g, "").length < 80) {
@@ -642,7 +661,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
         setPolicyError("Não encontramos texto neste arquivo (pode ser uma foto ou um PDF escaneado). Preencha os campos abaixo normalmente.");
         return;
       }
-      const count = applyPolicy(parsePolicy(text, { brands }));
+      const currentBrands = latestBrandsRef.current;
+      const count = applyPolicy(parsePolicy(text, { brands: currentBrands }));
+      if (!car && currentBrands.length === 0) pendingPolicyTextRef.current = text;
       if (count === 0) {
         setPolicyStatus("error");
         setPolicyError("Não reconhecemos os dados desta apólice. Preencha os campos abaixo normalmente.");
