@@ -4,10 +4,17 @@
     {
       "path": "/api/cron/quote-report",
       "schedule": "0 11 * * 1"
+    },
+    {
+      "path": "/api/cron/monthly-closing",
+      "schedule": "0 11 1 * *"
     }
   ],
   "functions": {
     "api/cron/quote-report.js": {
+      "maxDuration": 60
+    },
+    "api/cron/monthly-closing.js": {
       "maxDuration": 60
     }
   },

@@ -4,6 +4,10 @@
 export const INSURER_NAMES = {
   porto: "Porto Seguro", azul: "Azul Seguros", itau: "Itaú Seguros", allianz: "Allianz",
   liberty: "Liberty", bradesco: "Bradesco Seguros", suhai: "Suhai", mitsui: "Mitsui Sumitomo",
+  // Só aparecem como seguradora atual do cliente (renewal.insurer), não são cotadas.
+  hdi: "HDI", tokio: "Tokio Marine", mapfre: "Mapfre", sompo: "Sompo", zurich: "Zurich", youse: "Youse",
+  sura: "Sura", alfa: "Alfa", generali: "Generali", santander: "Santander", caixa: "Caixa Seguradora",
+  sul_america_cia_nacional_auto: "SulAmérica",
 };
 
 export function escapeHtml(value) {

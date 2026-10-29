@@ -98,6 +98,12 @@ export default function PrivacyPage({ T, onBack }) {
           <strong style={{ color: T.ink }}>eles nunca são armazenados no banco de dados deste site</strong>. A coleta só ocorre se você iniciar essa ação voluntariamente e concordar
           com o termo de consentimento exibido no formulário.
           <br /><br />
+          Se você usar a opção de enviar a apólice do seu seguro atual para preencher o formulário, o PDF é
+          lido no seu próprio navegador:{" "}
+          <strong style={{ color: T.ink }}>o arquivo não é enviado ao nosso servidor nem a terceiros</strong>.
+          Só os campos preenchidos a partir dele, que você confere e pode alterar, seguem para a cotação como
+          descrito acima. O registro técnico da cotação anota apenas que a apólice foi usada.
+          <br /><br />
           Para acompanhar o atendimento, o site guarda apenas um registro técnico de cada cotação: o código
           dela na Segfy, a data, a página e o link de divulgação de onde veio (por exemplo, um post do
           Instagram) e, se houver, o plano escolhido (seguradora, valor e

@@ -99,6 +99,7 @@ export default async function handler(req, res) {
         quote_guid: data.guid,
         source: SOURCES.includes(meta?.source) ? meta.source : null,
         car_id: typeof meta?.carId === "string" ? meta.carId.slice(0, 80) : null,
+        from_policy: meta?.fromPolicy === true,
         ...utmFields(meta?.utm),
       });
     }

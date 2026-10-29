@@ -28,10 +28,10 @@ export async function logQuoteEvent(row) {
     });
   try {
     let res = await insert(row);
-    // Colunas utm_* ainda não criadas no banco: grava o resto mesmo assim.
-    const utmKeys = Object.keys(row).filter((k) => k.startsWith("utm_"));
-    if (!res.ok && utmKeys.length) {
-      res = await insert(Object.fromEntries(Object.entries(row).filter(([k]) => !utmKeys.includes(k))));
+    // Colunas utm_*/from_policy ainda não criadas no banco: grava o resto mesmo assim.
+    const optionalKeys = Object.keys(row).filter((k) => k.startsWith("utm_") || k === "from_policy");
+    if (!res.ok && optionalKeys.length) {
+      res = await insert(Object.fromEntries(Object.entries(row).filter(([k]) => !optionalKeys.includes(k))));
     }
     if (!res.ok) console.error("[quote-log]", res.status, await res.text());
   } catch (error) {
@@ -39,10 +39,12 @@ export async function logQuoteEvent(row) {
   }
 }
 
-export async function listQuoteEvents(sinceIso) {
+export async function listQuoteEvents(sinceIso, untilIso) {
   const config = supabaseConfig();
   if (!config) throw new Error("VITE_SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados.");
-  const query = new URLSearchParams({ select: "*", created_at: `gte.${sinceIso}`, order: "created_at.asc" });
+  const query = new URLSearchParams({ select: "*", order: "created_at.asc" });
+  query.append("created_at", `gte.${sinceIso}`);
+  if (untilIso) query.append("created_at", `lt.${untilIso}`);
   const res = await fetch(`${config.url}/rest/v1/quote_events?${query}`, { headers: headers(config.key) });
   if (!res.ok) throw new Error(`Falha ao ler quote_events: ${res.status} ${await res.text()}`);
   return res.json();

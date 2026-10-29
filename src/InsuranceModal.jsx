@@ -36,7 +36,8 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 import { paymentOptions, headlineInstallment, formatPlan } from "./installments.js";
 import { readCampaign } from "./campaign.js";
-import { X, ShieldCheck, Loader2, FlaskConical, Info, AlertTriangle } from "lucide-react";
+import { extractPdfText, parsePolicy, PolicyPasswordError } from "./policyReader.js";
+import { X, ShieldCheck, Loader2, FlaskConical, Info, AlertTriangle, FileUp } from "lucide-react";
 
 // Mistura um hex do tema com alpha — mantém tints translúcidos acompanhando
 // o tema ativo (claro/escuro) em vez de fixar uma cor hardcoded.
@@ -310,6 +311,17 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   const socketRef = useRef(null);
   const brandAutoPickedRef = useRef(false);
 
+  // Apólice anterior (lida no navegador, ver policyReader.js). policyFilled
+  // guarda os campos preenchidos por ela, destacados até a pessoa mexer.
+  const [policyStatus, setPolicyStatus] = useState("idle"); // idle | reading | password | done | error
+  const [policyError, setPolicyError] = useState("");
+  const [policyPassword, setPolicyPassword] = useState("");
+  const [policyFilled, setPolicyFilled] = useState(() => new Set());
+  const [policySkippedVehicle, setPolicySkippedVehicle] = useState(false);
+  const policyFileRef = useRef(null);
+  const policyInputRef = useRef(null);
+  const pendingFipeRef = useRef(null); // código FIPE da apólice, aplicado quando os modelos carregarem
+
   // Honeypot: campo oculto para detectar bots. Humanos não o veem nem o
   // preenchem — se tiver conteúdo, o envio é silenciosamente bloqueado.
   const [honeypot, setHoneypot] = useState("");
@@ -322,11 +334,25 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   // evitar duplo clique ou submissões acidentais.
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const unmarkPolicy = (k) =>
+    setPolicyFilled((prev) => {
+      if (!prev.has(k)) return prev;
+      const next = new Set(prev);
+      next.delete(k);
+      return next;
+    });
+
+  const set = (k, v) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    unmarkPolicy(k);
+  };
 
   const cpfValid = isValidCpf(form.cpf);
 
-  const setQuestion = (k, v) => setQ((prev) => ({ ...prev, [k]: v }));
+  const setQuestion = (k, v) => {
+    setQ((prev) => ({ ...prev, [k]: v }));
+    unmarkPolicy(k);
+  };
 
   const age = ageFrom(form.nascimento);
   const ageValid = age != null && age >= 18 && age <= 100;
@@ -431,7 +457,16 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     })
       .then((res) => {
         if (cancelled) return;
-        setModels(res.data?.models || []);
+        const list = res.data?.models || [];
+        setModels(list);
+        // Apólice enviada: escolhe o modelo pelo código FIPE dela.
+        const fipe = pendingFipeRef.current;
+        const match = fipe && list.find((m) => m.data_fipe?.fipe_code === fipe);
+        if (match) {
+          setSelectedModelId(match.model_id);
+          setPolicyFilled((prev) => new Set(prev).add("model"));
+        }
+        pendingFipeRef.current = null;
       })
       .catch((err) => {
         if (!cancelled) setModelsError(err.message);
@@ -547,6 +582,104 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     };
   }, [useRealWidget, step]);
 
+  // Preenche só campos ainda vazios: o que a pessoa já digitou prevalece.
+  const applyPolicy = (data) => {
+    const filled = new Set();
+    const formPatch = {};
+    const fill = (key, value, current) => {
+      if (value == null || value === "" || current) return;
+      formPatch[key] = value;
+      filled.add(key);
+    };
+    fill("nome", data.nome, form.nome.trim());
+    fill("cpf", data.cpf && maskCpf(data.cpf), onlyDigits(form.cpf));
+    fill("email", data.email, form.email.trim());
+    fill("cep", data.cep && maskCep(data.cep), onlyDigits(form.cep));
+    fill("nascimento", data.nascimento, form.nascimento);
+    fill("sexo", data.sexo, form.sexo);
+    fill("estadoCivil", data.estadoCivil, form.estadoCivil);
+
+    // Na página de um carro a cotação é daquele carro; o veículo da apólice
+    // (provavelmente o atual da pessoa) fica de fora.
+    const hasVehicle = Boolean(data.brandId || data.ano || data.fipe);
+    setPolicySkippedVehicle(Boolean(car) && hasVehicle);
+    if (!car) {
+      if (YEARS.includes(Number(data.ano))) fill("ano", data.ano, form.ano);
+      if (data.brandId && !selectedBrandId) {
+        brandAutoPickedRef.current = true;
+        setSelectedBrandId(data.brandId);
+        filled.add("brand");
+        if (data.fipe) pendingFipeRef.current = data.fipe;
+      }
+    }
+    setForm((f) => ({ ...f, ...formPatch }));
+
+    if (data.profissao && !profession && !professionQuery.trim()) {
+      setProfessionQuery(data.profissao);
+      filled.add("profissao");
+    }
+
+    const qPatch = {};
+    for (const key of ["financiado", "temSeguro", "seguradoraAtual", "fimVigencia", "classeBonus"]) {
+      if (data[key] != null && data[key] !== "" && q[key] === "") {
+        qPatch[key] = data[key];
+        filled.add(key);
+      }
+    }
+    setQ((prev) => ({ ...prev, ...qPatch }));
+    setPolicyFilled(filled);
+    return filled.size;
+  };
+
+  const readPolicy = async (file, password) => {
+    setPolicyStatus("reading");
+    setPolicyError("");
+    try {
+      const text = await extractPdfText(file, password);
+      // Sem camada de texto (foto ou PDF escaneado).
+      if (text.replace(/\s/g, "").length < 80) {
+        setPolicyStatus("error");
+        setPolicyError("Não encontramos texto neste arquivo (pode ser uma foto ou um PDF escaneado). Preencha os campos abaixo normalmente.");
+        return;
+      }
+      const count = applyPolicy(parsePolicy(text, { brands }));
+      if (count === 0) {
+        setPolicyStatus("error");
+        setPolicyError("Não reconhecemos os dados desta apólice. Preencha os campos abaixo normalmente.");
+        return;
+      }
+      setPolicyStatus("done");
+      setPolicyPassword("");
+    } catch (err) {
+      if (err instanceof PolicyPasswordError) {
+        setPolicyStatus("password");
+        setPolicyError(err.wrongPassword ? "Senha incorreta. Tente de novo." : "");
+        return;
+      }
+      setPolicyStatus("error");
+      setPolicyError("Não conseguimos abrir este arquivo. Preencha os campos abaixo normalmente.");
+    }
+  };
+
+  const handlePolicyFile = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // permite reenviar o mesmo arquivo
+    if (!file) return;
+    if (file.type !== "application/pdf" && !/\.pdf$/i.test(file.name)) {
+      setPolicyStatus("error");
+      setPolicyError("Envie a apólice em PDF. Fotos ainda não são lidas automaticamente.");
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      setPolicyStatus("error");
+      setPolicyError("Arquivo grande demais (máximo de 15 MB).");
+      return;
+    }
+    policyFileRef.current = file;
+    setPolicyPassword("");
+    readPolicy(file);
+  };
+
   const handleSubmitApi = () => {
     const model = models.find((m) => m.model_id === selectedModelId);
     const brand = brands.find((b) => b.id === selectedBrandId);
@@ -579,7 +712,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
 
     socket.on("connect", () => {
       segfyApi("calculate", {
-        meta: { source: embedded ? "cotacao" : "comparador", carId: car?.id, utm: readCampaign() },
+        meta: { source: embedded ? "cotacao" : "comparador", carId: car?.id, utm: readCampaign(), fromPolicy: policyStatus === "done" },
         config: {
           insurers: QUOTED_INSURERS,
           callback: roomId,
@@ -732,6 +865,8 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     color: T.ink, fontSize: 13, boxSizing: "border-box", width: "100%",
   };
   const labelStyle = { fontSize: 12.5, color: T.ink, fontWeight: 600, display: "flex", flexDirection: "column", gap: 5 };
+  // Campo preenchido pela apólice: destaque até a pessoa conferir/alterar.
+  const fs = (key) => (policyFilled.has(key) ? { ...fieldStyle, borderColor: T.accent, background: hexA(T.accent, 0.08) } : fieldStyle);
 
   // Indicador de validade do CPF — só aparece depois que o usuário começa a
   // digitar (para não mostrar erro antes de qualquer interação).
@@ -750,7 +885,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   const questionSelect = (label, key, opts, extra) => (
     <label style={labelStyle}>
       {label}
-      <select value={q[key]} onChange={(e) => setQuestion(key, e.target.value)} style={fieldStyle}>
+      <select value={q[key]} onChange={(e) => setQuestion(key, e.target.value)} style={fs(key)}>
         <option value="">Selecione</option>
         {opts.map(([value, text]) => <option key={value} value={value}>{text}</option>)}
       </select>
@@ -840,9 +975,79 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
               </label>
             </div>
 
+            {useApiMode && (
+              <div style={{
+                marginBottom: 16, padding: "12px", borderRadius: 10,
+                background: hexA(T.accent, 0.07), border: `1px solid ${hexA(T.accent, 0.4)}`,
+              }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                  <FileUp size={18} color={T.accent} style={{ marginTop: 1, flexShrink: 0 }} />
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: T.ink }}>Já tem seguro auto? Use a apólice atual</div>
+                    <div style={{ fontSize: 11.5, color: T.inkDim, lineHeight: 1.5, marginTop: 2 }}>
+                      Envie o PDF e preenchemos o que encontrarmos nele. O arquivo é lido aqui no seu aparelho e
+                      não é enviado a ninguém. Se preferir, é só preencher abaixo.
+                    </div>
+
+                    {policyStatus === "done" && (
+                      <div style={{ fontSize: 12, color: T.ink, lineHeight: 1.5, marginTop: 8 }}>
+                        <strong>Preenchemos {policyFilled.size} {policyFilled.size === 1 ? "campo" : "campos"} com a apólice.</strong>{" "}
+                        Confira os destacados (inclusive na próxima etapa) e complete o que faltar.
+                        {policySkippedVehicle && ` Os dados do veículo da apólice não foram usados, porque esta cotação é do ${car.name}.`}
+                      </div>
+                    )}
+                    {(policyStatus === "error" || (policyStatus === "password" && policyError)) && (
+                      <div style={{ fontSize: 12, color: T.warn, lineHeight: 1.5, marginTop: 8 }}>{policyError}</div>
+                    )}
+                    {policyStatus === "password" && (
+                      <form
+                        onSubmit={(e) => { e.preventDefault(); if (policyPassword) readPolicy(policyFileRef.current, policyPassword); }}
+                        style={{ marginTop: 8 }}
+                      >
+                        <label style={labelStyle}>
+                          Este PDF tem senha
+                          <span style={hintStyle}>Costuma ser parte do seu CPF; o e-mail da seguradora informa qual.</span>
+                          <div style={{ display: "flex", gap: 8 }}>
+                            <input type="password" value={policyPassword} onChange={(e) => setPolicyPassword(e.target.value)} autoComplete="off" style={fieldStyle} />
+                            <button type="submit" disabled={!policyPassword} style={{
+                              background: T.accent2, color: T.bg, border: "none", borderRadius: 7, padding: "0 14px",
+                              fontWeight: 700, fontSize: 12.5, cursor: policyPassword ? "pointer" : "not-allowed", flexShrink: 0,
+                            }}>
+                              Abrir
+                            </button>
+                          </div>
+                        </label>
+                      </form>
+                    )}
+
+                    <input ref={policyInputRef} type="file" accept="application/pdf,.pdf" onChange={handlePolicyFile} style={{ display: "none" }} />
+                    {policyStatus !== "password" && (
+                      <button
+                        type="button"
+                        onClick={() => policyInputRef.current?.click()}
+                        disabled={policyStatus === "reading"}
+                        style={{
+                          marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6,
+                          background: policyStatus === "done" ? "none" : T.accent2,
+                          color: policyStatus === "done" ? (T.accentText || T.accent) : T.bg,
+                          border: policyStatus === "done" ? `1px solid ${T.line}` : "none",
+                          borderRadius: 7, padding: "8px 12px", fontWeight: 700, fontSize: 12.5,
+                          cursor: policyStatus === "reading" ? "wait" : "pointer",
+                        }}
+                      >
+                        {policyStatus === "reading" ? (
+                          <><Loader2 size={14} className="ev-spin" /> Lendo a apólice…<style>{`.ev-spin { animation: ev-spin-anim 0.9s linear infinite; } @keyframes ev-spin-anim { to { transform: rotate(360deg); } }`}</style></>
+                        ) : policyStatus === "done" || policyStatus === "error" ? "Enviar outro arquivo" : "Enviar apólice (PDF)"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <label style={{ ...labelStyle, marginBottom: 12 }}>
               Nome completo
-              <input type="text" value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Como no documento" style={fieldStyle} />
+              <input type="text" value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Como no documento" style={fs("nome")} />
             </label>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
@@ -854,7 +1059,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                   value={form.cpf}
                   onChange={(e) => set("cpf", maskCpf(e.target.value))}
                   placeholder="000.000.000-00"
-                  style={{ ...fieldStyle, borderColor: cpfBorderColor }}
+                  style={policyFilled.has("cpf") && cpfValid ? fs("cpf") : { ...fieldStyle, borderColor: cpfBorderColor }}
                 />
                 {cpfTouched && !cpfValid && (
                   <span style={{ fontSize: 10.5, color: T.warn, marginTop: 2 }}>CPF inválido</span>
@@ -868,17 +1073,17 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
 
             <label style={{ ...labelStyle, marginBottom: 12 }}>
               E-mail
-              <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="voce@email.com" style={fieldStyle} />
+              <input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="voce@email.com" style={fs("email")} />
             </label>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16 }}>
               <label style={labelStyle}>
                 CEP {!useApiMode && <span style={{ fontWeight: 400, color: T.inkDim }}>opc.</span>}
-                <input type="text" inputMode="numeric" value={form.cep} onChange={(e) => set("cep", maskCep(e.target.value))} placeholder="00000-000" style={fieldStyle} />
+                <input type="text" inputMode="numeric" value={form.cep} onChange={(e) => set("cep", maskCep(e.target.value))} placeholder="00000-000" style={fs("cep")} />
               </label>
               <label style={labelStyle}>
                 Ano do veículo
-                <select value={form.ano} onChange={(e) => set("ano", e.target.value)} style={fieldStyle}>
+                <select value={form.ano} onChange={(e) => set("ano", e.target.value)} style={fs("ano")}>
                   <option value="">—</option>
                   {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
                 </select>
@@ -896,7 +1101,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
                 <label style={labelStyle}>
                   Marca (catálogo Segfy)
-                  <select value={selectedBrandId} onChange={(e) => setSelectedBrandId(e.target.value)} style={fieldStyle}>
+                  <select value={selectedBrandId} onChange={(e) => { setSelectedBrandId(e.target.value); unmarkPolicy("brand"); unmarkPolicy("model"); }} style={fs("brand")}>
                     <option value="">—</option>
                     {brands.map((b) => <option key={b.id} value={b.id}>{b.text}</option>)}
                   </select>
@@ -906,9 +1111,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                   Modelo
                   <select
                     value={selectedModelId}
-                    onChange={(e) => setSelectedModelId(e.target.value)}
+                    onChange={(e) => { setSelectedModelId(e.target.value); unmarkPolicy("model"); }}
                     disabled={!selectedBrandId || !form.ano || modelsLoading}
-                    style={fieldStyle}
+                    style={fs("model")}
                   >
                     <option value="">{modelsLoading ? "Carregando…" : "—"}</option>
                     {models.map((m) => <option key={m.model_id} value={m.model_id}>{m.text}</option>)}
@@ -932,19 +1137,19 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 12 }}>
                   <label style={labelStyle}>
                     Data de nascimento
-                    <input type="date" value={form.nascimento} onChange={(e) => set("nascimento", e.target.value)} style={fieldStyle} />
+                    <input type="date" value={form.nascimento} onChange={(e) => set("nascimento", e.target.value)} style={fs("nascimento")} />
                     {form.nascimento && !ageValid && <span style={{ ...hintStyle, color: T.warn }}>É preciso ter 18 anos ou mais</span>}
                   </label>
                   <label style={labelStyle}>
                     Sexo
-                    <select value={form.sexo} onChange={(e) => set("sexo", e.target.value)} style={fieldStyle}>
+                    <select value={form.sexo} onChange={(e) => set("sexo", e.target.value)} style={fs("sexo")}>
                       <option value="">Selecione</option>
                       {SEX_OPTS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
                     </select>
                   </label>
                   <label style={labelStyle}>
                     Estado civil
-                    <select value={form.estadoCivil} onChange={(e) => set("estadoCivil", e.target.value)} style={fieldStyle}>
+                    <select value={form.estadoCivil} onChange={(e) => set("estadoCivil", e.target.value)} style={fs("estadoCivil")}>
                       <option value="">Selecione</option>
                       {MARITAL_OPTS.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
                     </select>
@@ -958,10 +1163,11 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                     onChange={(e) => {
                       setProfession(null);
                       setProfessionQuery(e.target.value);
+                      unmarkPolicy("profissao");
                     }}
                     placeholder="Digite e escolha na lista"
                     autoComplete="off"
-                    style={{ ...fieldStyle, borderColor: profession ? T.good : T.line }}
+                    style={{ ...fs("profissao"), ...(profession ? { borderColor: T.good } : {}) }}
                   />
                   {!profession && professionOptions.length > 0 && (
                     <div role="listbox" style={{ display: "flex", flexDirection: "column", border: `1px solid ${T.line}`, borderRadius: 7, background: T.bg, overflow: "hidden" }}>
@@ -977,6 +1183,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                         </button>
                       ))}
                     </div>
+                  )}
+                  {!profession && policyFilled.has("profissao") && professionOptions.length > 0 && (
+                    <span style={hintStyle}>Na apólice consta “{professionQuery}”. Escolha a opção equivalente na lista.</span>
                   )}
                   {!profession && professionQuery.trim().length >= 3 && professionOptions.length === 0 && (
                     <span style={hintStyle}>Nenhuma profissão encontrada ainda. Tente outra palavra.</span>
@@ -1064,7 +1273,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 12 }}>
                     <label style={labelStyle}>
                       Fim da vigência
-                      <input type="date" value={q.fimVigencia} onChange={(e) => setQuestion("fimVigencia", e.target.value)} style={fieldStyle} />
+                      <input type="date" value={q.fimVigencia} onChange={(e) => setQuestion("fimVigencia", e.target.value)} style={fs("fimVigencia")} />
                     </label>
                     {questionSelect("Classe de bônus", "classeBonus", BONUS_CLASSES.map((c) => [c, c]), <span style={hintStyle}>Consta na apólice</span>)}
                     {questionSelect("Sinistros nesta vigência", "sinistros", [["0", "Nenhum"], ["1", "1"], ["2", "2"], ["3", "3 ou mais"]])}

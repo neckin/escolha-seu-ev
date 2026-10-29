@@ -30,6 +30,11 @@ alter table quote_events add column if not exists utm_source text;
 alter table quote_events add column if not exists utm_medium text;
 alter table quote_events add column if not exists utm_campaign text;
 
+-- A pessoa enviou a apólice atual para preencher o formulário (já tem seguro,
+-- com a D&B ou com outra corretora, e está comparando preços).
+-- Em banco já criado, rode só esta linha.
+alter table quote_events add column if not exists from_policy boolean;
+
 create index if not exists quote_events_created_at_idx on quote_events (created_at);
 create index if not exists quote_events_guid_idx on quote_events (quote_guid);
 
