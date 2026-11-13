@@ -2,9 +2,10 @@ name: Kit semanal de Instagram (seguro auto)
 
 on:
   schedule:
-    # 10:00 UTC toda segunda-feira = 07:00 no horário de Brasília
+    # 10:00 UTC toda segunda-feira = 07:00 em Brasília. Gera as peças da
+    # semana e sobe para o Storage; o instagram-publish.yml publica às 18h.
     - cron: "0 10 * * 1"
-  workflow_dispatch: {} # permite gerar de novo pelo botão no GitHub
+  workflow_dispatch: {} # gera de novo pelo botão (antes de publicar a segunda)
 
 jobs:
   kit:
@@ -24,18 +25,17 @@ jobs:
       - name: Instalar ffmpeg
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
 
-      - name: Gerar o kit e mandar por e-mail
+      # Escolhe o tema pelo desempenho no Windsor.ai, gera e sobe o kit. O
+      # relatório de desempenho aparece na aba "Summary" desta execução.
+      - name: Gerar o kit e subir para o Storage
         env:
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          KIT_EMAILS: ${{ secrets.KIT_EMAILS }}
           SUSEP_REGISTRO: ${{ secrets.SUSEP_REGISTRO }}
-        run: node scripts/instagram-kit/build.mjs --out instagram-kit-out --email
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+        run: node scripts/instagram-kit/build.mjs --out instagram-kit-out --upload
 
-      # Cópia de segurança das peças, baixável na página da execução por 30 dias.
+      # Prévia das peças, baixável na página da execução por 30 dias.
       - uses: actions/upload-artifact@v4
         if: always()
         with:

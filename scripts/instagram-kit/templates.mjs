@@ -322,6 +322,7 @@ function ctaSlide(kit, { title, line, page: n, total }) {
         <div style="margin-top:56px;display:flex;flex-wrap:wrap;gap:14px 16px">
           ${INSURERS.map((name) => `<span style="font-size:26px;font-weight:500;color:${C.goldSoft};border:1.5px solid rgba(228,195,119,.45);border-radius:999px;padding:10px 22px">${name}</span>`).join("")}
         </div>
+        <div style="margin-top:56px;font-size:30px;font-weight:600;color:#C9D1DA">Salve este post e siga o perfil: toda sexta tem carro da semana.</div>
       </div>
       <div style="position:absolute;left:80px;right:80px;bottom:190px;display:flex;align-items:center;gap:40px">
         <div style="background:${C.goldSoft};color:${C.navy};font-family:Manrope;font-weight:800;font-size:30px;letter-spacing:.08em;padding:30px 44px;border-radius:12px">COTAR SEGURO · LINK NA BIO</div>
@@ -331,6 +332,72 @@ function ctaSlide(kit, { title, line, page: n, total }) {
   });
 }
 
+
+// ---------- Stories (1080x1920, uma imagem por dia de post) ----------
+// Publicados pela API, que não aceita figurinhas (enquete, link): a chamada é
+// "link na bio" / "veja no perfil". O conteúdo fica entre 300 e 1560 px de
+// altura, fora do topo (barra de progresso) e do rodapé (campo de resposta).
+
+export function storySlide(kind, data, kit) {
+  const STORY = { width: 1080, height: 1920 };
+  const pill = (text) => `<div style="display:inline-block;background:${C.goldSoft};color:${C.navy};font-family:Manrope;font-weight:800;font-size:38px;letter-spacing:.08em;padding:32px 52px;border-radius:14px">${text}</div>`;
+  const logo = `<img src="${kit.logoGold}" style="position:absolute;left:90px;top:300px;width:150px">`;
+
+  if (kind === "mon") {
+    const { theme } = data;
+    return page({
+      ...STORY, bg: C.navy,
+      body: `${arcs(C.gold, { right: -700, top: -420, size: 1300 })}${logo}
+        <div style="position:absolute;left:90px;right:90px;top:620px">
+          <div class="label" style="font-size:30px">${esc(theme.kicker)}</div>
+          <div class="rule" style="width:140px;margin:40px 0 52px"></div>
+          <div class="num" style="font-size:${theme.title.length > 30 ? 108 : 128}px;line-height:1.03;color:${C.white}">${esc(theme.title)}</div>
+          <div class="serif" style="font-size:72px;line-height:1.12;color:${C.goldSoft};font-style:italic;margin-top:52px">${esc(theme.sub)}</div>
+        </div>
+        <div style="position:absolute;left:90px;right:90px;top:1380px">${pill("COTE NO LINK DA BIO")}</div>`,
+    });
+  }
+
+  if (kind === "wed") {
+    const { car, variant } = data;
+    const model = car.name.replace(new RegExp(`^${car.brand}\\s+`, "i"), "");
+    const [line1, line2] = variant === "custo"
+      ? [`Quanto custa rodar 1.000 km de ${esc(model)}?`, "A resposta surpreende."]
+      : [`Seguro do ${esc(model)}?`, "Ainda vai ligar e esperar?"];
+    return page({
+      ...STORY, bg: C.navy2,
+      body: `${arcs(C.gold, { right: -760, top: 1100, size: 1300 })}${logo}
+        <div style="position:absolute;left:90px;right:90px;top:600px">
+          <div style="display:inline-flex;align-items:center;gap:18px;border:2px solid ${C.gold};border-radius:999px;padding:14px 30px">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="${C.gold}"><path d="M8 5v14l11-7z"/></svg>
+            <span class="label" style="font-size:28px">Reels novo</span></div>
+          <div class="num" style="font-size:${line1.length > 30 ? 96 : 124}px;line-height:1.03;color:${C.white};margin-top:60px">${line1}</div>
+          <div class="serif" style="font-size:96px;line-height:1.05;color:${C.goldSoft};font-style:italic;margin-top:44px">${line2}</div>
+        </div>
+        <div style="position:absolute;left:90px;right:90px;top:1380px">${pill("ASSISTA NO PERFIL")}</div>`,
+    });
+  }
+
+  const { car, cost } = data;
+  const model = car.name.replace(new RegExp(`^${car.brand}\\s+`, "i"), "");
+  const stat = (k, v) => `<div style="padding:30px 0;border-top:2px solid rgba(228,195,119,.35);display:flex;justify-content:space-between;align-items:baseline">
+    <span style="font-size:36px;font-weight:500;color:#C9D1DA">${k}</span><span class="num" style="font-size:64px;color:${C.white}">${v}</span></div>`;
+  return page({
+    ...STORY, bg: C.navy,
+    body: `${arcs(C.gold, { right: -700, top: -420, size: 1300 })}${logo}
+      <div style="position:absolute;left:90px;right:90px;top:540px">
+        <div class="label" style="font-size:30px">Carro da semana</div>
+        <div style="font-family:Manrope;font-weight:700;font-size:48px;color:${C.goldSoft};margin-top:40px">${esc(car.brand)}</div>
+        <div class="num" style="font-size:${model.length > 16 ? 100 : 124}px;line-height:1.02;color:${C.white};margin-top:6px">${esc(model)}</div>
+        <div style="margin-top:56px">
+          ${stat("Preço", brl(car.price))}
+          ${stat("Autonomia", `${num(car.rangeKm)} km`)}
+          ${stat("Energia a cada 1.000 km", brl(cost.evPer1000))}
+        </div>
+      </div>
+      <div style="position:absolute;left:90px;right:90px;top:1420px">${pill("VEJA O POST NO PERFIL")}</div>`,
+  });
+}
 
 // ---------- Reels (1080x1920, animação em CSS, capturada quadro a quadro) ----------
 // "Seguro do <carro da semana>? Ainda vai ligar e esperar?" → o jeito antigo
@@ -342,8 +409,9 @@ function ctaSlide(kit, { title, line, page: n, total }) {
 export const REELS_SECONDS = 15;
 export const REELS_COVER_SECONDS = 11.8;
 
-export function reelsPage(car, kit) {
-  const scenes = [[0, 3.4], [3.4, 8.4], [8.4, 12.4], [12.4, REELS_SECONDS + 1]];
+// Cenas que entram e saem em tempos fixos + elementos que "surgem" (pop) ou
+// são riscados (strike). Usado pelas duas variantes de Reels.
+function reelsKit(scenes) {
   const p = (t) => `${((Math.max(0, Math.min(REELS_SECONDS, t)) / REELS_SECONDS) * 100).toFixed(3)}%`;
   // Anima variáveis (--o, --y) e não opacity/transform direto: o Chrome roda
   // opacity no compositor e, com a animação pausada e reposicionada a cada
@@ -361,6 +429,25 @@ export function reelsPage(car, kit) {
   const strike = (name, start) => `
     @keyframes k-${name} { from { width: 0 } to { width: 100% } }
     .${name} { animation: k-${name} .35s ${start}s ease-in both; }`;
+  const vars = `@property --o { syntax: "<number>"; inherits: false; initial-value: 1; }
+    @property --y { syntax: "<length>"; inherits: false; initial-value: 0px; }
+    .scene { position: absolute; left: 90px; right: 90px; opacity: var(--o); transform: translateY(var(--y)); }`;
+  return { sceneCss, pop, strike, vars };
+}
+
+// Chamada final, igual nas duas variantes: cotar + seguir.
+function reelsCta(kit) {
+  return `<img src="${kit.logoGold}" style="width:230px">
+        <div class="serif" style="font-size:96px;line-height:1.06;color:${C.white};margin-top:70px">Cote em minutos,<br><span style="font-style:italic;color:${C.goldSoft}">a qualquer hora</span></div>
+        <div style="font-size:40px;color:#C9D1DA;margin-top:44px;line-height:1.35">A D&amp;B fala com você só para fechar.</div>
+        <div style="display:inline-block;margin-top:70px;background:${C.goldSoft};color:${C.navy};font-family:Manrope;font-weight:800;font-size:40px;letter-spacing:.08em;padding:34px 56px;border-radius:14px">LINK NA BIO</div>
+        <div style="font-size:34px;font-weight:600;color:${C.goldSoft};margin-top:52px">Siga para ver o carro da semana</div>
+        <div style="font-size:28px;color:${C.grey};margin-top:20px">${esc(kit.signature)}</div>`;
+}
+
+export function reelsPage(car, kit) {
+  const scenes = [[0, 3.4], [3.4, 8.4], [8.4, 12.4], [12.4, REELS_SECONDS + 1]];
+  const { sceneCss, pop, strike, vars } = reelsKit(scenes);
 
   const old = ["Ligar em horário comercial", "Passar dados por telefone", "Esperar o retorno"];
   const css = `${sceneCss}
@@ -369,10 +456,8 @@ export function reelsPage(car, kit) {
     ${old.map((_, i) => strike(`cut${i}`, 5.6 + i * 0.3)).join("\n")}
     ${pop("now", 6.9)}
     ${INSURERS.map((_, i) => pop(`ins${i}`, 9.3 + i * 0.32)).join("\n")}
-    @property --o { syntax: "<number>"; inherits: false; initial-value: 1; }
-    @property --y { syntax: "<length>"; inherits: false; initial-value: 0px; }
-    .scene, .hook2, .now, ${old.map((_, i) => `.old${i}`).join(", ")}, ${INSURERS.map((_, i) => `.ins${i}`).join(", ")} { opacity: var(--o); transform: translateY(var(--y)); }
-    .scene { position: absolute; left: 90px; right: 90px; }
+    ${vars}
+    .hook2, .now, ${old.map((_, i) => `.old${i}`).join(", ")}, ${INSURERS.map((_, i) => `.ins${i}`).join(", ")} { opacity: var(--o); transform: translateY(var(--y)); }
   `;
   const model = car.name.replace(new RegExp(`^${car.brand}\\s+`, "i"), "");
 
@@ -399,12 +484,64 @@ export function reelsPage(car, kit) {
             <span style="font-size:46px;font-weight:600;color:${C.goldSoft}">${name}</span></div>`).join("")}
         </div>
       </div>
-      <div class="scene s3" style="top:440px;text-align:center">
-        <img src="${kit.logoGold}" style="width:230px">
-        <div class="serif" style="font-size:96px;line-height:1.06;color:${C.white};margin-top:70px">Cote em minutos,<br><span style="font-style:italic;color:${C.goldSoft}">a qualquer hora</span></div>
-        <div style="font-size:40px;color:#C9D1DA;margin-top:44px;line-height:1.35">A D&amp;B fala com você só para fechar.</div>
-        <div style="display:inline-block;margin-top:70px;background:${C.goldSoft};color:${C.navy};font-family:Manrope;font-weight:800;font-size:40px;letter-spacing:.08em;padding:34px 56px;border-radius:14px">LINK NA BIO</div>
-        <div style="font-size:30px;color:${C.grey};margin-top:48px">${esc(kit.signature)}</div>
-      </div>`,
+      <div class="scene s3" style="top:400px;text-align:center">${reelsCta(kit)}</div>`,
+  });
+}
+
+// Variante "Quanto custa rodar": curiosidade sobre carro elétrico (alcança
+// quem ainda não pensa em seguro) → barras gasolina x elétrico crescendo →
+// "e o seguro?" → chamada. Alterna semana sim, semana não com a de cima.
+export function reelsCostPage(car, cost, kit) {
+  const scenes = [[0, 3.2], [3.2, 9.0], [9.0, 12.4], [12.4, REELS_SECONDS + 1]];
+  const { sceneCss, pop, vars } = reelsKit(scenes);
+  const model = car.name.replace(new RegExp(`^${car.brand}\\s+`, "i"), "");
+  const max = Math.max(cost.gasPer1000, cost.evPer1000);
+  const grow = (name, start, pct) => `
+    @keyframes g-${name} { from { width: 0% } to { width: ${pct}% } }
+    .${name} { animation: g-${name} 1.1s ${start}s cubic-bezier(.2,.7,.2,1) both; }`;
+  const css = `${sceneCss}
+    ${pop("hook2", 1.0)}
+    ${pop("gasrow", 3.6)}${grow("gasbar", 3.9, ((cost.gasPer1000 / max) * 100).toFixed(1))}
+    ${pop("evrow", 5.0)}${grow("evbar", 5.3, Math.max(4, (cost.evPer1000 / max) * 100).toFixed(1))}
+    ${pop("save", 6.9)}
+    ${pop("ins", 10.0)}
+    ${vars}
+    .hook2, .gasrow, .evrow, .save, .ins { opacity: var(--o); transform: translateY(var(--y)); }
+  `;
+  const row = (cls, bar, label, value, color, valueColor) => `
+    <div class="${cls}" style="margin-top:70px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:44px;font-weight:600;color:#C9D1DA">${label}</span>
+        <span class="num" style="font-size:88px;color:${valueColor}">${brl(value)}</span></div>
+      <div style="height:44px;background:rgba(255,255,255,.08);border-radius:10px;margin-top:22px">
+        <div class="${bar}" style="height:44px;background:${color};border-radius:10px"></div></div>
+    </div>`;
+  return page({
+    width: 1080, height: 1920, bg: C.navy, extraCss: css,
+    body: `${arcs(C.gold, { right: -620, top: -560, size: 1300 })}
+      <div class="scene s0" style="top:480px">
+        <div class="label" style="font-size:30px">Carro elétrico</div>
+        <div class="num" style="font-size:118px;line-height:1.03;color:${C.white};margin-top:24px">Quanto custa rodar <span style="color:${C.goldSoft}">1.000 km</span>?</div>
+        <div class="rule" style="width:140px;margin:60px 0"></div>
+        <div class="serif hook2" style="font-size:92px;line-height:1.05;color:${C.goldSoft};font-style:italic">${esc(model)} x carro a gasolina</div>
+      </div>
+      <div class="scene s1" style="top:400px">
+        <div class="label" style="font-size:30px">A cada 1.000 km</div>
+        ${row("gasrow", "gasbar", "Gasolina (12 km/l)", cost.gasPer1000, C.grey, C.white)}
+        ${row("evrow", "evbar", esc(model), cost.evPer1000, C.gold, C.goldSoft)}
+        <div class="save" style="margin-top:110px">
+          <div style="font-size:44px;color:#C9D1DA">Economia de</div>
+          <div class="num" style="font-size:150px;line-height:1;color:${C.goldSoft};margin-top:10px">${brl(cost.gasPer1000 - cost.evPer1000)}</div>
+          <div style="font-size:26px;color:${C.grey};margin-top:36px;line-height:1.4">Consumo INMETRO de ${num(car.consumptionKwh100, 1)} kWh/100 km, energia a R$ ${price(kit.energyPrice)}/kWh, gasolina a R$ ${price(kit.fuelPrice)}/l.</div>
+        </div>
+      </div>
+      <div class="scene s2" style="top:520px">
+        <div class="serif" style="font-size:140px;line-height:1;color:${C.white};font-style:italic">E o seguro?</div>
+        <div class="ins" style="margin-top:80px">
+          <div class="num" style="font-size:84px;line-height:1.08;color:${C.goldSoft}">8 seguradoras calculam ao mesmo tempo.</div>
+          <div style="font-size:44px;color:#C9D1DA;margin-top:40px;line-height:1.35">Sem ligar, sem esperar retorno.</div>
+        </div>
+      </div>
+      <div class="scene s3" style="top:400px;text-align:center">${reelsCta(kit)}</div>`,
   });
 }
