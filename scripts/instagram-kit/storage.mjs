@@ -58,7 +58,7 @@ async function ensureBucket() {
   const sb = admin();
   const { data } = await sb.storage.getBucket(BUCKET);
   if (data) return;
-  const { error } = await sb.storage.createBucket(BUCKET, { public: true, fileSizeLimit: "100MB" });
+  const { error } = await sb.storage.createBucket(BUCKET, { public: true });
   if (error && !/already exists/i.test(error.message)) throw error;
 }
 
