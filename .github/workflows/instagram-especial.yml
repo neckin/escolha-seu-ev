@@ -1,15 +1,22 @@
 name: Especial de Instagram (Reels + carrossel + Stories)
 
-# Só pelo botão: gera o especial (scripts/instagram-kit/especial.mjs), sobe
-# para o Storage e, se marcado, publica o Reels e o carrossel (cada um com o
+# Todo domingo às 18h (Brasília) gera o especial da semana (tema em rodízio,
+# scripts/instagram-kit/especial.mjs), sobe para o Storage e publica o Reels e o carrossel (cada um com o
 # seu Story) no Instagram e na Página do Facebook. Rodar de novo não duplica:
-# o publish.mjs pula o que já foi publicado.
+# o publish.mjs pula o que já foi publicado. Pelo botão, publicar é opcional.
+# Pausa junto com os outros: variável INSTAGRAM_AUTOPUBLISH = off.
 
 on:
+  schedule:
+    - cron: "0 21 * * 0" # 21:00 UTC = 18:00 em Brasília, domingo
   workflow_dispatch:
     inputs:
       date:
         description: "Data do especial (AAAA-MM-DD). Vazio = hoje"
+        type: string
+        default: ""
+      theme:
+        description: "Tema (vazio = rodízio): sofa, madrugada, renovacao, confianca"
         type: string
         default: ""
       publish:
@@ -23,6 +30,7 @@ concurrency:
 
 jobs:
   especial:
+    if: github.event_name == 'workflow_dispatch' || vars.INSTAGRAM_AUTOPUBLISH != 'off'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -46,10 +54,13 @@ jobs:
         id: build
         env:
           DATE: ${{ inputs.date }}
+          THEME: ${{ inputs.theme }}
         run: |
           if [ -z "$DATE" ]; then DATE=$(TZ=America/Sao_Paulo date +%F); fi
           echo "kit=especial-$DATE" >> "$GITHUB_OUTPUT"
-          node scripts/instagram-kit/especial.mjs --date "$DATE" --out instagram-kit-out --upload
+          ARGS=""
+          if [ -n "$THEME" ]; then ARGS="--theme $THEME"; fi
+          node scripts/instagram-kit/especial.mjs --date "$DATE" $ARGS --out instagram-kit-out --upload
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -59,7 +70,7 @@ jobs:
           retention-days: 30
 
       - name: Publicar Reels + Story
-        if: inputs.publish
+        if: github.event_name == 'schedule' || inputs.publish
         env:
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
@@ -68,7 +79,7 @@ jobs:
         run: node scripts/instagram-kit/publish.mjs --kit ${{ steps.build.outputs.kit }} --day sun
 
       - name: Publicar carrossel + Story
-        if: inputs.publish
+        if: github.event_name == 'schedule' || inputs.publish
         env:
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
