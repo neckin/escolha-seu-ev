@@ -7,6 +7,7 @@ Publica sozinho, às **18h de segunda, quarta e sexta**, no Instagram e na Pági
 | Segunda | Carrossel "Seguro em minutos" (tema escolhido pelo desempenho no Windsor.ai) | Arte do tema + "cote no link da bio" |
 | Quarta | Reels de 15 s com música, alternando "Ainda vai ligar e esperar?" e "Quanto custa rodar 1.000 km?" | Arte "Reels novo" |
 | Sexta | Carrossel "Carro da semana" (elétrico até R$ 230 mil, com dados oficiais) | Arte com preço, autonomia e custo de energia |
+| Domingo | **Especial**: Reels "POV" + carrossel (tema em rodízio: `sofa`, `madrugada`, `renovacao`, `confianca`) | 2 artes: chamada para o Reels e para o carrossel |
 
 Como funciona: toda segunda às 07h o GitHub gera as peças da semana e as sobe para o Supabase Storage. Às 18h de cada dia de post, publica pela API oficial da Meta. Um post nunca sai duas vezes: rodar de novo só tenta o que falhou.
 
@@ -54,6 +55,10 @@ Repositório → **Settings → Secrets and variables → Actions → New reposi
 ### 7. Link da bio
 Coloque na bio do Instagram (e no botão da Página) o link com marcação, para o relatório de cotações mostrar o que veio do Instagram:
 `https://ev.dbcorr.com.br/cotacao?utm_source=instagram&utm_medium=bio`
+
+## Especial de domingo
+
+Workflow **Especial de Instagram** (`instagram-especial.yml`), todo domingo às 18h: gera com `especial.mjs` (visual próprio, fundo marfim e legendas estilo criador), sobe para o Storage em `especial-AAAA-MM-DD/` e publica Reels + carrossel, cada um com o seu Story, no Instagram e no Facebook. Os temas e textos ficam em `templates-especial.mjs` (`THEMES`); o rodízio recomeça depois do último, então vale acrescentar temas novos de tempos em tempos. Pelo botão dá para escolher a data, o tema e se publica ou só gera. O Reels sai também em `reels-sem-musica.mp4`, para quem quiser postar pelo app com um áudio em alta.
 
 ## Operação
 
