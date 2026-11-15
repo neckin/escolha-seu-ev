@@ -19,6 +19,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 import { chromium } from "playwright-core";
 import {
   weekCarSlides, quoteSlides, reelsPage, reelsCostPage, storySlide, QUOTE_THEMES, REELS_SECONDS, REELS_COVER_SECONDS, INSURERS, brl, num, price,
@@ -35,7 +36,7 @@ const MAX_CAR_PRICE = 230000; // carro da semana: só até R$ 230 mil (populares
 // uso comercial, sem crédito obrigatório) e sem "Content ID Registered", para
 // o Instagram não silenciar o vídeo. O repositório é público e a licença não
 // permite redistribuir o áudio solto, por isso o arquivo é baixado na hora.
-const REELS_MUSIC = [
+export const REELS_MUSIC = [
   { title: "Upbeat Corporate", artist: "The_Mountain", page: "https://pixabay.com/music/corporate-upbeat-corporate-576594/", url: "https://cdn.pixabay.com/download/audio/2026/08/05/audio_70e1bbcd7e.mp3?filename=the_mountain-upbeat-corporate-576594.mp3" },
   { title: "Advertising Marketing", artist: "AtlasAudio", page: "https://pixabay.com/music/corporate-advertising-marketing-617541/", url: "https://cdn.pixabay.com/download/audio/2026/10/08/audio_e0b3fc85ac.mp3?filename=atlasaudio-advertising-marketing-617541.mp3" },
   { title: "Creative Technology Showreel", artist: "Pumpupthemind", page: "https://pixabay.com/music/beats-creative-technology-showreel-241274/", url: "https://cdn.pixabay.com/download/audio/2024/09/16/audio_a10608d6cd.mp3?filename=pumpupthemind-creative-technology-showreel-241274.mp3" },
@@ -199,7 +200,7 @@ ${[...base, "#carroeletrico", tag(weekCar.brand), "#carrodasemana"].join(" ")}`,
 }
 
 // JPEG: a API de publicação do Instagram só aceita JPEG.
-async function renderSlides(browser, htmls, dir, { height = 1350, names } = {}) {
+export async function renderSlides(browser, htmls, dir, { height = 1350, names } = {}) {
   fs.mkdirSync(dir, { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1080, height } });
   const files = [];
@@ -215,7 +216,7 @@ async function renderSlides(browser, htmls, dir, { height = 1350, names } = {}) 
 }
 
 // Baixa a trilha da semana. Se a Pixabay falhar, o Reels sai sem áudio.
-async function downloadMusic(track, dir) {
+export async function downloadMusic(track, dir) {
   try {
     const res = await fetch(track.url, { headers: { "User-Agent": "Mozilla/5.0", Referer: track.page } });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -229,14 +230,14 @@ async function downloadMusic(track, dir) {
   }
 }
 
-async function renderReels(browser, html, dir, musicFile) {
+export async function renderReels(browser, html, dir, musicFile, { seconds = REELS_SECONDS, coverSeconds = REELS_COVER_SECONDS } = {}) {
   const framesDir = path.join(dir, "frames");
   fs.mkdirSync(framesDir, { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   await page.setContent(html, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
   const fps = 30;
-  for (let f = 0; f < REELS_SECONDS * fps; f++) {
+  for (let f = 0; f < seconds * fps; f++) {
     // Pausa todas as animações e posiciona no tempo exato do quadro.
     await page.evaluate((ms) => document.getAnimations().forEach((a) => { a.pause(); a.currentTime = ms; }), (f * 1000) / fps);
     await page.screenshot({ path: path.join(framesDir, `${String(f).padStart(4, "0")}.jpg`), type: "jpeg", quality: 92 });
@@ -255,15 +256,15 @@ async function renderReels(browser, html, dir, musicFile) {
     // estourava a memória. Entram os primeiros segundos da música, com fade
     // na entrada e na saída, no volume padrão das redes (-14 LUFS).
     execFileSync(ffmpeg, [
-      "-y", "-loglevel", "error", "-i", silent, "-t", String(REELS_SECONDS), "-i", musicFile,
-      "-af", `afade=t=in:d=0.3,afade=t=out:st=${REELS_SECONDS - 1.5}:d=1.5,loudnorm=I=-14:TP=-1.5`,
+      "-y", "-loglevel", "error", "-i", silent, "-t", String(seconds), "-i", musicFile,
+      "-af", `afade=t=in:d=0.3,afade=t=out:st=${seconds - 1.5}:d=1.5,loudnorm=I=-14:TP=-1.5`,
       "-ar", "44100", "-c:v", "copy", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", out,
     ]);
     fs.rmSync(silent, { force: true });
     fs.rmSync(musicFile, { force: true });
   }
   const cover = path.join(dir, "capa.jpg");
-  fs.copyFileSync(path.join(framesDir, `${String(Math.round(REELS_COVER_SECONDS * fps)).padStart(4, "0")}.jpg`), cover);
+  fs.copyFileSync(path.join(framesDir, `${String(Math.round(coverSeconds * fps)).padStart(4, "0")}.jpg`), cover);
   fs.rmSync(framesDir, { recursive: true, force: true });
   return [out, cover];
 }
@@ -336,7 +337,10 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+// Só roda quando chamado direto (o especial.mjs importa as funções acima).
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
