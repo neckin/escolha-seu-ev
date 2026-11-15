@@ -16,6 +16,7 @@
 // SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY.
 //
 // Uso: node scripts/instagram-kit/publish.mjs [--day mon|wed|fri] [--week AAAA-MM-DD] [--dry-run] [--force] [--check]
+// Especial (especial.mjs): --kit especial-AAAA-MM-DD --day sun|sun2
 
 import path from "node:path";
 import { execFileSync } from "node:child_process";
@@ -133,9 +134,10 @@ async function fbStory(post, url, pageId, token) {
 
 // ---------- Execução ----------
 
-async function loadManifest(week) {
+async function loadManifest(week, special) {
   let manifest = await getJson(`${week}/manifest.json`);
   if (manifest) return manifest;
+  if (special) throw new Error(`Kit ${week} não encontrado no Storage (gere com especial.mjs --upload).`);
   console.log(`Semana ${week} sem kit no Storage: gerando agora.`);
   execFileSync(process.execPath, [path.join(ROOT, "scripts", "instagram-kit", "build.mjs"), "--week", week, "--upload"], { stdio: "inherit" });
   manifest = await getJson(`${week}/manifest.json`);
@@ -178,13 +180,15 @@ async function main() {
   loadEnvLocal();
   if (arg("check")) return check();
   const today = new Date(Date.now() - 3 * 3600 * 1000); // Brasília
+  const kit = arg("kit");
   const day = arg("day", DAYS[today.getUTCDay()]);
-  if (!["mon", "wed", "fri"].includes(day)) {
+  if (kit && !arg("day")) throw new Error("Com --kit, informe o --day (ex.: sun ou sun2).");
+  if (!kit && !["mon", "wed", "fri"].includes(day)) {
     console.log("Hoje não é dia de post (segunda, quarta ou sexta). Nada a fazer.");
     return;
   }
-  const week = iso(weekMonday(arg("week")));
-  const manifest = await loadManifest(week);
+  const week = kit || iso(weekMonday(arg("week")));
+  const manifest = await loadManifest(week, Boolean(kit));
   const post = manifest.posts[day];
   if (!post) throw new Error(`O kit de ${week} não tem post para ${day} (Reels gerado com --no-video?).`);
 

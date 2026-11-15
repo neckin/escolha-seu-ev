@@ -10,8 +10,12 @@ on:
       day:
         description: "Qual post publicar (auto = o de hoje)"
         type: choice
-        options: [auto, mon, wed, fri]
+        options: [auto, mon, wed, fri, sun, sun2]
         default: auto
+      kit:
+        description: "Kit especial (ex.: especial-2026-11-15). Vazio = kit da semana"
+        type: string
+        default: ""
       check:
         description: "Só verificar o token e as contas (não publica nada)"
         type: boolean
@@ -57,11 +61,13 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUSEP_REGISTRO: ${{ secrets.SUSEP_REGISTRO }}
           DAY: ${{ inputs.day }}
+          KIT: ${{ inputs.kit }}
           FORCE: ${{ inputs.force }}
           CHECK: ${{ inputs.check }}
         run: |
           if [ "$CHECK" = "true" ]; then node scripts/instagram-kit/publish.mjs --check; exit $?; fi
           ARGS=""
           if [ -n "$DAY" ] && [ "$DAY" != "auto" ]; then ARGS="--day $DAY"; fi
+          if [ -n "$KIT" ]; then ARGS="$ARGS --kit $KIT"; fi
           if [ "$FORCE" = "true" ]; then ARGS="$ARGS --force"; fi
           node scripts/instagram-kit/publish.mjs $ARGS

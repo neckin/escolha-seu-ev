@@ -1,0 +1,77 @@
+name: Especial de Instagram (Reels + carrossel + Stories)
+
+# Só pelo botão: gera o especial (scripts/instagram-kit/especial.mjs), sobe
+# para o Storage e, se marcado, publica o Reels e o carrossel (cada um com o
+# seu Story) no Instagram e na Página do Facebook. Rodar de novo não duplica:
+# o publish.mjs pula o que já foi publicado.
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Data do especial (AAAA-MM-DD). Vazio = hoje"
+        type: string
+        default: ""
+      publish:
+        description: "Publicar agora (desmarcado = só gera e sobe para conferir)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: instagram-publish
+  cancel-in-progress: false
+
+jobs:
+  especial:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUSEP_REGISTRO: ${{ secrets.SUSEP_REGISTRO }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Instalar ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+
+      - name: Gerar o especial e subir para o Storage
+        id: build
+        env:
+          DATE: ${{ inputs.date }}
+        run: |
+          if [ -z "$DATE" ]; then DATE=$(TZ=America/Sao_Paulo date +%F); fi
+          echo "kit=especial-$DATE" >> "$GITHUB_OUTPUT"
+          node scripts/instagram-kit/especial.mjs --date "$DATE" --out instagram-kit-out --upload
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: instagram-especial
+          path: instagram-kit-out
+          retention-days: 30
+
+      - name: Publicar Reels + Story
+        if: inputs.publish
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          IG_LOCATION_ID: ${{ secrets.IG_LOCATION_ID }}
+        run: node scripts/instagram-kit/publish.mjs --kit ${{ steps.build.outputs.kit }} --day sun
+
+      - name: Publicar carrossel + Story
+        if: inputs.publish
+        env:
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          IG_LOCATION_ID: ${{ secrets.IG_LOCATION_ID }}
+        run: node scripts/instagram-kit/publish.mjs --kit ${{ steps.build.outputs.kit }} --day sun2
