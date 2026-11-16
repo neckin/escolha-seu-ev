@@ -1,0 +1,105 @@
+name: Ação de Instagram (5 elétricos até R$ 150 mil)
+
+# Ação pontual (scripts/instagram-kit/acao.mjs): Reels "5 carros elétricos até
+# R$ 150 mil" + carrossel + 2 Stories, no Instagram e na Página. Se existir
+# scripts/instagram-kit/assets/acao-intro.mp4 (vídeo de rosto), ele abre o Reels.
+#   - pelo botão: gera e sobe para o Storage; publica o post escolhido;
+#   - agendado: carrossel em 17/11, às 12h de Brasília (o Reels sai pelo botão,
+#     quando o vídeo de rosto estiver pronto).
+# Rodar de novo não duplica (o publish.mjs pula o que já foi publicado).
+# Os agendamentos são de uma vez só: o passo confere a data antes de publicar.
+
+on:
+  schedule:
+    - cron: "0 15 17 11 *" # 15:00 UTC = 12:00 em Brasília
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Data da ação (AAAA-MM-DD), usada no nome do kit. Vazio = 2026-11-16"
+        type: string
+        default: ""
+      post:
+        description: "O que publicar agora"
+        type: choice
+        options: [nada, reels, carrossel, os-dois]
+        default: nada
+
+concurrency:
+  group: instagram-publish
+  cancel-in-progress: false
+
+env:
+  KIT_DATE: ${{ inputs.date || '2026-11-16' }}
+
+jobs:
+  acao:
+    if: github.event_name == 'workflow_dispatch' || vars.INSTAGRAM_AUTOPUBLISH != 'off'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUSEP_REGISTRO: ${{ secrets.SUSEP_REGISTRO }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+      IG_LOCATION_ID: ${{ secrets.IG_LOCATION_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Decidir o que publicar
+        id: plan
+        env:
+          EVENT: ${{ github.event_name }}
+          POST: ${{ inputs.post }}
+        run: |
+          TODAY=$(TZ=America/Sao_Paulo date +%F)
+          REELS=false; CAROUSEL=false
+          if [ "$EVENT" = "schedule" ]; then
+            [ "$TODAY" = "2026-11-17" ] && CAROUSEL=true
+          else
+            case "$POST" in reels) REELS=true;; carrossel) CAROUSEL=true;; os-dois) REELS=true; CAROUSEL=true;; esac
+          fi
+          echo "reels=$REELS" >> "$GITHUB_OUTPUT"
+          echo "carousel=$CAROUSEL" >> "$GITHUB_OUTPUT"
+          # Agendado só regera se o kit ainda não estiver no Storage.
+          BUILD=true
+          if [ "$EVENT" = "schedule" ]; then
+            if [ "$REELS$CAROUSEL" = "falsefalse" ]; then BUILD=false
+            elif curl -sfo /dev/null "$SUPABASE_URL/storage/v1/object/public/instagram-kit/acao-$KIT_DATE/manifest.json"; then BUILD=false; fi
+          fi
+          echo "build=$BUILD" >> "$GITHUB_OUTPUT"
+          echo "Hoje $TODAY · gerar=$BUILD · reels=$REELS · carrossel=$CAROUSEL"
+
+      - name: Instalar ffmpeg
+        if: steps.plan.outputs.build == 'true'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends ffmpeg
+
+      - name: Gerar a ação e subir para o Storage
+        if: steps.plan.outputs.build == 'true'
+        run: |
+          INTRO=""
+          for f in scripts/instagram-kit/assets/acao-intro.*; do [ -f "$f" ] && INTRO="--intro $f"; done
+          node scripts/instagram-kit/acao.mjs --date "$KIT_DATE" $INTRO --out instagram-kit-out --upload
+
+      - uses: actions/upload-artifact@v4
+        if: steps.plan.outputs.build == 'true'
+        with:
+          name: instagram-acao
+          path: instagram-kit-out
+          retention-days: 30
+
+      - name: Publicar Reels + Story
+        if: steps.plan.outputs.reels == 'true'
+        run: node scripts/instagram-kit/publish.mjs --kit "acao-$KIT_DATE" --day rank
+
+      - name: Publicar carrossel + Story
+        if: steps.plan.outputs.carousel == 'true'
+        run: node scripts/instagram-kit/publish.mjs --kit "acao-$KIT_DATE" --day rank2

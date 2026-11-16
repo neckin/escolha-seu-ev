@@ -21,7 +21,7 @@ export const brl = (n) => Number(n).toLocaleString("pt-BR", { style: "currency",
 export const num = (n, d = 0) => Number(n).toLocaleString("pt-BR", { maximumFractionDigits: d });
 export const price = (n) => Number(n).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-function page({ width, height, bg, body, extraCss = "" }) {
+export function page({ width, height, bg, body, extraCss = "" }) {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <link rel="stylesheet" href="${FONTS}">
 <style>
@@ -41,7 +41,7 @@ function page({ width, height, bg, body, extraCss = "" }) {
 }
 
 // Arco de proteção: círculos abertos, cortados pela borda da peça.
-function arcs(color, { right = -520, top = -260, size = 1100 } = {}) {
+export function arcs(color, { right = -520, top = -260, size = 1100 } = {}) {
   return [0, 70, 140]
     .map((d, i) => `<div class="arc" style="width:${size - d * 2}px;height:${size - d * 2}px;right:${right + d}px;top:${top + d}px;border-color:${color};opacity:${0.45 - i * 0.12}"></div>`)
     .join("");
