@@ -1,23 +1,35 @@
-name: Ação de Instagram (5 elétricos até R$ 150 mil)
+name: Ação de Instagram (listas de carros para turbinar)
 
-# Ação pontual (scripts/instagram-kit/acao.mjs): Reels "5 carros elétricos até
-# R$ 150 mil" + carrossel + 2 Stories, no Instagram e na Página. Se existir
-# scripts/instagram-kit/assets/acao-intro.mp4 (vídeo de rosto), ele abre o Reels.
-#   - pelo botão: gera e sobe para o Storage; publica o post escolhido;
-#   - agendado: carrossel em 17/11, às 12h de Brasília (o Reels sai pelo botão,
-#     quando o vídeo de rosto estiver pronto).
+# Ações pontuais (scripts/instagram-kit/acao.mjs): Reels + carrossel + 2
+# Stories, no Instagram e na Página, no kit acao-<data>/ do Storage.
+#   lista ate150: 5 elétricos até R$ 150 mil;
+#   lista top10:  5 elétricos + 5 híbridos até R$ 200 mil (parte 2).
+# Abre com cenas reais da Pixabay, ou com scripts/instagram-kit/assets/
+# acao-intro.* (vídeo próprio), se existir.
+#
+# Agenda (cada linha vale uma vez só; o passo confere a data):
+#   17/11 12h: carrossel da lista ate150 (kit acao-2026-11-16)
+#   19/11 12h: Reels da lista top10 (kit acao-2026-11-19)
+#   19/11 19h: carrossel da lista top10
+# Pelo botão: escolha a data do kit, a lista e o que publicar.
 # Rodar de novo não duplica (o publish.mjs pula o que já foi publicado).
-# Os agendamentos são de uma vez só: o passo confere a data antes de publicar.
 
 on:
   schedule:
-    - cron: "0 15 17 11 *" # 15:00 UTC = 12:00 em Brasília
+    - cron: "0 15 17 11 *" # 12:00 em Brasília
+    - cron: "0 15 19 11 *" # 12:00 em Brasília
+    - cron: "0 22 19 11 *" # 19:00 em Brasília
   workflow_dispatch:
     inputs:
       date:
-        description: "Data da ação (AAAA-MM-DD), usada no nome do kit. Vazio = 2026-11-16"
+        description: "Data do kit (AAAA-MM-DD)"
         type: string
-        default: ""
+        default: "2026-11-19"
+      lista:
+        description: "Lista"
+        type: choice
+        options: [top10, ate150]
+        default: top10
       post:
         description: "O que publicar agora"
         type: choice
@@ -27,9 +39,6 @@ on:
 concurrency:
   group: instagram-publish
   cancel-in-progress: false
-
-env:
-  KIT_DATE: ${{ inputs.date || '2026-11-16' }}
 
 jobs:
   acao:
@@ -54,29 +63,39 @@ jobs:
 
       - run: npm ci
 
-      - name: Decidir o que publicar
+      - name: Decidir o que gerar e publicar
         id: plan
         env:
           EVENT: ${{ github.event_name }}
-          POST: ${{ inputs.post }}
+          CRON: ${{ github.event.schedule }}
+          IN_DATE: ${{ inputs.date }}
+          IN_LISTA: ${{ inputs.lista }}
+          IN_POST: ${{ inputs.post }}
         run: |
           TODAY=$(TZ=America/Sao_Paulo date +%F)
-          REELS=false; CAROUSEL=false
+          REELS=false; CAROUSEL=false; KIT_DATE=""; LISTA=""; DUE=""
           if [ "$EVENT" = "schedule" ]; then
-            [ "$TODAY" = "2026-11-17" ] && CAROUSEL=true
+            case "$CRON" in
+              "0 15 17 11 *") DUE=2026-11-17; KIT_DATE=2026-11-16; LISTA=ate150; CAROUSEL=true;;
+              "0 15 19 11 *") DUE=2026-11-19; KIT_DATE=2026-11-19; LISTA=top10; REELS=true;;
+              "0 22 19 11 *") DUE=2026-11-19; KIT_DATE=2026-11-19; LISTA=top10; CAROUSEL=true;;
+            esac
+            if [ "$TODAY" != "$DUE" ]; then REELS=false; CAROUSEL=false; fi
           else
-            case "$POST" in reels) REELS=true;; carrossel) CAROUSEL=true;; os-dois) REELS=true; CAROUSEL=true;; esac
+            KIT_DATE="$IN_DATE"; LISTA="$IN_LISTA"
+            case "$IN_POST" in reels) REELS=true;; carrossel) CAROUSEL=true;; os-dois) REELS=true; CAROUSEL=true;; esac
           fi
-          echo "reels=$REELS" >> "$GITHUB_OUTPUT"
-          echo "carousel=$CAROUSEL" >> "$GITHUB_OUTPUT"
-          # Agendado só regera se o kit ainda não estiver no Storage.
+          # Agendado só gera se o kit ainda não estiver no Storage.
           BUILD=true
           if [ "$EVENT" = "schedule" ]; then
             if [ "$REELS$CAROUSEL" = "falsefalse" ]; then BUILD=false
             elif curl -sfo /dev/null "$SUPABASE_URL/storage/v1/object/public/instagram-kit/acao-$KIT_DATE/manifest.json"; then BUILD=false; fi
           fi
-          echo "build=$BUILD" >> "$GITHUB_OUTPUT"
-          echo "Hoje $TODAY · gerar=$BUILD · reels=$REELS · carrossel=$CAROUSEL"
+          {
+            echo "kit=acao-$KIT_DATE"; echo "date=$KIT_DATE"; echo "lista=$LISTA"
+            echo "build=$BUILD"; echo "reels=$REELS"; echo "carousel=$CAROUSEL"
+          } >> "$GITHUB_OUTPUT"
+          echo "Hoje $TODAY · kit acao-$KIT_DATE ($LISTA) · gerar=$BUILD · reels=$REELS · carrossel=$CAROUSEL"
 
       - name: Instalar ffmpeg
         if: steps.plan.outputs.build == 'true'
@@ -84,10 +103,13 @@ jobs:
 
       - name: Gerar a ação e subir para o Storage
         if: steps.plan.outputs.build == 'true'
+        env:
+          KIT_DATE: ${{ steps.plan.outputs.date }}
+          LISTA: ${{ steps.plan.outputs.lista }}
         run: |
           INTRO=""
           for f in scripts/instagram-kit/assets/acao-intro.*; do [ -f "$f" ] && INTRO="--intro $f"; done
-          node scripts/instagram-kit/acao.mjs --date "$KIT_DATE" $INTRO --out instagram-kit-out --upload
+          node scripts/instagram-kit/acao.mjs --lista "$LISTA" --date "$KIT_DATE" $INTRO --out instagram-kit-out --upload
 
       - uses: actions/upload-artifact@v4
         if: steps.plan.outputs.build == 'true'
@@ -98,8 +120,8 @@ jobs:
 
       - name: Publicar Reels + Story
         if: steps.plan.outputs.reels == 'true'
-        run: node scripts/instagram-kit/publish.mjs --kit "acao-$KIT_DATE" --day rank
+        run: node scripts/instagram-kit/publish.mjs --kit "${{ steps.plan.outputs.kit }}" --day rank
 
       - name: Publicar carrossel + Story
         if: steps.plan.outputs.carousel == 'true'
-        run: node scripts/instagram-kit/publish.mjs --kit "acao-$KIT_DATE" --day rank2
+        run: node scripts/instagram-kit/publish.mjs --kit "${{ steps.plan.outputs.kit }}" --day rank2

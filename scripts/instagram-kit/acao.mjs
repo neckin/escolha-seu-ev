@@ -13,7 +13,12 @@
 // falando, com a trilha baixinha por baixo da fala). Sempre com legenda por
 // cima (muita gente assiste sem som), cortada para 1080x1920.
 //
-// Uso: node scripts/instagram-kit/acao.mjs [--date AAAA-MM-DD] [--out pasta] [--upload]
+// Listas (--lista):
+//   ate150 (padrão): 5 elétricos até R$ 150 mil (templates-acao.mjs);
+//   top10: 5 elétricos + 5 híbridos mais em conta até R$ 200 mil, parte 2
+//          (templates-top10.mjs).
+//
+// Uso: node scripts/instagram-kit/acao.mjs [--lista ate150|top10] [--date AAAA-MM-DD] [--out pasta] [--upload]
 //        [--intro arquivo | --no-intro] [--intro-text "legenda"]
 
 import fs from "node:fs";
@@ -22,6 +27,7 @@ import { execFileSync } from "node:child_process";
 import { chromium } from "playwright-core";
 import { renderSlides, renderReels, downloadMusic, REELS_MUSIC } from "./build.mjs";
 import { rankingReelsPage, rankingCarousel, rankingStories, introOverlay, ACAO_SECONDS, ACAO_COVER_SECONDS, PRICE_CAP } from "./templates-acao.mjs";
+import { top10ReelsPage, top10Carousel, top10Stories, TOP10_SECONDS, TOP10_COVER_SECONDS, TOP10_CAP } from "./templates-top10.mjs";
 import { ROOT, loadEnvLocal, uploadWeek } from "./storage.mjs";
 
 const ENERGY_PRICE = 0.9; // R$/kWh, igual ao build.mjs e ao simulador do site
@@ -57,6 +63,59 @@ export function affordableEvs(cars, n = 5, cap = PRICE_CAP) {
     if (out.length === n) break;
   }
   return out;
+}
+
+// Top 10: os 5 elétricos e os 5 híbridos mais em conta até o teto. Híbrido
+// precisa do consumo oficial (km/l); o custo é de gasolina a cada 1.000 km
+// (no plug-in, sem contar a recarga).
+export function top10Items(cars, cap = TOP10_CAP) {
+  const pick = (ok) => {
+    const seen = new Set();
+    const out = [];
+    for (const car of cars.filter((c) => c.price && c.price <= cap && ok(c)).sort((a, b) => a.price - b.price)) {
+      const key = modelKey(car);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(car);
+      if (out.length === 5) break;
+    }
+    return out;
+  };
+  const evs = pick((c) => c.fuelType === "BEV" && c.rangeKm && c.consumptionKwh100)
+    .map((car) => ({ car, kind: "BEV", per1000: cost(car).evPer1000 }));
+  const hybrids = pick((c) => (c.fuelType === "PHEV" || c.fuelType === "HEV") && c.fuelKmL)
+    .map((car) => ({ car, kind: car.fuelType, per1000: Math.round((1000 / car.fuelKmL) * FUEL_PRICE) }));
+  return [...evs, ...hybrids].sort((a, b) => a.car.price - b.car.price);
+}
+
+function top10Captions(items, verifiedLabel) {
+  const susep = process.env.SUSEP_REGISTRO ? `\n${process.env.SUSEP_REGISTRO}` : "";
+  const gas = Math.round((1000 / GAS_KM_L) * FUEL_PRICE);
+  const kind = { BEV: "elétrico", PHEV: "híbrido plug-in", HEV: "híbrido" };
+  const list = [...items].reverse().map((it, i) => `${i + 1}. ${it.car.name} (${kind[it.kind]}): R$ ${it.car.price.toLocaleString("pt-BR")} · R$ ${it.per1000} de ${it.kind === "BEV" ? "energia" : "gasolina"} a cada 1.000 km`).join("\n");
+  const tail = `
+
+E o seguro? Elétrico ou híbrido, cote em 8 seguradoras de uma vez, pelo celular, a qualquer hora 👉 link na bio.
+Siga {{perfil}}: toda semana tem carro analisado e dica para pagar menos no seguro.
+
+Os 5 elétricos e os 5 híbridos mais em conta do nosso catálogo até R$ 200 mil, uma versão por modelo. Preços de tabela verificados em ${verifiedLabel} (podem mudar); consumo INMETRO. Energia a R$ 0,90/kWh; gasolina a R$ 6,00/l (no plug-in, sem contar a recarga).
+${SIGN}${susep}
+
+#carroeletrico #carrohibrido #hibrido #veiculoeletrico #seguroauto #brasilia #aguasclaras #DBCorretora`;
+  return {
+    reels: `Parte 2: 10 carros elétricos e híbridos até R$ 200 mil ⚡ e quanto custa rodar com cada um.
+
+${list}
+
+Um carro a gasolina comum (12 km/l) gasta uns R$ ${gas} a cada 1.000 km.
+
+💬 Elétrico ou híbrido: qual você escolheria? Comenta.
+📲 Manda pra quem está pensando em trocar de carro.${tail}`,
+    carousel: `10 carros elétricos e híbridos até R$ 200 mil 🔋 Arrasta para ver preço e quanto custa rodar com cada um.
+
+💬 Faltou algum? Conta aqui que a gente analisa.
+📌 Salve para consultar quando for trocar de carro.${tail}`,
+  };
 }
 
 function captions(top, verifiedLabel) {
@@ -136,9 +195,9 @@ async function stockIntro(dir) {
   return out;
 }
 
-function composeWithIntro({ intro, overlay, anim, music, out }) {
+function composeWithIntro({ intro, overlay, anim, music, out, seconds }) {
   const d = Math.min(duration(intro), 10);
-  const total = d + ACAO_SECONDS;
+  const total = d + seconds;
   const speech = hasAudio(intro);
   const inputs = ["-t", String(d), "-i", intro, "-loop", "1", "-t", String(d), "-i", overlay, "-i", anim];
   if (music) inputs.push("-t", String(total), "-i", music);
@@ -169,9 +228,28 @@ async function main() {
   fs.mkdirSync(reelsDir, { recursive: true });
   const intro = arg("intro") && fs.existsSync(arg("intro")) ? path.resolve(arg("intro")) : arg("no-intro") ? null : await stockIntro(reelsDir);
 
+  const lista = arg("lista", "ate150");
   const cars = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "carsFallback.json"), "utf8"));
-  const top = affordableEvs(cars);
-  if (top.length < 5) throw new Error(`Só ${top.length} elétricos até R$ ${PRICE_CAP} no catálogo.`);
+  let top, spec;
+  if (lista === "top10") {
+    const items = top10Items(cars);
+    if (items.length < 10) throw new Error(`Só ${items.length} carros para o top 10 até R$ ${TOP10_CAP}.`);
+    top = items.map((it) => it.car);
+    spec = {
+      seconds: TOP10_SECONDS, cover: TOP10_COVER_SECONDS, theme: "top10-eletricos-hibridos-ate-200-mil",
+      introText: "Elétrico ou híbrido até R$&nbsp;200&nbsp;mil?",
+      reels: (kit) => top10ReelsPage(items, kit), carousel: (kit) => top10Carousel(items, kit), stories: (kit) => top10Stories(items, kit),
+      captions: (label) => top10Captions(items, label),
+    };
+  } else {
+    top = affordableEvs(cars);
+    if (top.length < 5) throw new Error(`Só ${top.length} elétricos até R$ ${PRICE_CAP} no catálogo.`);
+    spec = {
+      seconds: ACAO_SECONDS, cover: ACAO_COVER_SECONDS, theme: "eletricos-ate-150-mil", introText: INTRO_TEXT,
+      reels: (kit) => rankingReelsPage(top, cost, kit), carousel: (kit) => rankingCarousel(top, cost, kit), stories: (kit) => rankingStories(top, kit),
+      captions: (label) => captions(top, label),
+    };
+  }
   const months = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
   const toSortable = (d) => (d ? d.split("/").reverse().join("-") : "");
   const verified = top.map((c) => c.priceVerifiedDate).filter(Boolean).sort((a, b) => toSortable(a).localeCompare(toSortable(b))).pop() || "";
@@ -184,24 +262,24 @@ async function main() {
   };
   console.log(`Ação ${date} · ${top.map((c) => `${c.name} (${c.price})`).join(", ")} · abertura: ${intro ? path.basename(intro) : "sem rosto"}`);
 
-  const caps = captions(top, verifiedLabel);
+  const caps = spec.captions(verifiedLabel);
   const music = await downloadMusic(REELS_MUSIC[2], outDir);
   const browser = await chromium.launch({ channel: "chrome" });
   let video, cover, carousel, stories, overlay;
   try {
     // Sem abertura, a trilha entra direto; com abertura, a animação sai muda
     // e a montagem final junta tudo.
-    [video, cover] = await renderReels(browser, rankingReelsPage(top, cost, kit), reelsDir, intro ? null : music, { seconds: ACAO_SECONDS, coverSeconds: ACAO_COVER_SECONDS });
+    [video, cover] = await renderReels(browser, spec.reels(kit), reelsDir, intro ? null : music, { seconds: spec.seconds, coverSeconds: spec.cover });
     if (intro) {
       const p = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
-      await p.setContent(introOverlay(kit, arg("intro-text", INTRO_TEXT)), { waitUntil: "networkidle" });
+      await p.setContent(introOverlay(kit, arg("intro-text", spec.introText)), { waitUntil: "networkidle" });
       await p.evaluate(() => document.fonts.ready);
       overlay = path.join(reelsDir, "legenda.png");
       await p.screenshot({ path: overlay, omitBackground: true });
       await p.close();
     }
-    carousel = await renderSlides(browser, rankingCarousel(top, cost, kit), path.join(outDir, "2-carrossel"));
-    stories = await renderSlides(browser, rankingStories(top, kit), path.join(outDir, "stories"), { height: 1920, names: ["rank.jpg", "rank2.jpg"] });
+    carousel = await renderSlides(browser, spec.carousel(kit), path.join(outDir, "2-carrossel"));
+    stories = await renderSlides(browser, spec.stories(kit), path.join(outDir, "stories"), { height: 1920, names: ["rank.jpg", "rank2.jpg"] });
   } finally {
     await browser.close();
   }
@@ -209,17 +287,17 @@ async function main() {
   if (intro) {
     const anim = path.join(reelsDir, "animacao.mp4");
     fs.renameSync(video, anim);
-    const d = composeWithIntro({ intro, overlay, anim, music, out: video });
+    const d = composeWithIntro({ intro, overlay, anim, music, out: video, seconds: spec.seconds });
     fs.rmSync(overlay, { force: true });
     fs.rmSync(anim, { force: true });
     if (intro.startsWith(reelsDir)) fs.rmSync(intro, { force: true });
     if (music) fs.rmSync(music, { force: true });
-    console.log(`Abertura de ${d.toFixed(1)} s + animação de ${ACAO_SECONDS} s`);
+    console.log(`Abertura de ${d.toFixed(1)} s + animação de ${spec.seconds} s`);
   }
 
   const rel = (f) => path.relative(outDir, f).split(path.sep).join("/");
   const manifest = {
-    week: kitId, special: true, theme: "eletricos-ate-150-mil", generatedAt: new Date().toISOString(), cars: top.map((c) => c.id), intro: Boolean(intro),
+    week: kitId, special: true, theme: spec.theme, generatedAt: new Date().toISOString(), cars: top.map((c) => c.id), intro: Boolean(intro),
     posts: {
       rank: { type: "reels", video: rel(video), cover: rel(cover), caption: caps.reels, story: rel(stories[0]) },
       rank2: { type: "carousel", media: carousel.map(rel), caption: caps.carousel, story: rel(stories[1]) },

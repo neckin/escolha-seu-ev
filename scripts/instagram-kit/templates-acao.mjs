@@ -18,7 +18,7 @@ const model = (car) => car.name.replace(new RegExp(`^${car.brand}\\s+`, "i"), ""
 // Cena i aparece de start a end (fade + subida curta). Anima variáveis (--o,
 // --y) e não opacity direto: com a animação pausada a cada quadro, o Chrome
 // capturava valores velhos de opacity (ver reelsKit em templates.mjs).
-function timeline(scenes, seconds) {
+export function timeline(scenes, seconds) {
   const p = (t) => `${((Math.max(0, Math.min(seconds, t)) / seconds) * 100).toFixed(3)}%`;
   const css = scenes.map(([s, e], i) => {
     const first = s === 0;
@@ -36,27 +36,27 @@ function timeline(scenes, seconds) {
     ${css}`;
 }
 
-const pop = (name, start, dur = 0.35) => `
+export const pop = (name, start, dur = 0.35) => `
   @keyframes p-${name} { from { --o: 0; --y: 30px } to { --o: 1; --y: 0px } }
   .${name} { animation: p-${name} ${dur}s ${start}s ease-out both; opacity: var(--o); transform: translateY(var(--y)); }`;
 
 // Palavra que "bate" na tela: entra grande e assenta.
-const punch = (name, start) => `
+export const punch = (name, start) => `
   @keyframes z-${name} { 0% { --o: 0; --sc: 1.7 } 55% { --o: 1; --sc: .94 } 100% { --o: 1; --sc: 1 } }
   .${name} { animation: z-${name} .4s ${start}s cubic-bezier(.2,.8,.2,1) both; opacity: var(--o); transform: scale(var(--sc)); transform-origin: left center; }`;
 
 // Entra deslizando da direita.
-const slide = (name, start) => `
+export const slide = (name, start) => `
   @keyframes x-${name} { from { --o: 0; --x: 160px } to { --o: 1; --x: 0px } }
   .${name} { animation: x-${name} .4s ${start}s cubic-bezier(.2,.8,.2,1) both; opacity: var(--o); transform: translateX(var(--x)); }`;
 
 // Preço contando: os milhares sobem de 0 até o valor; o resto (",990") é fixo.
-const count = (name, start, to) => `
+export const count = (name, start, to) => `
   @keyframes c-${name} { from { --k: ${Math.floor(to * 0.7)} } to { --k: ${to} } }
   .${name} { animation: c-${name} .8s ${start}s cubic-bezier(.1,.6,.2,1) both; counter-reset: k var(--k); }
   .${name}::before { content: "R$ " counter(k); }`;
 
-const grow = (name, start, pct) => `
+export const grow = (name, start, pct) => `
   @keyframes g-${name} { from { width: 0% } to { width: ${pct}% } }
   .${name} { animation: g-${name} .9s ${start}s cubic-bezier(.2,.7,.2,1) both; }`;
 
