@@ -131,7 +131,17 @@ Antes de aceitar a renovação, cote em 8 seguradoras de uma vez e compare. Se t
 Cote antes da entrega: com o modelo e o ano, 8 seguradoras calculam na hora e você escolhe o plano. A D&B conclui a contratação com você.
 
 💬 Qual carro você está esperando chegar?`,
+  "qualquer-carro": `Muita gente acha que a D&B só faz seguro de carro elétrico. Não é! 🚗
+
+Na cotação online você escolhe a marca, o modelo e o ano de qualquer carro: flex, a gasolina, híbrido ou elétrico, zero km ou usado. 8 seguradoras calculam ao mesmo tempo e as ofertas aparecem na tela em poucos minutos.
+
+Aqui no perfil a gente fala muito de elétrico, mas a cotação vale para todo carro.
+
+💬 Qual carro você tem hoje? Conta aqui.`,
 };
+
+// Tema de segunda fixado numa semana (passa por cima do Windsor.ai e do rodízio).
+const PINNED_THEMES = { "2026-11-23": "qualquer-carro" };
 
 const REELS_CAPTIONS = {
   ligar: (car) => `Seguro do ${car.name}? Não precisa ligar e esperar. ⚡
@@ -145,7 +155,7 @@ Vale para qualquer carro, elétrico ou não.
 
 São ${brl(cost.gasPer1000 - cost.evPer1000)} de diferença a cada 1.000 km (consumo INMETRO, energia a R$ ${price(ENERGY_PRICE)}/kWh e gasolina a R$ ${price(FUEL_PRICE)}/l).
 
-E o seguro do elétrico? Cote em 8 seguradoras de uma vez, em poucos minutos, sem ligar para ninguém.
+E o seguro? Cote em 8 seguradoras de uma vez, em poucos minutos, sem ligar para ninguém. Do elétrico ou de qualquer outro carro.
 
 💬 Você trocaria o seu carro por um elétrico? Sim ou não?`,
 };
@@ -184,7 +194,7 @@ ${[...base, "#carroeletrico", tag(weekCar.brand)].join(" ")}`,
 
 A cada 1.000 km, a energia sai por cerca de ${brl(cost.evPer1000)}, contra ${brl(cost.gasPer1000)} de um carro a gasolina de ${GAS_KM_L} km/l.${cost.maintTotal ? ` As revisões somam ${brl(cost.maintTotal)} até ${num(cost.maintKm / 1000)} mil km.` : ""}
 
-E o seguro? Cote em 8 seguradoras de uma vez, em poucos minutos, e fale com a D&B só para fechar.
+E o seguro? Cote em 8 seguradoras de uma vez, em poucos minutos, e fale com a D&B só para fechar. Vale para qualquer carro, elétrico ou não.
 
 💬 Compraria o ${weekCar.name}? Responde com 👍 ou 👎.
 
@@ -289,7 +299,8 @@ async function main() {
   } catch (error) {
     console.error(`Windsor.ai indisponível (${error.message}); tema pelo rodízio.`);
   }
-  const { theme, reason } = chooseTheme(QUOTE_THEMES, weekIndex, perf);
+  const pinned = QUOTE_THEMES.find((t) => t.id === PINNED_THEMES[week]);
+  const { theme, reason } = pinned ? { theme: pinned, reason: "fixado para a semana" } : chooseTheme(QUOTE_THEMES, weekIndex, perf);
   if (arg("upload")) await writeReport(perf, week).catch((e) => console.error(`Relatório: ${e.message}`));
 
   const logo = (file) => `data:image/png;base64,${fs.readFileSync(path.join(ROOT, "public", "brand", file)).toString("base64")}`;

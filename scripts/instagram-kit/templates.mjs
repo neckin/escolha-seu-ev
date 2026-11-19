@@ -170,6 +170,11 @@ export const QUOTE_THEMES = [
     id: "carro-novo", kicker: "Carro novo", title: "Vai buscar o carro novo?", sub: "Deixe o seguro encaminhado antes da entrega.",
     slides: [{ list: "Antes de sair da loja", items: ["Cote com o modelo e o ano do carro", "Compare as ofertas de 8 seguradoras", "Escolha o plano e a forma de pagamento", "A D&B conclui a contratação com você"] }, "steps"], cta: "Cote o seu",
   },
+  {
+    // Fixado na semana de 23/11/2026 (build.mjs, PINNED_THEMES).
+    id: "qualquer-carro", kicker: "Seguro auto", title: "Não é só para elétrico.", sub: "Na D&B você cota o seguro de qualquer carro.",
+    slides: [{ label: "Qualquer carro", list: "Dá para cotar", items: ["Carro flex, a gasolina ou a etanol", "Híbrido ou elétrico", "Zero km ou usado, até 15 anos", "Uso particular ou de aplicativo"] }, "insurers"], cta: "Cote o seu carro",
+  },
 ];
 
 function quoteCover(theme, kit, n, total) {
@@ -242,12 +247,12 @@ function insurersSlide(kit, n, total) {
   });
 }
 
-function listSlide(kit, { list, items }, n, total) {
+function listSlide(kit, { list, items, label = "Checklist" }, n, total) {
   return page({
     ...CAROUSEL, bg: C.ivory,
     body: `<img class="logo" src="${kit.logoNavy}" style="right:80px;top:80px;width:88px">
       <div style="position:absolute;left:80px;right:80px;top:110px">
-        <div class="label">Checklist</div>
+        <div class="label">${esc(label)}</div>
         <div class="num" style="font-size:72px;color:${C.navy};margin-top:24px;line-height:1.05">${esc(list)}</div>
       </div>
       <div style="position:absolute;left:80px;right:80px;top:420px">
