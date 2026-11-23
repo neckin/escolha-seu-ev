@@ -138,6 +138,9 @@ const RENEWAL_INSURER_OPTS = [
   ["generali", "Generali"], ["santander", "Santander"], ["caixa", "Caixa Seguradora"],
   ["sul_america_cia_nacional_auto", "SulAmérica"],
 ];
+// Seguradoras que recusam a renovação sem o C.I. da apólice atual
+// ("Para renovações Allianz é necessário informar o CI", 23/11/2026).
+const CI_REQUIRED = new Set(["allianz"]);
 const BONUS_CLASSES = Array.from({ length: 11 }, (_, i) => String(i));
 
 const EMPTY_QUESTIONS = {
@@ -145,7 +148,7 @@ const EMPTY_QUESTIONS = {
   outroCondutor: "", idadeOutro: "", kmMes: "", distTrabalho: "",
   zeroKm: "", financiado: "", rastreador: "",
   blindado: false, kitGas: false, chassiRemarcado: false, isencao: "not_isent",
-  temSeguro: "", seguradoraAtual: "", numeroApolice: "", fimVigencia: "", classeBonus: "", sinistros: "",
+  temSeguro: "", seguradoraAtual: "", numeroApolice: "", ciApolice: "", fimVigencia: "", classeBonus: "", sinistros: "",
 };
 
 function ageFrom(isoDate) {
@@ -396,7 +399,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     Number(q.kmMes) > 0 && (!usesCarForWork || Number(q.distTrabalho) > 0) &&
     q.zeroKm && q.financiado && q.rastreador && q.isencao &&
     (q.temSeguro === "nao" ||
-      (q.temSeguro === "sim" && q.seguradoraAtual && q.numeroApolice.trim() && q.fimVigencia && q.classeBonus !== "" && q.sinistros !== ""));
+      (q.temSeguro === "sim" && q.seguradoraAtual && q.numeroApolice.trim() && (!CI_REQUIRED.has(q.seguradoraAtual) || q.ciApolice.trim()) && q.fimVigencia && q.classeBonus !== "" && q.sinistros !== ""));
 
   const canSubmit =
     baseDataValid &&
@@ -642,7 +645,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     }
 
     const qPatch = {};
-    for (const key of ["zeroKm", "financiado", "temSeguro", "seguradoraAtual", "numeroApolice", "fimVigencia", "classeBonus"]) {
+    for (const key of ["zeroKm", "financiado", "temSeguro", "seguradoraAtual", "numeroApolice", "ciApolice", "fimVigencia", "classeBonus"]) {
       if (data[key] != null && data[key] !== "" && q[key] === "") {
         qPatch[key] = data[key];
         filled.add(key);
@@ -774,6 +777,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                   // Obrigatório na renovação: sem ele a Segfy responde 422
                   // ("Número da apólice anterior não informado").
                   prior_policy: q.numeroApolice.trim(),
+                  // C.I. (código de identificação) da apólice atual; a Allianz
+                  // recusa a renovação sem ele. Mesmo campo do widget da Segfy.
+                  ...(q.ciApolice.trim() ? { prior_ic: q.ciApolice.trim() } : {}),
                   prior_policy_end: q.fimVigencia,
                   bonus_last: q.classeBonus,
                   claim_amount: q.sinistros,
@@ -1317,6 +1323,19 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                         style={fs("numeroApolice")}
                       />
                       <span style={hintStyle}>No alto da apólice atual</span>
+                    </label>
+                    <label style={labelStyle}>
+                      {CI_REQUIRED.has(q.seguradoraAtual) ? "C.I. da apólice" : "C.I. da apólice (se tiver)"}
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        maxLength={30}
+                        value={q.ciApolice}
+                        onChange={(e) => setQuestion("ciApolice", e.target.value)}
+                        style={fs("ciApolice")}
+                      />
+                      <span style={hintStyle}>Código de identificação, na apólice</span>
                     </label>
                     <label style={labelStyle}>
                       Fim da vigência

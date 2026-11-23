@@ -297,6 +297,11 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
     .find((n) => onlyDigitCount(n) >= 5 && !/^\d{2}[/.-]\d{2}[/.-]\d{4}$/.test(n));
   if (policyNumber) out.numeroApolice = policyNumber;
 
+  // C.I. (código de identificação): "C.I.: 12345678", "CI 1234567",
+  // "Código de Identificação (CI): 123...". A Allianz exige na renovação.
+  const ci = /(?:c[oó]digo\s*de\s*identifica[cç][aã]o|\bc\.\s?i\b\.?|\bci\b)\s*(?:\(c\.?i\.?\))?\s*(?:vigente|atual)?\s*(?:n[º°o]\.?)?\s*:?\s*([0-9][0-9.\-/]{2,25}[0-9])/i.exec(text);
+  if (ci && onlyDigitCount(ci[1]) >= 4) out.ciApolice = ci[1];
+
   // Fim de vigência: a data mais tarde do trecho "Vigência ... de X até Y".
   const validityDates = windowAfter(text, /vig[eê]ncia/, 160)
     .flatMap((w) => (w.match(/\d{2}[/.-]\d{2}[/.-]\d{4}/g) || []).map(brDateToIso))
