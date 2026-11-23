@@ -10,7 +10,7 @@
 //   + as do Supabase (api/_lib/quoteLog.js) e do SMTP (api/_lib/mailer.js).
 
 import { segfyRequest } from "../_lib/segfyClient.js";
-import { listQuoteEvents } from "../_lib/quoteLog.js";
+import { listQuoteEvents, listQuoteFailures } from "../_lib/quoteLog.js";
 import { sendEmail } from "../_lib/mailer.js";
 import { escapeHtml, money, brDate, formatPhone, insurerName, INSURER_NAMES } from "../_lib/quoteFormat.js";
 
@@ -154,7 +154,34 @@ function originTable(entries) {
     </table>`;
 }
 
-export async function buildReport(events, now = new Date()) {
+// Cotações que a Segfy recusou: sem dado pessoal (não dá para ligar para a
+// pessoa), mas mostra se o mesmo erro se repete e em que situação.
+function failuresSection(failures) {
+  if (!failures.length) return "";
+  const td = "padding:4px 10px 4px 0;border-bottom:1px solid #EEE;vertical-align:top";
+  const context = (f) => {
+    const parts = [];
+    if (f.from_policy) parts.push("enviou apólice");
+    if (f.renewal_insurer && f.renewal_insurer !== "new") {
+      parts.push(`renovação ${escapeHtml(INSURER_NAMES[f.renewal_insurer] || f.renewal_insurer)}`);
+      if (f.renewal_bonus) parts.push(`bônus ${escapeHtml(f.renewal_bonus)}`);
+      if (f.renewal_days_to_end != null) parts.push(f.renewal_days_to_end >= 0 ? `vigência atual acaba em ${f.renewal_days_to_end} d` : `vigência venceu há ${-f.renewal_days_to_end} d`);
+    } else if (f.renewal_insurer === "new") parts.push("sem seguro");
+    if (f.vehicle_year) parts.push(`carro ${f.vehicle_year}${f.fuel_type ? ` ${escapeHtml(f.fuel_type)}` : ""}`);
+    if (f.car_id) parts.push(`<code>${escapeHtml(f.car_id)}</code>`);
+    parts.push(escapeHtml(SOURCE_LABELS[f.source] || "origem ?"));
+    return parts.join(" · ");
+  };
+  return `<h3 style="margin:20px 0 8px;color:#A1260D">Cotações recusadas pela Segfy (${failures.length})</h3>
+    <p style="margin:0 0 8px;color:#555;font-size:13px">A pessoa viu erro e não recebeu preço. Se o mesmo motivo se repetir, é ajuste no formulário ou chamado na Segfy.</p>
+    <table style="border-collapse:collapse;font-size:12.5px">
+      <tr><th style="${td};text-align:left">Quando</th><th style="${td};text-align:left">HTTP</th><th style="${td};text-align:left">Motivo / contexto</th></tr>
+      ${failures.map((f) => `<tr><td style="${td};white-space:nowrap">${brDateTime(f.created_at)}</td><td style="${td}">${escapeHtml(f.http_status ?? "—")}</td>
+        <td style="${td}"><code>${escapeHtml(f.reason || "—")}</code><br><span style="color:#555">${context(f)}</span></td></tr>`).join("")}
+    </table>`;
+}
+
+export async function buildReport(events, now = new Date(), failures = []) {
   const entries = groupEvents(events);
   const details = [];
   for (let i = 0; i < entries.length; i += 5) {
@@ -178,9 +205,11 @@ export async function buildReport(events, now = new Date()) {
       <p style="margin:0 0 4px"><strong>${quotes}</strong> ${quotes === 1 ? "cotação feita" : "cotações feitas"} ·
         <strong>${chosen.length}</strong> ${chosen.length === 1 ? "plano escolhido" : "planos escolhidos"}${renewals
           ? ` · <strong>${renewals}</strong> com apólice atual enviada` : ""}</p>
+      ${failures.length ? `<p style="margin:0 0 4px;color:#A1260D"><strong>${failures.length}</strong> ${failures.length === 1 ? "cotação recusada" : "cotações recusadas"} pela Segfy (detalhes no fim)</p>` : ""}
       ${items.length ? originTable(entries) : `<p style="color:#555">Nenhuma cotação pelo site nesta semana.</p>`}
       ${section("Escolheram plano: falta pagamento e emissão", chosen)}
       ${section("Só cotaram: vale um contato", onlyQuoted)}
+      ${failuresSection(failures)}
       <p style="color:#555;font-size:12px;margin-top:20px">Relatório automático (toda segunda-feira) das cotações
         feitas no comparador e na página de cotação do site da D&B. Os dados do cliente vêm da Segfy; CPF e
         questionário completo estão na cotação, pelo ID.</p>
@@ -204,10 +233,15 @@ export default async function handler(req, res) {
 
   try {
     const now = new Date();
-    const events = await listQuoteEvents(new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000).toISOString());
-    const { html, subject } = await buildReport(events, now);
+    const since = new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000).toISOString();
+    const events = await listQuoteEvents(since);
+    const failures = await listQuoteFailures(since).catch((error) => {
+      console.error("[quote-report] quote_failures", error.message);
+      return [];
+    });
+    const { html, subject } = await buildReport(events, now, failures);
     await sendEmail({ to: to.join(", "), subject, html });
-    res.status(200).json({ ok: true, events: events.length });
+    res.status(200).json({ ok: true, events: events.length, failures: failures.length });
   } catch (error) {
     console.error("[quote-report]", error.message);
     res.status(500).json({ error: "Falha ao gerar o relatório." });

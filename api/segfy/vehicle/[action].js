@@ -10,7 +10,7 @@
 
 import { segfyRequest } from "../../_lib/segfyClient.js";
 import { isAllowedOrigin } from "../../_lib/origin.js";
-import { logQuoteEvent } from "../../_lib/quoteLog.js";
+import { logQuoteEvent, logQuoteFailure } from "../../_lib/quoteLog.js";
 
 const SOURCES = ["comparador", "cotacao"];
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -69,6 +69,73 @@ function withoutBrokerToken(value) {
   return clean;
 }
 
+// Resumo do motivo de uma recusa da Segfy, para o registro e para a tela.
+// Pega o texto e o caminho do campo (ex.: "data.renewal.prior_policy_end:
+// must be ...") e descarta os valores enviados (input/value), que podem ter
+// CPF, nome ou e-mail. Por garantia, mascara qualquer sequência longa de
+// dígitos ou e-mail que sobre no texto.
+function redact(text) {
+  return String(text)
+    .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, "[e-mail]")
+    .replace(/\d[\d.\-/ ]{6,}\d/g, (m) => (/^\d{4}-\d{2}-\d{2}$/.test(m) ? m : "[número]"));
+}
+
+function describeIssue(item) {
+  if (item == null) return "";
+  if (typeof item === "string") return item;
+  if (typeof item !== "object") return String(item);
+  const where = Array.isArray(item.loc) ? item.loc.join(".") : item.field || item.path || item.property || item.param || "";
+  const what = item.msg || item.message || item.error || item.detail || item.type || "";
+  if (where || what) return [where, typeof what === "string" ? what : JSON.stringify(what)].filter(Boolean).join(": ");
+  return Object.keys(item).join(", ");
+}
+
+export function segfyFailureReason(data) {
+  if (data == null) return "resposta vazia";
+  if (typeof data !== "object") return redact(String(data)).slice(0, 500);
+  const parts = [];
+  for (const key of ["message", "error", "detail", "errors", "error_message", "msg", "raw"]) {
+    const value = data[key];
+    if (value == null || value === "") continue;
+    if (Array.isArray(value)) parts.push(...value.map(describeIssue));
+    else if (typeof value === "object") parts.push(...Object.entries(value).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.map(describeIssue).join("; ") : describeIssue(v)}`));
+    else parts.push(String(value));
+  }
+  if (!parts.length) parts.push(`campos na resposta: ${Object.keys(data).join(", ") || "nenhum"}`);
+  return redact(parts.filter(Boolean).join(" | ")).slice(0, 1000);
+}
+
+// Contexto não pessoal da cotação que falhou (ajuda a achar padrões).
+function failureContext(payload) {
+  const d = payload?.data || {};
+  const r = d.renewal || {};
+  const days = /^\d{4}-\d{2}-\d{2}$/.test(r.prior_policy_end || "") && /^\d{4}-\d{2}-\d{2}$/.test(d.quotation_date || "")
+    ? Math.round((Date.parse(r.prior_policy_end) - Date.parse(d.quotation_date)) / 86400000)
+    : null;
+  const short = (v) => (typeof v === "string" || typeof v === "number" ? String(v).slice(0, 40) : null);
+  return {
+    renewal_insurer: short(r.insurer),
+    renewal_bonus: short(r.bonus_last),
+    renewal_days_to_end: days,
+    vehicle_year: Number.isInteger(d.vehicle?.model_year) ? d.vehicle.model_year : null,
+    fuel_type: short(d.vehicle?.fuel_type),
+  };
+}
+
+async function recordFailure(httpStatus, reason, meta, payload) {
+  const row = {
+    http_status: httpStatus,
+    reason,
+    source: SOURCES.includes(meta?.source) ? meta.source : null,
+    car_id: typeof meta?.carId === "string" ? meta.carId.slice(0, 80) : null,
+    from_policy: meta?.fromPolicy === true,
+    ...failureContext(payload),
+    ...utmFields(meta?.utm),
+  };
+  console.error("[segfy:calculate] recusada", JSON.stringify(row));
+  await logQuoteFailure(row);
+}
+
 export default async function handler(req, res) {
   const { action } = req.query;
   const path = ACTIONS[action];
@@ -103,9 +170,21 @@ export default async function handler(req, res) {
         ...utmFields(meta?.utm),
       });
     }
+    if (action === "calculate" && (status >= 400 || data?.status !== "OK")) {
+      const reason = segfyFailureReason(data);
+      await recordFailure(status, reason, meta, payload);
+      // O front mostra uma mensagem amigável; `reason` vai junto (sem dado
+      // pessoal) para quem estiver depurando no navegador.
+      res.status(status >= 400 ? status : 422).json({ status: "ERROR", http_status: status, reason });
+      return;
+    }
     res.status(status).json(withoutBrokerToken(data));
   } catch (error) {
     console.error(`[segfy:${action}]`, error.message);
+    if (action === "calculate") {
+      const { meta, ...payload } = req.body && typeof req.body === "object" ? req.body : {};
+      await recordFailure(502, `sem resposta da Segfy: ${redact(error.message).slice(0, 300)}`, meta, payload);
+    }
     res.status(502).json({ error: "Falha ao comunicar com a Segfy." });
   }
 }

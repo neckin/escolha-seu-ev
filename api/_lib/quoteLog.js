@@ -49,3 +49,32 @@ export async function listQuoteEvents(sinceIso, untilIso) {
   if (!res.ok) throw new Error(`Falha ao ler quote_events: ${res.status} ${await res.text()}`);
   return res.json();
 }
+
+// Cotações que a Segfy recusou (tabela quote_failures, ver
+// supabase/schema-quote-failures.sql). Mesmo cuidado: só o motivo técnico,
+// sem nome, CPF, contato ou os valores digitados. Falha aqui também é silenciosa.
+export async function logQuoteFailure(row) {
+  const config = supabaseConfig();
+  if (!config) return;
+  try {
+    const res = await fetch(`${config.url}/rest/v1/quote_failures`, {
+      method: "POST",
+      headers: { ...headers(config.key), Prefer: "return=minimal" },
+      body: JSON.stringify(row),
+    });
+    if (!res.ok) console.error("[quote-log] failure", res.status, await res.text());
+  } catch (error) {
+    console.error("[quote-log] failure", error.message);
+  }
+}
+
+export async function listQuoteFailures(sinceIso) {
+  const config = supabaseConfig();
+  if (!config) throw new Error("VITE_SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados.");
+  const query = new URLSearchParams({ select: "*", order: "created_at.asc", created_at: `gte.${sinceIso}` });
+  const res = await fetch(`${config.url}/rest/v1/quote_failures?${query}`, { headers: headers(config.key) });
+  // Tabela ainda não criada: o relatório sai sem a seção de falhas.
+  if (res.status === 404 || res.status === 400) return [];
+  if (!res.ok) throw new Error(`Falha ao ler quote_failures: ${res.status} ${await res.text()}`);
+  return res.json();
+}

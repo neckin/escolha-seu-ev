@@ -195,7 +195,12 @@ async function segfyApi(action, body) {
   });
   const data = await res.json().catch(() => null);
   if (!res.ok || !data || data.status !== "OK") {
-    const message = data?.message || data?.error || `Falha em ${action} (HTTP ${res.status}).`;
+    // Recusa da Segfy no calculate: o motivo técnico fica registrado no
+    // servidor (quote_failures) e vai ao console; a pessoa vê uma orientação.
+    if (action === "calculate" && data?.reason) console.warn("[Segfy calculate recusado]", data.http_status, data.reason);
+    const message = action === "calculate" && res.status >= 400 && res.status < 500
+      ? "A Segfy não aceitou algum dado desta cotação. Confira as datas e os campos do seguro atual e tente de novo; se continuar, fale com a D&B que fazemos a cotação por você."
+      : data?.message || data?.error || `Não conseguimos falar com o sistema de cotação agora (erro ${res.status}). Tente de novo em alguns minutos.`;
     throw new Error(message);
   }
   return data;
