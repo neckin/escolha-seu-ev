@@ -145,7 +145,7 @@ const EMPTY_QUESTIONS = {
   outroCondutor: "", idadeOutro: "", kmMes: "", distTrabalho: "",
   zeroKm: "", financiado: "", rastreador: "",
   blindado: false, kitGas: false, chassiRemarcado: false, isencao: "not_isent",
-  temSeguro: "", seguradoraAtual: "", fimVigencia: "", classeBonus: "", sinistros: "",
+  temSeguro: "", seguradoraAtual: "", numeroApolice: "", fimVigencia: "", classeBonus: "", sinistros: "",
 };
 
 function ageFrom(isoDate) {
@@ -396,7 +396,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     Number(q.kmMes) > 0 && (!usesCarForWork || Number(q.distTrabalho) > 0) &&
     q.zeroKm && q.financiado && q.rastreador && q.isencao &&
     (q.temSeguro === "nao" ||
-      (q.temSeguro === "sim" && q.seguradoraAtual && q.fimVigencia && q.classeBonus !== "" && q.sinistros !== ""));
+      (q.temSeguro === "sim" && q.seguradoraAtual && q.numeroApolice.trim() && q.fimVigencia && q.classeBonus !== "" && q.sinistros !== ""));
 
   const canSubmit =
     baseDataValid &&
@@ -642,7 +642,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     }
 
     const qPatch = {};
-    for (const key of ["zeroKm", "financiado", "temSeguro", "seguradoraAtual", "fimVigencia", "classeBonus"]) {
+    for (const key of ["zeroKm", "financiado", "temSeguro", "seguradoraAtual", "numeroApolice", "fimVigencia", "classeBonus"]) {
       if (data[key] != null && data[key] !== "" && q[key] === "") {
         qPatch[key] = data[key];
         filled.add(key);
@@ -771,6 +771,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
             q.temSeguro === "sim"
               ? {
                   insurer: q.seguradoraAtual,
+                  // Obrigatório na renovação: sem ele a Segfy responde 422
+                  // ("Número da apólice anterior não informado").
+                  prior_policy: q.numeroApolice.trim(),
                   prior_policy_end: q.fimVigencia,
                   bonus_last: q.classeBonus,
                   claim_amount: q.sinistros,
@@ -1302,6 +1305,19 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                 </div>
                 {q.temSeguro === "sim" && (
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginBottom: 12 }}>
+                    <label style={labelStyle}>
+                      Número da apólice
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        maxLength={40}
+                        value={q.numeroApolice}
+                        onChange={(e) => setQuestion("numeroApolice", e.target.value)}
+                        style={fs("numeroApolice")}
+                      />
+                      <span style={hintStyle}>No alto da apólice atual</span>
+                    </label>
                     <label style={labelStyle}>
                       Fim da vigência
                       <input type="date" value={q.fimVigencia} onChange={(e) => setQuestion("fimVigencia", e.target.value)} style={fs("fimVigencia")} />

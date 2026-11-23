@@ -288,6 +288,15 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
   const insurer = detectInsurer(norm);
   if (insurer) out.seguradoraAtual = insurer;
 
+  // Número da apólice (a Segfy exige na renovação). Formatos comuns:
+  // "Apólice nº 01.31.1234567", "Número da apólice: 5177001234567",
+  // "Nº Apólice: 1234567-8". Ignora proposta, apólice anterior e endosso.
+  const policyNumber = [...text.matchAll(/(?:n[º°o]\.?\s*(?:da\s*)?ap[oó]lice|n[uú]mero\s*da\s*ap[oó]lice|ap[oó]lice\s*(?:n[º°o]\.?|n[uú]mero|num\.?)?)\s*:?\s*([0-9][0-9.\-/ ]{3,30}[0-9])/gi)]
+    .filter((m) => !/anterior|renova|substitu|endosso/i.test(text.slice(Math.max(0, m.index - 20), m.index)))
+    .map((m) => m[1].replace(/\s+/g, ""))
+    .find((n) => onlyDigitCount(n) >= 5 && !/^\d{2}[/.-]\d{2}[/.-]\d{4}$/.test(n));
+  if (policyNumber) out.numeroApolice = policyNumber;
+
   // Fim de vigência: a data mais tarde do trecho "Vigência ... de X até Y".
   const validityDates = windowAfter(text, /vig[eê]ncia/, 160)
     .flatMap((w) => (w.match(/\d{2}[/.-]\d{2}[/.-]\d{4}/g) || []).map(brDateToIso))
@@ -299,9 +308,13 @@ export function parsePolicy(rawText, { brands = [] } = {}) {
     .find((c) => c != null && Number(c) <= 10);
   if (bonus != null) out.classeBonus = String(Number(bonus));
 
-  if (out.seguradoraAtual || out.fimVigencia || out.classeBonus != null) out.temSeguro = "sim";
+  if (out.seguradoraAtual || out.numeroApolice || out.fimVigencia || out.classeBonus != null) out.temSeguro = "sim";
 
   return out;
+}
+
+function onlyDigitCount(s) {
+  return (String(s).match(/\d/g) || []).length;
 }
 
 // ---- modelo na lista da Segfy ----------------------------------------------
