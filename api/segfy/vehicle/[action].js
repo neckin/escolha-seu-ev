@@ -87,17 +87,30 @@ function describeIssue(item) {
   const where = Array.isArray(item.loc) ? item.loc.join(".") : item.field || item.path || item.property || item.param || "";
   const what = item.msg || item.message || item.error || item.detail || item.type || "";
   if (where || what) return [where, typeof what === "string" ? what : JSON.stringify(what)].filter(Boolean).join(": ");
-  return Object.keys(item).join(", ");
+  // Objeto aninhado (ex.: { renewal: { bonus_last: "inválido" } }): achata
+  // em "renewal.bonus_last: inválido", sem os campos de valor enviado.
+  return Object.entries(item)
+    .filter(([k]) => !["input", "value", "ctx", "url"].includes(k))
+    .map(([k, v]) => {
+      const inner = Array.isArray(v) ? v.map(describeIssue).join("; ") : describeIssue(v);
+      return inner.includes(": ") && v && typeof v === "object" && !Array.isArray(v) ? inner.split(" | ").map((x) => `${k}.${x}`).join(" | ") : `${k}: ${inner}`;
+    })
+    .join(" | ");
 }
 
 export function segfyFailureReason(data) {
   if (data == null) return "resposta vazia";
   if (typeof data !== "object") return redact(String(data)).slice(0, 500);
   const parts = [];
-  for (const key of ["message", "error", "detail", "errors", "error_message", "msg", "raw"]) {
+  // Campos conhecidos primeiro; depois qualquer outro (a Segfy usa
+  // "validations" no 422), menos o "status" e o que pode trazer dado pessoal.
+  const known = ["message", "error", "detail", "errors", "validations", "error_message", "msg", "raw"];
+  const skip = new Set(["status", "config", "data", "customer", "token", "guid"]);
+  const keys = [...known, ...Object.keys(data).filter((k) => !known.includes(k) && !skip.has(k))];
+  for (const key of keys) {
     const value = data[key];
     if (value == null || value === "") continue;
-    if (Array.isArray(value)) parts.push(...value.map(describeIssue));
+    if (Array.isArray(value)) parts.push(...value.map((v) => (known.includes(key) ? describeIssue(v) : `${key}: ${describeIssue(v)}`)));
     else if (typeof value === "object") parts.push(...Object.entries(value).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.map(describeIssue).join("; ") : describeIssue(v)}`));
     else parts.push(String(value));
   }
