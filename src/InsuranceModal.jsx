@@ -90,6 +90,15 @@ const DEFAULT_COVERAGE = {
   material_damage: 100000,
 };
 
+// Franquias que o cliente pode comparar no resultado. A primeira cotação usa
+// sempre a normal (menor preço); "Mais proteção" recota com a reduzida 50%
+// (valores aceitos pela Segfy: reduced_25/50/75, normal, facultativa_50/100).
+const FRANCHISE_OPTIONS = [
+  { value: "normal", label: "Econômico", hint: "franquia normal, menor preço" },
+  { value: "reduced_50", label: "Mais proteção", hint: "franquia 50% menor" },
+];
+const franchiseLabel = (value) => FRANCHISE_OPTIONS.find((o) => o.value === value)?.label || value;
+
 // Questionário de risco exigido pela Segfy no calculate (perguntas validadas
 // com a D&B). Valores = enums do public-swagger.json da Segfy; rótulos = o que
 // a pessoa vê. Obs.: o swagger descreve yes_male como "sexo feminino" e
@@ -150,6 +159,27 @@ const EMPTY_QUESTIONS = {
   blindado: false, kitGas: false, chassiRemarcado: false, isencao: "not_isent",
   temSeguro: "", seguradoraAtual: "", numeroApolice: "", ciApolice: "", fimVigencia: "", classeBonus: "", sinistros: "",
 };
+
+// Agrupa os resultados por seguradora (critério explicado em insurerGroups).
+function groupByInsurer(results) {
+  return Object.values(
+    results.reduce((acc, r) => {
+      const name = r.company?.name || "seguradora";
+      (acc[name] ||= { name, priced: [], failures: [] })[r.premium != null ? "priced" : "failures"].push(r);
+      return acc;
+    }, {})
+  )
+    .map((g) => {
+      const byPrice = [...g.priced].sort((a, b) => a.premium - b.premium);
+      const main = byPrice.find(isComprehensive) || byPrice[0] || null;
+      return { ...g, main, others: byPrice.filter((r) => r !== main) };
+    })
+    .sort((a, b) => {
+      if (!a.main !== !b.main) return a.main ? -1 : 1;
+      if (a.main && b.main && isComprehensive(a.main) !== isComprehensive(b.main)) return isComprehensive(a.main) ? -1 : 1;
+      return (a.main?.premium ?? 0) - (b.main?.premium ?? 0);
+    });
+}
 
 function ageFrom(isoDate) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate || "")) return null;
@@ -308,6 +338,10 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   const [quoteResults, setQuoteResults] = useState([]);
   const [resultsDone, setResultsDone] = useState(false);
   const [quoteGuid, setQuoteGuid] = useState(null);
+  const [franchise, setFranchise] = useState("normal"); // franquia da cotação na tela
+  // Cotação já concluída com a outra franquia: { franchise, results, guid }.
+  const [altRun, setAltRun] = useState(null);
+  const [requoteError, setRequoteError] = useState(null);
   const [choosingId, setChoosingId] = useState(null);
   const [chooseError, setChooseError] = useState(null);
   const [chosen, setChosen] = useState(null); // { result, customerEmailSent, payment }
@@ -563,23 +597,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
   // exemplo, devolve como principal um seguro só de roubo/furto. Por isso o
   // destaque de cada seguradora é o produto compreensivo mais barato; o resto
   // vai para "outras opções". Seguradoras com preço vêm antes, da mais barata.
-  const insurerGroups = Object.values(
-    quoteResults.reduce((acc, r) => {
-      const name = r.company?.name || "seguradora";
-      (acc[name] ||= { name, priced: [], failures: [] })[r.premium != null ? "priced" : "failures"].push(r);
-      return acc;
-    }, {})
-  )
-    .map((g) => {
-      const byPrice = [...g.priced].sort((a, b) => a.premium - b.premium);
-      const main = byPrice.find(isComprehensive) || byPrice[0] || null;
-      return { ...g, main, others: byPrice.filter((r) => r !== main) };
-    })
-    .sort((a, b) => {
-      if (!a.main !== !b.main) return a.main ? -1 : 1;
-      if (a.main && b.main && isComprehensive(a.main) !== isComprehensive(b.main)) return isComprehensive(a.main) ? -1 : 1;
-      return (a.main?.premium ?? 0) - (b.main?.premium ?? 0);
-    });
+  const insurerGroups = groupByInsurer(quoteResults);
+  // Cotação anterior com a outra franquia, para comparar preço a preço.
+  const altMains = new Map(altRun ? groupByInsurer(altRun.results).filter((g) => g.main).map((g) => [g.name, g.main]) : []);
   const pricedCount = insurerGroups.filter((g) => g.main).length;
 
   // ---- caminho real: injeta o bundle White Label da Segfy quando houver token ----
@@ -708,20 +728,49 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
     readPolicy(file);
   };
 
-  const handleSubmitApi = () => {
+  // Troca a franquia na tela de resultado. Se a outra já foi cotada, só alterna
+  // entre as duas; senão guarda a atual e recota com a nova franquia.
+  const switchFranchise = (next) => {
+    if (next === franchise || !resultsDone || isSubmitting) return;
+    const current = { franchise, results: quoteResults, guid: quoteGuid };
+    if (altRun?.franchise === next) {
+      setQuoteResults(altRun.results);
+      setQuoteGuid(altRun.guid);
+      setFranchise(next);
+      setAltRun(current);
+      setPendingChoice(null);
+      return;
+    }
+    setAltRun(current);
+    handleSubmitApi(next);
+  };
+
+  // `nextFranchise` vem do seletor do resultado (recotação); o envio do
+  // formulário sempre começa pela franquia normal, a de menor preço.
+  const handleSubmitApi = (nextFranchise = "normal") => {
     const model = models.find((m) => m.model_id === selectedModelId);
     const brand = brands.find((b) => b.id === selectedBrandId);
     if (!model || !brand) return;
+    const isRequote = typeof nextFranchise === "string" && nextFranchise !== "normal";
+    const franchiseValue = isRequote ? nextFranchise : "normal";
+    const previous = { results: quoteResults, guid: quoteGuid, franchise };
 
+    socketRef.current?.disconnect();
     setIsSubmitting(true);
     setApiError(null);
+    setRequoteError(null);
     setQuoteResults([]);
     setResultsDone(false);
     setQuoteGuid(null);
+    setFranchise(franchiseValue);
     setChosen(null);
     setChooseError(null);
+    setPendingChoice(null);
     clearTimeout(resultsTimerRef.current);
-    setStep("loading");
+    if (!isRequote) {
+      setAltRun(null);
+      setStep("loading");
+    }
 
     const roomId = crypto.randomUUID();
     const today = new Date();
@@ -814,7 +863,7 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
             gas_kit: q.kitGas,
             chassis_relabeled: q.chassiRemarcado,
           },
-          coverage: DEFAULT_COVERAGE,
+          coverage: { ...DEFAULT_COVERAGE, franchise: franchiseValue },
         },
       })
         .then((res) => {
@@ -828,10 +877,20 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
           }, RESULTS_TIMEOUT_MS);
         })
         .catch((err) => {
-          setApiError(err.message);
-          setStep("form");
           setIsSubmitting(false);
           socket.disconnect();
+          if (isRequote) {
+            // Recotação falhou: volta para a cotação que já estava na tela.
+            setQuoteResults(previous.results);
+            setQuoteGuid(previous.guid);
+            setFranchise(previous.franchise);
+            setResultsDone(true);
+            setAltRun(null);
+            setRequoteError(err.message);
+            return;
+          }
+          setApiError(err.message);
+          setStep("form");
         });
     });
   };
@@ -1460,6 +1519,44 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
               </div>
             )}
             <style>{`.ev-spin { animation: ev-spin-anim 0.9s linear infinite; } @keyframes ev-spin-anim { to { transform: rotate(360deg); } }`}</style>
+            {!pendingChoice && (
+              <div style={{ marginBottom: 12 }}>
+                <div role="radiogroup" aria-label="Franquia" style={{ display: "flex", gap: 4, padding: 3, borderRadius: 10, background: T.panelAlt, border: `1px solid ${T.line}` }}>
+                  {FRANCHISE_OPTIONS.map((o) => {
+                    const active = franchise === o.value;
+                    const locked = !active && (!resultsDone || isSubmitting || Boolean(choosingId));
+                    return (
+                      <button
+                        key={o.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => switchFranchise(o.value)}
+                        disabled={locked}
+                        title={locked ? "Aguarde as seguradoras responderem" : undefined}
+                        style={{
+                          flex: 1, border: "none", borderRadius: 8, padding: "8px 6px", cursor: active ? "default" : locked ? "wait" : "pointer",
+                          background: active ? T.accent2 : "transparent", color: active ? T.bg : T.ink, opacity: locked ? 0.55 : 1,
+                          textAlign: "center", lineHeight: 1.25,
+                        }}
+                      >
+                        <div style={{ fontWeight: 700, fontSize: 12.5 }}>{o.label}</div>
+                        <div style={{ fontSize: 10.5, opacity: 0.85 }}>{o.hint}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+                <div style={{ fontSize: 11, color: T.inkDim, marginTop: 6, lineHeight: 1.45 }}>
+                  Franquia é o valor que você paga do seu bolso se o carro bater e precisar de conserto. Franquia menor deixa o
+                  seguro um pouco mais caro.
+                </div>
+                {requoteError && (
+                  <div style={{ fontSize: 11.5, color: T.warn, marginTop: 6, lineHeight: 1.45 }}>
+                    Não foi possível cotar com franquia menor agora. Tente de novo em instantes ou fale com a D&B.
+                  </div>
+                )}
+              </div>
+            )}
             <div style={{ fontSize: 11.5, color: T.inkDim, marginBottom: 10, display: "flex", alignItems: "center", gap: 5, lineHeight: 1.5 }}>
               {resultsDone ? (
                 <span>
@@ -1575,7 +1672,9 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                       <div style={{ textAlign: "right", flexShrink: 0 }}>
                         <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontWeight: 700, fontSize: 15, color: T.accentText || T.accent2 }}>{money(r.premium)}/ano</div>
                         {r.franchise > 0 && (
-                          <div style={{ fontSize: 11, color: T.inkDim }}>Franquia {money(r.franchise)}</div>
+                          <div style={{ fontSize: 12, color: T.ink, fontWeight: 600, marginTop: 1 }}>
+                            Franquia <span style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{money(r.franchise)}</span>
+                          </div>
                         )}
                         {(() => {
                           const h = headlineInstallment(r);
@@ -1589,6 +1688,22 @@ export default function InsuranceModal({ car = null, onClose, T, onOpenPrivacy, 
                       {complete ? "Cobertura completa" : `Cobertura parcial: ${coverageTypeOf(r) || "confira com a D&B"}`}
                       {fipePct && fipePct < 100 ? ` · indeniza ${fipePct}% da FIPE` : ""}
                     </div>
+                    {(() => {
+                      const alt = altMains.get(g.name);
+                      if (!alt || !altRun) return null;
+                      const diff = alt.premium - r.premium;
+                      return (
+                        <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontSize: 11.5, marginTop: 6, padding: "6px 8px", borderRadius: 6, border: `1px dashed ${T.line}`, color: T.inkDim }}>
+                          <span>
+                            {franchiseLabel(altRun.franchise)}: <strong style={{ color: T.ink }}>{money(alt.premium)}/ano</strong>
+                            {alt.franchise > 0 ? ` · franquia ${money(alt.franchise)}` : ""}
+                          </span>
+                          {Math.round(diff) !== 0 && (
+                            <span style={{ flexShrink: 0 }}>{money(Math.abs(diff))} {diff > 0 ? "a mais" : "a menos"}</span>
+                          )}
+                        </div>
+                      );
+                    })()}
                     {stripHtml(r.adjustments) && (
                       <div style={{ fontSize: 11, color: T.inkDim, marginTop: 4, lineHeight: 1.4 }}>{stripHtml(r.adjustments)}</div>
                     )}
